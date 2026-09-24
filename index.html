@@ -178,19 +178,28 @@
     margin:26px 0 0;
     padding:0;
     display:flex;
-    flex-wrap:wrap;
-    gap:8px;
+    width:fit-content;
+    max-width:100%;
+    border:1px solid var(--rule-strong);
+    border-radius:999px;
+    background:var(--panel);
+    overflow:hidden;
   }
   .specialties li{
-    padding:10px 13px;
-    border:1px solid var(--rule-strong);
-    background:var(--panel);
+    padding:12px clamp(12px, 1.7vw, 24px);
     font-family:var(--font-display);
     font-weight:600;
     font-size:clamp(16px, 1.55vw, 19px);
     line-height:1.15;
     letter-spacing:0.03em;
     text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .specialties li + li{border-left:1px solid var(--rule-strong);}
+  @media (max-width:560px){
+    .specialties{flex-direction:column; border-radius:28px; width:100%;}
+    .specialties li{padding:11px 22px; white-space:normal;}
+    .specialties li + li{border-left:none; border-top:1px solid var(--rule-strong);}
   }
   .hero .summary{
     margin-top:18px;
