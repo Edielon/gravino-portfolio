@@ -4,12 +4,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#E6E6E3;
-    --panel:#F0F0EE;
+    --bg:#DCDCD9;
+    --panel:#E9E9E6;
     --ink:#33363A;
-    --ink-muted:#5A5E63;
-    --rule:#BDBDBA;
-    --rule-strong:#8E9094;
+    --ink-muted:#55595E;
+    --rule:#B9B9B5;
+    --rule-strong:#8A8C8F;
     --accent:#800020;
     --accent-on:#FFFFFF;
     --accent-text:#800020;
@@ -21,33 +21,6 @@
     --font-body:'Barlow','Segoe UI',sans-serif;
     --font-mono:'IBM Plex Mono','Consolas',monospace;
   }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#2A2C2F;
-      --panel:#34373B;
-      --ink:#ECECEA;
-      --ink-muted:#B0B3B6;
-      --rule:#4A4D52;
-      --rule-strong:#7A7D82;
-      --accent-text:#ECECEA;
-      --band:#1F2123;
-      --band-ink:#ECECEA;
-      --band-muted:#A3A6A9;
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#2A2C2F;
-    --panel:#34373B;
-    --ink:#ECECEA;
-    --ink-muted:#B0B3B6;
-    --rule:#4A4D52;
-    --rule-strong:#7A7D82;
-    --accent-text:#ECECEA;
-    --band:#1F2123;
-    --band-ink:#ECECEA;
-    --band-muted:#A3A6A9;
-  }
-
   *{box-sizing:border-box;}
   body{
     background:var(--bg);
@@ -161,16 +134,19 @@
 
   /* PROFILE */
   .hero{
-    display:grid;
-    grid-template-columns:1.3fr 0.8fr;
-    gap:56px;
+    display:flex;
+    flex-direction:column;
     align-items:center;
-    padding-block:64px 72px;
+    text-align:center;
+    padding-block:64px 48px;
   }
+  .hero-eyebrow{justify-content:center;}
   .hero h1{
-    margin-top:18px;
-    font-size:clamp(52px, 8.4vw, 108px);
-    line-height:0.92;
+    margin-top:20px;
+    max-width:1000px;
+    color:var(--accent-text);
+    font-size:clamp(40px, 7.4vw, 96px);
+    line-height:0.95;
     letter-spacing:0.005em;
   }
   .specialties{
@@ -201,34 +177,43 @@
     .specialties li{padding:11px 22px; white-space:normal;}
     .specialties li + li{border-left:none; border-top:1px solid var(--rule-strong);}
   }
-  .hero .summary{
-    margin-top:18px;
-    max-width:56ch;
-  }
-  .hero .actions{margin-top:30px; display:flex; gap:14px; flex-wrap:wrap;}
-  .slab{
+  .hero .actions{margin-top:30px; display:flex; gap:14px; flex-wrap:wrap; justify-content:center;}
+  .hero-photo{
     position:relative;
-    aspect-ratio:4/5;
-    max-width:100%;
+    height:clamp(240px, 40vw, 520px);
+    background:var(--rule);
+    overflow:hidden;
+  }
+  .hero-photo::after{
+    content:"";
+    position:absolute;
+    right:0; bottom:0;
+    width:clamp(72px, 13vw, 190px);
+    height:clamp(72px, 13vw, 190px);
     background:var(--accent);
   }
-  .slab .photo{
-    position:absolute;
-    top:48px; right:28px; bottom:0; left:0;
-    background:var(--panel);
-    border:2px dashed var(--rule-strong);
-    border-bottom:none;
-    padding:18px;
+  .hero-photo .wrap{
+    position:relative;
+    height:100%;
     display:flex;
     flex-direction:column;
     justify-content:flex-end;
+    align-items:flex-start;
+    padding-block:20px;
     font-size:15px;
-    color:var(--ink-muted);
+    color:var(--ink);
+    z-index:1;
   }
-  .slab .photo .ph-tag{align-self:flex-start;}
+  .headshot{
+    aspect-ratio:4/5;
+    max-width:260px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:flex-start;
+  }
   @media (max-width:860px){
-    .hero{grid-template-columns:1fr; gap:40px; padding-block:44px 52px;}
-    .slab{max-width:420px;}
+    .hero{padding-block:44px 36px;}
   }
 
   .band{background:var(--band); color:var(--band-ink);}
@@ -444,30 +429,23 @@
 <main>
   <section id="profile">
     <div class="wrap hero">
-      <div>
-        <div class="label">Civil Engineer</div>
-        <h1>Hanny Creselle B. Gravino</h1>
-        <ul class="specialties" aria-label="Specializations">
-          <li>Structural design</li>
-          <li>Seismic retrofit</li>
-          <li>Project management</li>
-        </ul>
-        <p class="summary">
-          Hanny designs and delivers structures built to take seismic loads, and manages the cost,
-          schedule and people around them. Her record spans a fault-line academic building in Digos City,
-          a full retrofit of an earthquake-damaged six-storey structure, and construction estimating
-          systems for a housing developer in Queensland, Australia.
-        </p>
-        <div class="actions">
-          <a class="btn btn-primary" href="#work">View work</a>
-          <a class="btn btn-ghost" href="#contact">Contact</a>
-        </div>
+      <div class="label hero-eyebrow">Hanny Creselle B. Gravino / Civil Engineer</div>
+      <h1>Hi, I'm Hanny. I engineer structures that hold when the ground moves.</h1>
+      <ul class="specialties" aria-label="Specializations">
+        <li>Structural design</li>
+        <li>Seismic retrofit</li>
+        <li>Project management</li>
+      </ul>
+      <div class="actions">
+        <a class="btn btn-primary" href="#work">View work</a>
+        <a class="btn btn-ghost" href="#contact">Contact</a>
       </div>
-      <div class="slab">
-        <div class="photo">
-          <span class="ph-tag">Placeholder</span>
-          <span>Add headshot photo</span>
-        </div>
+    </div>
+
+    <div class="hero-photo">
+      <div class="wrap">
+        <span class="ph-tag">Placeholder</span>
+        <span>Add a wide greyscale hero photo, such as Hanny on site or a signature project</span>
       </div>
     </div>
 
@@ -524,6 +502,10 @@
         <div class="placeholder">
           <span class="ph-tag">Placeholder</span>
           <p>Add degree, university and year of graduation.</p>
+        </div>
+        <div class="placeholder headshot">
+          <span class="ph-tag">Placeholder</span>
+          <p>Add headshot photo.</p>
         </div>
       </div>
     </div>
