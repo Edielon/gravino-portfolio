@@ -72,7 +72,7 @@ Pages link to each other with relative `.html` paths (`index.html`, `resume.html
   - **Right:** a mid-rise structural frame with a Vierendeel-style truss band.
 - Hairline strokes (1 to 1.25px, `vector-effect: non-scaling-stroke`) in `--rule-strong` at about 0.35 to 0.5 opacity. No fills and no motion.
 - Anchored to the bottom of the hero so the drawings "stand" on the hero photo edge. They never extend under the headline's text box: the headline column keeps its max width, and the art is sized to the remaining gutter.
-- Hidden below about 1100px viewport width, where the gutters become too narrow to hold the drawings.
+- Hidden below 1320px viewport width, where the gutters become too narrow to hold the drawings. The headline measure is 980px, the narrowest that keeps it on 3 lines at 56px.
 
 ## Out of scope
 

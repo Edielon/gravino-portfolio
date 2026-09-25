@@ -1,6 +1,10 @@
 # Gravino portfolio
 
-Single-page portfolio for Hanny Creselle B. Gravino, civil and structural engineer. Everything lives in `index.html`, which is also published as the Claude artifact https://claude.ai/artifact/LiKngY8nwyeBYjV6jcT1Nw. After editing, republish to that same URL so the two stay in step.
+Multi-page static portfolio for Hanny Creselle B. Gravino, PMP-certified project manager and structural engineer. Pages: `index.html` (hero, work, certifications), `resume.html` (career, education, expertise), `contact.html` (details + Web3Forms enquiry form). Shared styles live in `styles.css`; the nav/footer block is duplicated in each page, so change all three together. Structural tests: `node --test tests/site.test.mjs`. Local preview: `node .claude/serve.js` → http://localhost:4173.
+
+The site is also published as the Claude artifact https://claude.ai/artifact/LiKngY8nwyeBYjV6jcT1Nw (index.html as the page, the other files as supporting files). After editing, republish to that same URL.
+
+The contact form needs a real Web3Forms access key in place of `YOUR_WEB3FORMS_ACCESS_KEY` in `contact.html`.
 
 ## Workflow for changes
 
