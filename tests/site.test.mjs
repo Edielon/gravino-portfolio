@@ -73,3 +73,14 @@ test('contact page', () => {
   const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
   assert.ok(script.indexOf('YOUR_WEB3FORMS_ACCESS_KEY') < script.indexOf('fetch('), 'placeholder check runs before fetch');
 });
+
+test('hero line art is decorative and outside the headline', () => {
+  const html = read('index.html');
+  const stage = html.match(/<div class="hero-stage">([\s\S]*?)<div class="hero-photo">/);
+  assert.ok(stage, 'hero-stage wraps the hero');
+  const svgs = [...stage[1].matchAll(/<svg class="hero-art hero-art--(left|right)"[^>]*>/g)];
+  assert.deepEqual(svgs.map((m) => m[1]), ['left', 'right']);
+  for (const [tag] of svgs) assert.match(tag, /aria-hidden="true"/);
+  const h1 = stage[1].match(/<h1>[\s\S]*?<\/h1>/)[0];
+  assert.ok(!h1.includes('<svg'), 'svgs are not inside the headline');
+});

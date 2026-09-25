@@ -1,4 +1,5 @@
 :root{
+  --hero-measure:980px;
   --bg:#DCDCD9;
   --panel:#E9E9E6;
   --heading:#1A1B1D;
@@ -141,7 +142,7 @@ header.site-nav{
   padding-block:64px 48px;
 }
 .hero h1{
-  max-width:1100px;
+  max-width:var(--hero-measure);
   font-size:clamp(30px, 5vw, 56px);
   line-height:1.1;
   letter-spacing:-0.025em;
@@ -458,3 +459,19 @@ footer.site-foot{
 .form-status{font-size:15px; min-height:1.6em; color:var(--band-ink);}
 .form-status[data-kind="error"]{color:#FFB3BD;}
 .hp{position:absolute; left:-9999px; width:1px; height:1px; opacity:0;}
+
+.hero-stage{position:relative; overflow-x:clip;}
+.hero-stage > .hero{position:relative; z-index:1;}
+.hero-art{
+  display:none;
+  position:absolute;
+  bottom:0;
+  width:min(260px, calc(50% - var(--hero-measure) / 2 - 48px));
+  height:auto;
+  color:var(--rule-strong);
+  opacity:0.45;
+  pointer-events:none;
+}
+.hero-art--left{right:calc(50% + var(--hero-measure) / 2 + 24px);}
+.hero-art--right{left:calc(50% + var(--hero-measure) / 2 + 24px);}
+@media (min-width:1320px){ .hero-art{display:block;} }
