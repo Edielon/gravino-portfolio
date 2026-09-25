@@ -54,3 +54,22 @@ test('resume page', () => {
   assert.match(html, /Senterprisys Limited/);
   assert.match(html, /Codes and compliance/);
 });
+
+test('contact page', () => {
+  const html = read('contact.html');
+  assert.match(html, /<link rel="stylesheet" href="styles.css">/);
+  assertNav(html, 'Contact');
+  const rows = [...html.matchAll(/<div class="k">([^<]+)<\/div>/g)].map((m) => m[1]);
+  assert.deepEqual(rows, ['Email', 'Phone', 'LinkedIn']);
+  assert.match(html, /<form id="contact-form" action="https:\/\/api.web3forms.com\/submit" method="POST"/);
+  assert.match(html, /name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY"/);
+  for (const [id, required] of [['cf-name', true], ['cf-email', true], ['cf-company', false], ['cf-type', false], ['cf-message', true]]) {
+    assert.match(html, new RegExp(`<label for="${id}"`), `label for ${id}`);
+    const field = html.match(new RegExp(`<(input|select|textarea)[^>]*id="${id}"[^>]*>`));
+    assert.ok(field, `field ${id}`);
+    assert.equal(/\brequired\b/.test(field[0]), required, `${id} required=${required}`);
+  }
+  assert.match(html, /id="cf-status"[^>]*role="status"/);
+  const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+  assert.ok(script.indexOf('YOUR_WEB3FORMS_ACCESS_KEY') < script.indexOf('fetch('), 'placeholder check runs before fetch');
+});

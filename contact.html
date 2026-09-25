@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact · Gravino Engineering</title>
+<meta name="description" content="Discuss a construction or structural project with Hanny Gravino.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-nav" id="top">
+  <div class="wrap nav-inner">
+    <a class="wordmark" href="index.html">H. Gravino</a>
+    <nav aria-label="Main">
+      <ul class="nav-links">
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="contact.html" aria-current="page">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="band">
+    <div class="wrap contact">
+      <div class="contact-grid">
+        <div>
+          <h1 class="section-title">Discuss a project</h1>
+          <p class="contact-note">Available for construction project management, structural design and seismic retrofit assessment work.</p>
+          <div class="contact-lines">
+            <div class="c-row"><div class="k">Email</div><div class="v">[ Add email address ]</div></div>
+            <div class="c-row"><div class="k">Phone</div><div class="v">[ Add phone number ]</div></div>
+            <div class="c-row"><div class="k">LinkedIn</div><div class="v">[ Add profile link ]</div></div>
+          </div>
+        </div>
+
+        <form id="contact-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+          <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+          <input type="hidden" name="subject" value="New enquiry from gravino portfolio">
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <div class="field">
+            <label for="cf-name">Name</label>
+            <input id="cf-name" name="name" type="text" autocomplete="name" required aria-describedby="cf-name-err">
+            <p class="field-err" id="cf-name-err" hidden>Please enter your name.</p>
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input id="cf-email" name="email" type="email" autocomplete="email" required aria-describedby="cf-email-err">
+            <p class="field-err" id="cf-email-err" hidden>Please enter a valid email address.</p>
+          </div>
+          <div class="field">
+            <label for="cf-company">Company <span class="opt">(optional)</span></label>
+            <input id="cf-company" name="company" type="text" autocomplete="organization">
+          </div>
+          <div class="field">
+            <label for="cf-type">Project type</label>
+            <select id="cf-type" name="project_type">
+              <option>Project management</option>
+              <option>Structural design</option>
+              <option>Seismic retrofit</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" rows="6" required aria-describedby="cf-message-err"></textarea>
+            <p class="field-err" id="cf-message-err" hidden>Please tell me a little about the project.</p>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Send enquiry</button>
+          <p class="form-status" id="cf-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot wrap">
+  <span>&copy; Hanny Creselle B. Gravino &middot; Civil Engineer</span>
+  <a href="#top">Back to top</a>
+</footer>
+
+<script>
+(() => {
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('cf-status');
+  const button = form.querySelector('button[type="submit"]');
+  const checks = [
+    ['cf-name', (v) => v.trim() !== ''],
+    ['cf-email', (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())],
+    ['cf-message', (v) => v.trim() !== ''],
+  ];
+
+  function validate() {
+    let firstBad = null;
+    for (const [id, ok] of checks) {
+      const input = document.getElementById(id);
+      const valid = ok(input.value);
+      input.setAttribute('aria-invalid', String(!valid));
+      document.getElementById(id + '-err').hidden = valid;
+      if (!valid && !firstBad) firstBad = input;
+    }
+    if (firstBad) firstBad.focus();
+    return !firstBad;
+  }
+
+  function say(text, kind) {
+    status.textContent = text;
+    status.dataset.kind = kind;
+  }
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!validate()) return;
+    if (form.access_key.value === 'YOUR_WEB3FORMS_ACCESS_KEY') {
+      say('The form is not connected yet. Please use the email address on this page for now.', 'error');
+      return;
+    }
+    button.disabled = true;
+    say('Sending…', 'info');
+    try {
+      const res = await fetch(form.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || data.success === false) throw new Error(data.message || res.status);
+      form.reset();
+      checks.forEach(([id]) => document.getElementById(id).removeAttribute('aria-invalid'));
+      say('Thank you. Your enquiry has been sent.', 'success');
+    } catch {
+      say('Sorry, the message could not be sent. Please try again or use the email address on this page.', 'error');
+    } finally {
+      button.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>
