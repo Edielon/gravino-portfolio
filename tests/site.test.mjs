@@ -115,3 +115,17 @@ test('primary button hover stays visible on the dark band', () => {
 test('anchor targets clear the sticky nav', () => {
   assert.match(read('styles.css'), /html\{[^}]*scroll-padding-top:/);
 });
+
+test('footer repeats the nav links plus back to top on every page', () => {
+  for (const [page, current] of [['index.html', null], ['resume.html', 'Resume'], ['contact.html', 'Contact']]) {
+    const foot = (read(page).match(/<footer class="site-foot[^"]*">[\s\S]*?<\/footer>/) || [''])[0];
+    assert.match(foot, /&copy; Hanny Creselle B\. Gravino &middot; Civil Engineer &amp; Project Manager/, `${page} copyright`);
+    assert.ok(!foot.includes('wordmark'), `${page} footer has no wordmark`);
+    const links = [...foot.matchAll(/<li><a href="([^"]+)"([^>]*)>([^<]+)<\/a><\/li>/g)]
+      .map(([, href, attrs, label]) => ({ href, label, current: attrs.includes('aria-current="page"') }));
+    assert.deepEqual(links.map((l) => [l.label, l.href]), [
+      ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Contact', 'contact.html'], ['Back to top', '#top'],
+    ], page);
+    assert.deepEqual(links.filter((l) => l.current).map((l) => l.label), current ? [current] : [], `${page} current`);
+  }
+});
