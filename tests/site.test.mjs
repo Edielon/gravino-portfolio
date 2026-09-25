@@ -43,3 +43,14 @@ test('home page keeps hero, work and certifications only', () => {
   assert.match(html, /<a class="btn btn-primary" href="#work">View Work<\/a>/);
   assert.match(html, /<a class="btn btn-ghost" href="contact.html">Discuss a Project<\/a>/);
 });
+
+test('resume page', () => {
+  const html = read('resume.html');
+  assert.match(html, /<link rel="stylesheet" href="styles.css">/);
+  assertNav(html, 'Resume');
+  for (const heading of ['Career', 'Education', 'Expertise']) {
+    assert.match(html, new RegExp(`<h2 class="section-title">${heading}</h2>`));
+  }
+  assert.match(html, /Senterprisys Limited/);
+  assert.match(html, /Codes and compliance/);
+});
