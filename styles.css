@@ -445,7 +445,7 @@ footer.site-foot{
   font-size:16px;
   color:var(--band-ink);
   background:rgba(255,255,255,0.06);
-  border:1px solid rgba(255,255,255,0.28);
+  border:1px solid rgba(255,255,255,0.5);
   border-radius:0;
 }
 .field select{appearance:none; background-image:linear-gradient(45deg, transparent 50%, var(--band-muted) 50%), linear-gradient(135deg, var(--band-muted) 50%, transparent 50%); background-position:calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size:5px 5px; background-repeat:no-repeat; padding-right:40px;}
@@ -475,3 +475,8 @@ footer.site-foot{
 .hero-art--left{right:calc(50% + var(--hero-measure) / 2 + 24px);}
 .hero-art--right{left:calc(50% + var(--hero-measure) / 2 + 24px);}
 @media (min-width:1320px){ .hero-art{display:block;} }
+
+.band .btn-primary:hover{background:var(--band-ink); border-color:var(--band-ink); color:var(--band);}
+
+html{scroll-padding-top:80px;}
+@media (max-width:640px){ html{scroll-padding-top:120px;} }

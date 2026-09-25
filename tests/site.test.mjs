@@ -84,3 +84,34 @@ test('hero line art is decorative and outside the headline', () => {
   const h1 = stage[1].match(/<h1>[\s\S]*?<\/h1>/)[0];
   assert.ok(!h1.includes('<svg'), 'svgs are not inside the headline');
 });
+
+const hex = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const lum = (rgb) => {
+  const [r, g, b] = rgb.map((c) => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+};
+const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+const token = (css, name) => css.match(new RegExp(`${name}:(#[0-9A-Fa-f]{6})`))[1];
+const BAND = () => hex(token(read('styles.css'), '--band'));
+
+test('form field borders meet 3:1 against the dark band', () => {
+  const css = read('styles.css');
+  const rule = css.match(/\.field input, \.field select, \.field textarea\{[^}]*border:1px solid ([^;]+);/)[1];
+  let border;
+  const rgba = rule.match(/rgba\(255,\s*255,\s*255,\s*([\d.]+)\)/);
+  if (rgba) border = BAND().map((c) => Math.round(c + (255 - c) * Number(rgba[1])));
+  else border = hex(token(css, rule.replace(/var\(|\)/g, '')));
+  assert.ok(contrast(border, BAND()) >= 3, `border contrast ${contrast(border, BAND()).toFixed(2)}`);
+});
+
+test('primary button hover stays visible on the dark band', () => {
+  const css = read('styles.css');
+  const rule = css.match(/\.band \.btn-primary:hover\{([^}]*)\}/);
+  assert.ok(rule, 'band hover rule exists');
+  const bg = rule[1].match(/background:var\((--[\w-]+)\)/)[1];
+  assert.ok(contrast(hex(token(css, bg)), BAND()) >= 3);
+});
+
+test('anchor targets clear the sticky nav', () => {
+  assert.match(read('styles.css'), /html\{[^}]*scroll-padding-top:/);
+});
