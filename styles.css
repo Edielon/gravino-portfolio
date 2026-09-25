@@ -129,6 +129,8 @@ header.site-nav{
   color:var(--ink);
 }
 .nav-links a:hover{background:var(--accent); color:var(--accent-on);}
+.nav-links a[aria-current="page"]{box-shadow:inset 0 -2px 0 var(--accent);}
+.nav-links a[aria-current="page"]:hover{box-shadow:none;}
 
 /* PROFILE */
 .hero{

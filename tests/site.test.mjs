@@ -20,3 +20,26 @@ test('styles.css keeps the design tokens', () => {
     assert.ok(css.includes(token), `missing ${token}`);
   }
 });
+
+export function assertNav(html, current) {
+  const nav = navOf(html);
+  assert.match(nav, /<a class="wordmark" href="index.html">H. Gravino<\/a>/);
+  const links = [...nav.matchAll(/<li><a href="([^"]+)"([^>]*)>([^<]+)<\/a><\/li>/g)]
+    .map(([, href, attrs, label]) => ({ href, label, current: attrs.includes('aria-current="page"') }));
+  assert.deepEqual(links.map((l) => [l.label, l.href]), [
+    ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Contact', 'contact.html'],
+  ]);
+  assert.deepEqual(links.filter((l) => l.current).map((l) => l.label), current ? [current] : []);
+}
+
+test('home page nav', () => assertNav(read('index.html'), null));
+
+test('home page keeps hero, work and certifications only', () => {
+  const html = read('index.html');
+  for (const id of ['work', 'certifications']) assert.match(html, new RegExp(`id="${id}"`));
+  for (const gone of ['id="expertise"', 'id="contact"', 'class="wrap career"', 'Location']) {
+    assert.ok(!html.includes(gone), `should not contain ${gone}`);
+  }
+  assert.match(html, /<a class="btn btn-primary" href="#work">View Work<\/a>/);
+  assert.match(html, /<a class="btn btn-ghost" href="contact.html">Discuss a Project<\/a>/);
+});
