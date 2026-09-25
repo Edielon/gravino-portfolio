@@ -63,7 +63,7 @@ test('contact page', () => {
   assert.deepEqual(rows, ['Email', 'Phone', 'LinkedIn']);
   assert.match(html, /<form id="contact-form" action="https:\/\/api.web3forms.com\/submit" method="POST"/);
   assert.match(html, /name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY"/);
-  for (const [id, required] of [['cf-name', true], ['cf-email', true], ['cf-company', false], ['cf-type', false], ['cf-message', true]]) {
+  for (const [id, required] of [['cf-name', true], ['cf-email', true], ['cf-company', false], ['cf-subject', true], ['cf-message', true]]) {
     assert.match(html, new RegExp(`<label for="${id}"`), `label for ${id}`);
     const field = html.match(new RegExp(`<(input|select|textarea)[^>]*id="${id}"[^>]*>`));
     assert.ok(field, `field ${id}`);
@@ -72,6 +72,10 @@ test('contact page', () => {
   assert.match(html, /id="cf-status"[^>]*role="status"/);
   const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
   assert.ok(script.indexOf('YOUR_WEB3FORMS_ACCESS_KEY') < script.indexOf('fetch('), 'placeholder check runs before fetch');
+  assert.match(html, /<input id="cf-subject" name="enquiry_subject" type="text"/, 'subject is a text input');
+  assert.ok(!html.includes('<select'), 'no dropdown left');
+  assert.match(script, /form\.subject\.value = 'Portfolio enquiry: ' \+ /, 'email subject line uses the visitor subject');
+  assert.ok(script.indexOf("'Portfolio enquiry: '") < script.indexOf('fetch('), 'subject set before sending');
 });
 
 test('hero line art is decorative and outside the headline', () => {
@@ -96,7 +100,7 @@ const BAND = () => hex(token(read('styles.css'), '--band'));
 
 test('form field borders meet 3:1 against the dark band', () => {
   const css = read('styles.css');
-  const rule = css.match(/\.field input, \.field select, \.field textarea\{[^}]*border:1px solid ([^;]+);/)[1];
+  const rule = css.match(/\.field input, \.field textarea\{[^}]*border:1px solid ([^;]+);/)[1];
   let border;
   const rgba = rule.match(/rgba\(255,\s*255,\s*255,\s*([\d.]+)\)/);
   if (rgba) border = BAND().map((c) => Math.round(c + (255 - c) * Number(rgba[1])));

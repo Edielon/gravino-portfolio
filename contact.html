@@ -59,13 +59,9 @@
             <input id="cf-company" name="company" type="text" autocomplete="organization">
           </div>
           <div class="field">
-            <label for="cf-type">Project type</label>
-            <select id="cf-type" name="project_type">
-              <option>Project management</option>
-              <option>Structural design</option>
-              <option>Seismic retrofit</option>
-              <option>Other</option>
-            </select>
+            <label for="cf-subject">Subject</label>
+            <input id="cf-subject" name="enquiry_subject" type="text" required aria-describedby="cf-subject-err">
+            <p class="field-err" id="cf-subject-err" hidden>Please add a subject.</p>
           </div>
           <div class="field">
             <label for="cf-message">Message</label>
@@ -101,6 +97,7 @@
   const checks = [
     ['cf-name', (v) => v.trim() !== ''],
     ['cf-email', (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())],
+    ['cf-subject', (v) => v.trim() !== ''],
     ['cf-message', (v) => v.trim() !== ''],
   ];
 
@@ -129,6 +126,7 @@
       say('The form is not connected yet. Please use the email address on this page for now.', 'error');
       return;
     }
+    form.subject.value = 'Portfolio enquiry: ' + document.getElementById('cf-subject').value.trim();
     button.disabled = true;
     say('Sending…', 'info');
     try {

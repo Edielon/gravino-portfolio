@@ -438,7 +438,7 @@ footer.site-foot{
   color:var(--band-muted);
 }
 .field .opt{text-transform:none; letter-spacing:0;}
-.field input, .field select, .field textarea{
+.field input, .field textarea{
   width:100%;
   min-height:46px;
   padding:11px 14px;
@@ -449,10 +449,8 @@ footer.site-foot{
   border:1px solid rgba(255,255,255,0.5);
   border-radius:0;
 }
-.field select{appearance:none; background-image:linear-gradient(45deg, transparent 50%, var(--band-muted) 50%), linear-gradient(135deg, var(--band-muted) 50%, transparent 50%); background-position:calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size:5px 5px; background-repeat:no-repeat; padding-right:40px;}
-.field select option{color:var(--ink);}
 .field textarea{resize:vertical; min-height:140px;}
-.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible{outline:2px solid var(--band-ink); outline-offset:2px; border-color:var(--band-ink);}
+.field input:focus-visible, .field textarea:focus-visible{outline:2px solid var(--band-ink); outline-offset:2px; border-color:var(--band-ink);}
 .field [aria-invalid="true"]{border-color:#FF9AA8;}
 .field-err{font-size:14px; color:#FFB3BD;}
 #contact-form .btn{justify-self:start; min-height:46px;}
