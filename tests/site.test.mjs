@@ -219,3 +219,19 @@ test('case numbers are burgundy and figures sit under a hairline', () => {
 test('section titles have no accent bar above them', () => {
   assert.ok(!read('styles.css').includes('.section-title::before'));
 });
+
+test('read the case is a filled button with readable burgundy text', () => {
+  const css = read('styles.css');
+  const btn = cssRule(css, '.case-toggle');
+  assert.match(btn, /background:var\(--button-soft\)/, 'filled with the soft button grey');
+  assert.match(btn, /color:var\(--accent-text\)/, 'burgundy label');
+  assert.match(btn, /padding:12px 20px/);
+  assert.match(btn, /min-height:44px/);
+  assert.match(cssRule(css, '.case-toggle:hover'), /background:var\(--button-soft-hover\)/);
+  const burgundy = hex(token(css, '--accent-text'));
+  for (const fill of ['--button-soft', '--button-soft-hover']) {
+    const ratio = contrast(burgundy, hex(token(css, fill)));
+    assert.ok(ratio >= 4.5, `${fill} text contrast ${ratio.toFixed(2)}`);
+  }
+  assert.ok(contrast(hex(token(css, '--button-soft')), hex(token(css, '--bg'))) > 1.2, 'fill is visibly darker than the page');
+});
