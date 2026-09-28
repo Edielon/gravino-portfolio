@@ -4,6 +4,8 @@ Multi-page static portfolio for Hanny Creselle B. Gravino, PMP-certified project
 
 The site is also published as the Claude artifact https://claude.ai/artifact/LiKngY8nwyeBYjV6jcT1Nw (index.html as the page, the other files as supporting files). After editing, republish to that same URL.
 
+The CV download on `resume.html` serves `assets/Hanny-Gravino-CV.pdf` (currently a placeholder). To update it, replace that file and update the "PDF · N KB" size label next to the button.
+
 The contact form needs a real Web3Forms access key in place of `YOUR_WEB3FORMS_ACCESS_KEY` in `contact.html`.
 
 ## Workflow for changes

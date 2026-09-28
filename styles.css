@@ -484,3 +484,6 @@ html{scroll-padding-top:80px;}
 .foot-links a{display:block; padding-block:6px; font-size:12px; letter-spacing:0.1em; text-decoration:none; color:var(--ink);}
 .foot-links a:hover{color:var(--accent-text);}
 .foot-links a[aria-current="page"]{box-shadow:inset 0 -2px 0 var(--accent);}
+
+.cv-download{margin-top:24px; display:flex; align-items:center; flex-wrap:wrap; gap:10px 16px;}
+.cv-meta{font-size:13px; color:var(--ink-muted);}

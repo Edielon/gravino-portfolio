@@ -133,3 +133,14 @@ test('footer repeats the nav links plus back to top on every page', () => {
     assert.deepEqual(links.filter((l) => l.current).map((l) => l.label), current ? [current] : [], `${page} current`);
   }
 });
+
+test('resume page offers the CV download right under the header', () => {
+  const html = read('resume.html');
+  const head = (html.match(/<div class="wrap page-head">[\s\S]*?\n  <\/div>/) || [''])[0];
+  const link = head.match(/<a class="btn btn-primary" href="([^"]+)" download="([^"]+)"[^>]*>Download CV<\/a>/);
+  assert.ok(link, 'Download CV button inside the page header');
+  assert.equal(link[2], 'Hanny-Gravino-CV.pdf');
+  assert.ok(existsSync(new URL(`../${link[1]}`, import.meta.url)), `${link[1]} exists`);
+  assert.ok(head.indexOf('</h1>') < head.indexOf('Download CV'), 'button comes after the heading');
+  assert.match(head, /PDF &middot; \d+ KB/);
+});
