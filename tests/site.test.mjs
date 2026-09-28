@@ -162,7 +162,7 @@ test('band contains its children margins (no light gap above the stats)', () => 
   assert.match(band, /display:flow-root/);
 });
 
-test('selected work is an editorial index with expandable case details', () => {
+test('each case shows short problem/approach/result that expand in place', () => {
   const html = read('index.html');
   const work = html.match(/<section class="block work" id="work">[\s\S]*?<\/section>/);
   assert.ok(work, 'work section uses the editorial layout');
@@ -171,11 +171,27 @@ test('selected work is an editorial index with expandable case details', () => {
   cases.forEach((c, i) => {
     assert.match(c, new RegExp(`<span class="case-num" aria-hidden="true">0${i + 1}</span>`));
     assert.match(c, /<h3>[^<]+<\/h3>/);
-    assert.match(c, /<p class="case-outcome">[^<]+/);
-    assert.match(c, /<details class="case-more">\s*<summary>Read the case<\/summary>/);
-    for (const term of ['Problem', 'Approach', 'Result']) assert.match(c, new RegExp(`<dt>${term}</dt>`));
+    const id = `case-${i + 1}-story`;
+    assert.match(c, new RegExp(`<div class="case-story" id="${id}">`), `${id} region`);
+    for (const term of ['Problem', 'Approach', 'Result']) {
+      const row = c.match(new RegExp(`<dt>${term}</dt>\\s*<dd>([\\s\\S]*?)</dd>`));
+      assert.ok(row, `${term} row in case ${i + 1}`);
+      const short = row[1].match(/<span class="story-short">([^<]+)<\/span>/);
+      const long = row[1].match(/<span class="story-long" hidden>([\s\S]+?)<\/span>/);
+      assert.ok(short && long, `${term} has short and hidden long text`);
+      assert.ok(long[1].length > short[1].length, `${term} long text is longer than short`);
+    }
+    assert.match(c, /<p class="case-tools" hidden>/);
+    assert.match(c, new RegExp(`<button class="case-toggle" type="button" aria-expanded="false" aria-controls="${id}" hidden>Read the case</button>`));
+    assert.ok(!c.includes('<details'), 'no separate expanding block below');
+    assert.ok(!c.includes('case-outcome'), 'outcome sentence replaced by the short rows');
   });
-  for (const old of ['class="project"', 'class="tools"', 'class="fields"']) assert.ok(!work[0].includes(old), `no ${old}`);
+  const script = html.match(/<script>([\s\S]*?)<\/script>/);
+  assert.ok(script, 'toggle script present');
+  for (const needle of ['.case-toggle', 'aria-expanded', '.story-short', '.story-long', '.case-tools', 'prefers-reduced-motion']) {
+    assert.ok(script[1].includes(needle), `script handles ${needle}`);
+  }
+  assert.match(script[1], /setTimeout\(\(\) => animation\.cancel\(\)/, 'a stalled height animation is cancelled so text is never left clipped');
 });
 
 const cssRule = (css, sel) => {
@@ -186,9 +202,9 @@ const cssRule = (css, sel) => {
 test('selected work keeps photos on the left with no stray lines', () => {
   const css = read('styles.css');
   assert.match(cssRule(css, 'section.work'), /border-top:none/);
-  for (const sel of ['.case', '.case-photo', '.case-more summary']) {
+  for (const sel of ['.case', '.case-photo', '.case-toggle']) {
     assert.ok(cssRule(css, sel), `${sel} rule exists`);
-    assert.ok(!/border(-top|-bottom)?:\s*\d/.test(cssRule(css, sel)), `${sel} has no border line`);
+    assert.ok(!/border(-top|-bottom)?:\s*[1-9]/.test(cssRule(css, sel)), `${sel} has no border line`);
   }
   assert.ok(!/nth-child\(even\)[^{]*\.case-media/.test(css), 'no alternating image sides');
   assert.match(cssRule(css, '.case'), /align-items:start/, 'photo stays at the top when a case is expanded');
