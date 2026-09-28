@@ -161,3 +161,33 @@ test('band contains its children margins (no light gap above the stats)', () => 
   const band = read('styles.css').match(/\n\.band\{([^}]*)\}/)[1];
   assert.match(band, /display:flow-root/);
 });
+
+test('selected work is an editorial index with expandable case details', () => {
+  const html = read('index.html');
+  const work = html.match(/<section class="block work" id="work">[\s\S]*?<\/section>/);
+  assert.ok(work, 'work section uses the editorial layout');
+  const cases = [...work[0].matchAll(/<article class="case">([\s\S]*?)<\/article>/g)].map((m) => m[1]);
+  assert.equal(cases.length, 3);
+  cases.forEach((c, i) => {
+    assert.match(c, new RegExp(`<span class="case-num" aria-hidden="true">0${i + 1}</span>`));
+    assert.match(c, /<h3>[^<]+<\/h3>/);
+    assert.match(c, /<p class="case-outcome">[^<]+/);
+    assert.match(c, /<details class="case-more">\s*<summary>Read the case<\/summary>/);
+    for (const term of ['Problem', 'Approach', 'Result']) assert.match(c, new RegExp(`<dt>${term}</dt>`));
+  });
+  for (const old of ['class="project"', 'class="tools"', 'class="fields"']) assert.ok(!work[0].includes(old), `no ${old}`);
+});
+
+test('selected work has no divider lines and alternates image sides', () => {
+  const css = read('styles.css');
+  const rule = (sel) => {
+    const start = css.indexOf('\n' + sel + '{');
+    return start < 0 ? '' : css.slice(start + sel.length + 2, css.indexOf('}', start));
+  };
+  assert.match(rule('section.work'), /border-top:none/);
+  for (const sel of ['.case', '.case-photo', '.case-more summary']) {
+    assert.ok(rule(sel), `${sel} rule exists`);
+    assert.ok(!/border(-top|-bottom)?:\s*\d/.test(rule(sel)), `${sel} has no border line`);
+  }
+  assert.match(css, /\.case:nth-child\(even\) \.case-media\{order:2;\}/);
+});
