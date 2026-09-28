@@ -144,3 +144,20 @@ test('resume page offers the CV download right under the header', () => {
   assert.ok(head.indexOf('</h1>') < head.indexOf('Download CV'), 'button comes after the heading');
   assert.match(head, /PDF &middot; \d+ KB/);
 });
+
+test('stats read as a divided grid with no accent bars', () => {
+  const css = read('styles.css');
+  const stat = css.match(/\n\.stat\{([^}]*)\}/)[1];
+  assert.ok(!/border-top/.test(stat), 'no burgundy bar on top of each stat');
+  const stats = css.match(/\n\.stats\{([^}]*)\}/)[1];
+  assert.match(stats, /gap:1px/, 'hairline gaps between cells');
+  assert.match(stats, /background-clip:content-box/, 'lines only between cells, not in the side padding');
+  const num = css.match(/\.stat \.num\{([^}]*)\}/)[1];
+  const max = Number(num.match(/font-size:clamp\([^,]+,[^,]+,\s*(\d+)px\)/)[1]);
+  assert.ok(max <= 28, `stat figure max ${max}px`);
+});
+
+test('band contains its children margins (no light gap above the stats)', () => {
+  const band = read('styles.css').match(/\n\.band\{([^}]*)\}/)[1];
+  assert.match(band, /display:flow-root/);
+});
