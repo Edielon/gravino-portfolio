@@ -178,16 +178,28 @@ test('selected work is an editorial index with expandable case details', () => {
   for (const old of ['class="project"', 'class="tools"', 'class="fields"']) assert.ok(!work[0].includes(old), `no ${old}`);
 });
 
-test('selected work has no divider lines and alternates image sides', () => {
+const cssRule = (css, sel) => {
+  const start = css.indexOf('\n' + sel + '{');
+  return start < 0 ? '' : css.slice(start + sel.length + 2, css.indexOf('}', start));
+};
+
+test('selected work keeps photos on the left with no stray lines', () => {
   const css = read('styles.css');
-  const rule = (sel) => {
-    const start = css.indexOf('\n' + sel + '{');
-    return start < 0 ? '' : css.slice(start + sel.length + 2, css.indexOf('}', start));
-  };
-  assert.match(rule('section.work'), /border-top:none/);
+  assert.match(cssRule(css, 'section.work'), /border-top:none/);
   for (const sel of ['.case', '.case-photo', '.case-more summary']) {
-    assert.ok(rule(sel), `${sel} rule exists`);
-    assert.ok(!/border(-top|-bottom)?:\s*\d/.test(rule(sel)), `${sel} has no border line`);
+    assert.ok(cssRule(css, sel), `${sel} rule exists`);
+    assert.ok(!/border(-top|-bottom)?:\s*\d/.test(cssRule(css, sel)), `${sel} has no border line`);
   }
-  assert.match(css, /\.case:nth-child\(even\) \.case-media\{order:2;\}/);
+  assert.ok(!/nth-child\(even\)[^{]*\.case-media/.test(css), 'no alternating image sides');
+  assert.match(cssRule(css, '.case'), /align-items:start/, 'photo stays at the top when a case is expanded');
+});
+
+test('case numbers are burgundy and figures sit under a hairline', () => {
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.case-num'), /color:var\(--accent-text\)/);
+  assert.match(cssRule(css, '.case-figures'), /border-top:1px solid var\(--rule\)/);
+});
+
+test('section titles have no accent bar above them', () => {
+  assert.ok(!read('styles.css').includes('.section-title::before'));
 });
