@@ -234,7 +234,7 @@ test('read the case is a filled button with readable burgundy text', () => {
 
 test('band under the hero photo lists qualifications, not numbers', () => {
   const html = read('index.html');
-  const band = html.match(/<div class="wrap"><ul class="stats" aria-label="Qualifications">([\s\S]*?)<\/ul><\/div>/);
+  const band = html.match(/<div class="wrap quals"><ul class="stats" aria-label="Qualifications">([\s\S]*?)<\/ul><\/div>/);
   assert.ok(band, 'qualifications table in the graphite band');
   assert.ok(html.indexOf('class="hero-photo"') < html.indexOf('aria-label="Qualifications"'), 'band stays under the large photo');
   const items = [...band[1].matchAll(/<li class="stat"><div class="num">([^<]+)<\/div><div class="cap">([^<]+)<\/div><\/li>/g)]
@@ -261,10 +261,13 @@ test('qualifications stack one per row below 640px so long titles are not squeez
   assert.match(read('styles.css'), /@media \(max-width:640px\)\{\.stats\{grid-template-columns:1fr;/);
 });
 
-test('qualifications render as a bordered table with compact titles', () => {
+test('qualifications table is open at the sides with extended top and bottom lines', () => {
   const css = read('styles.css');
   const stats = cssRule(css, '.stats');
-  assert.match(stats, /border:1px solid var\(--band-line\)/, 'outer table border');
+  assert.ok(!/border/.test(stats), 'no box border around the table');
+  assert.match(cssRule(css, '.quals::before, .quals::after'), /height:1px/, 'top and bottom rules drawn by the wrapper');
+  assert.match(css, /@media \(min-width:1240px\)\{\s*\.quals::before, \.quals::after\{left:-40px; right:-40px;\}\s*\}/, 'rules extend past the table on wide screens');
+  assert.match(cssRule(css, '.band'), /overflow-x:clip/, 'extended rules can never cause sideways scrolling');
   assert.match(stats, /background:var\(--band-line\)/, 'inner cell lines');
   assert.ok(!/background-clip/.test(stats), 'no side padding trick needed any more');
   assert.match(cssRule(css, '.stat .num'), /font-size:18px/);

@@ -216,16 +216,22 @@ header.site-nav{
   .hero{padding-block:44px 36px;}
 }
 
-.band{display:flow-root; background:var(--band); color:var(--band-ink);}
+.band{display:flow-root; overflow-x:clip; background:var(--band); color:var(--band-ink);}
 .stats{
   display:grid;
   grid-template-columns:repeat(5, 1fr);
   gap:1px;
-  margin-block:48px;
+  margin:0;
   padding:0;
   list-style:none;
   background:var(--band-line);
-  border:1px solid var(--band-line);
+}
+.quals{position:relative; padding-block:48px;}
+.quals::before, .quals::after{content:""; position:absolute; left:0; right:0; height:1px; background:var(--band-line);}
+.quals::before{top:47px;}
+.quals::after{bottom:47px;}
+@media (min-width:1240px){
+  .quals::before, .quals::after{left:-40px; right:-40px;}
 }
 .stat{background:var(--band); padding:26px 24px 28px;}
 .stat .num{
@@ -243,7 +249,7 @@ header.site-nav{
   .stat{grid-column:span 2;}
   .stat:nth-child(n+4){grid-column:span 3;}
 }
-@media (max-width:640px){.stats{grid-template-columns:1fr; margin-block:32px;} .stat, .stat:nth-child(n+4){grid-column:auto; padding:22px 20px;}}
+@media (max-width:640px){.stats{grid-template-columns:1fr;} .quals{padding-block:32px;} .quals::before{top:31px;} .quals::after{bottom:31px;} .stat, .stat:nth-child(n+4){grid-column:auto; padding:22px 20px;}}
 
 .career{
   display:grid;
