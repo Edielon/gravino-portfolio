@@ -268,8 +268,14 @@ test('qualifications table is open at the sides with extended top and bottom lin
   assert.match(cssRule(css, '.quals::before, .quals::after'), /height:1px/, 'top and bottom rules drawn by the wrapper');
   assert.match(css, /@media \(min-width:1240px\)\{\s*\.quals::before, \.quals::after\{left:-40px; right:-40px;\}\s*\}/, 'rules extend past the table on wide screens');
   assert.match(cssRule(css, '.band'), /overflow-x:clip/, 'extended rules can never cause sideways scrolling');
-  assert.match(stats, /background:var\(--band-line\)/, 'inner cell lines');
   assert.ok(!/background-clip/.test(stats), 'no side padding trick needed any more');
+  // Dividers are drawn on each cell's left and top edge and clipped at the table edge, so sub-pixel
+  // rounding can never expose a stray line down the right side.
+  for (const [grid, cell] of [['.stats', '.stat'], ['.cred-grid', '.cred-cell']]) {
+    assert.ok(!/background:var\(--band-line\)/.test(cssRule(css, grid)), `${grid} has no line-coloured background`);
+    assert.match(cssRule(css, grid), /overflow:hidden/, `${grid} clips edge dividers`);
+    assert.match(cssRule(css, cell), /box-shadow:-1px 0 0 var\(--band-line\), 0 -1px 0 var\(--band-line\)/, `${cell} draws left and top dividers`);
+  }
   assert.match(cssRule(css, '.stat .num'), /font-size:18px/);
 });
 
@@ -287,7 +293,7 @@ test('home certifications sit on the graphite band and each opens its certificat
   const html = read('index.html');
   const section = html.match(/<section class="band creds-band" id="certifications">[\s\S]*?<\/section>/);
   assert.ok(section, 'certifications section on the graphite band');
-  assert.match(section[0], /<h2 class="section-title">Certifications and memberships<\/h2>/);
+  assert.match(section[0], /<h2 class="section-title">Certifications and Memberships<\/h2>/);
   const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-title">([^<]+)<\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
     .map(([, href, dataTitle, title, desc]) => ({ href, dataTitle, title, desc: desc.replace(/&middot;/g, '·') }));
   assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'MIEAust', 'MIET', 'M.ASCE', 'PMI Member']);
