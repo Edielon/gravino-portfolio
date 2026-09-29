@@ -272,3 +272,13 @@ test('qualifications table is open at the sides with extended top and bottom lin
   assert.ok(!/background-clip/.test(stats), 'no side padding trick needed any more');
   assert.match(cssRule(css, '.stat .num'), /font-size:18px/);
 });
+
+test('qualification titles are centred and descriptions start on one shared line', () => {
+  const css = read('styles.css');
+  const stat = cssRule(css, '.stat');
+  assert.match(stat, /display:grid/);
+  assert.match(stat, /grid-row:span 2/);
+  assert.match(stat, /grid-template-rows:subgrid/, 'titles in a row share one height so descriptions align');
+  assert.match(stat, /text-align:center/);
+  assert.match(cssRule(css, '.stat .num'), /align-self:end/, 'short titles sit just above their description');
+});

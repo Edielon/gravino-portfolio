@@ -233,17 +233,18 @@ header.site-nav{
 @media (min-width:1240px){
   .quals::before, .quals::after{left:-40px; right:-40px;}
 }
-.stat{background:var(--band); padding:26px 24px 28px;}
+.stat{display:grid; grid-row:span 2; grid-template-rows:subgrid; row-gap:10px; text-align:center; background:var(--band); padding:26px 24px 28px;}
 .stat .num{
   font-family:var(--font-display);
   font-weight:600;
+  align-self:end;
   font-size:18px;
   line-height:1.3;
   letter-spacing:-0.01em;
   color:var(--band-ink);
   font-variant-numeric:tabular-nums;
 }
-.stat .cap{margin-top:10px; font-size:14.5px; line-height:1.6; color:var(--band-muted);}
+.stat .cap{font-size:14.5px; line-height:1.6; color:var(--band-muted);}
 @media (max-width:1024px){
   .stats{grid-template-columns:repeat(6, 1fr);}
   .stat{grid-column:span 2;}
