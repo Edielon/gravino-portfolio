@@ -365,7 +365,8 @@ test('hero line art is structured for draw-in and scroll motion', () => {
 
 test('hero line art motion respects reduced motion and stays cheap', () => {
   const css = read('styles.css');
-  assert.match(css, /@keyframes art-draw\{from\{stroke-dashoffset:1;?\}\s*to\{stroke-dashoffset:0;?\}\}/);
+  // Undrawn strokes are fully hidden so curved paths can't leave a speck before their turn.
+  assert.match(css, /@keyframes art-draw\{from\{stroke-dashoffset:1; stroke-opacity:0;\}\s*1%\{stroke-opacity:1;\}\s*to\{stroke-dashoffset:0;\}\}/);
   assert.match(css, /@media \(prefers-reduced-motion: no-preference\)\{[^@]*\.hero-art \[pathLength\]\{animation:art-draw/);
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{\s*\.hero-stage\{--p:1;\}\s*\}/, 'reduced motion shows the finished drawing');
   for (const sel of ['.art-jib', '.art-hook-line', '.art-hook', '.art-frame']) {
@@ -384,4 +385,22 @@ test('building frame grows from the ground so it never sinks below it', () => {
   assert.match(frame, /transform-origin:130px 318px/, 'anchored at ground level');
   assert.match(frame, /transform:scaleY\(calc\(0\.94 \+ var\(--p, 0\) \* 0\.06\)\)/);
   assert.ok(!/translateY/.test(frame), 'no downward shift below the ground line');
+});
+
+test('line art draws stroke by stroke and finishes in 1.5 seconds', () => {
+  const html = read('index.html');
+  const css = read('styles.css');
+  const seg = Number(css.match(/--art-seg:([\d.]+)s/)[1]);
+  for (const side of ['left', 'right']) {
+    const svg = html.match(new RegExp(`<svg class="hero-art hero-art--${side}"[^>]*>[\\s\\S]*?</svg>`))[0];
+    const step = Number(svg.match(/style="--art-step:([\d.]+)s"/)[1]);
+    const indices = [...svg.matchAll(/<(?:line|rect|polyline|path)\b[^>]*style="--i:(\d+)"/g)].map((m) => Number(m[1]));
+    const shapes = [...svg.matchAll(/<(?:line|rect|polyline|path)\b/g)].length;
+    assert.equal(indices.length, shapes, `${side}: every stroke has its own order index`);
+    assert.deepEqual(indices, indices.map((_, i) => i), `${side}: strokes draw in document order`);
+    const total = (shapes - 1) * step + seg;
+    assert.ok(Math.abs(total - 1.5) < 0.01, `${side}: drawing takes ${total.toFixed(3)}s`);
+  }
+  assert.match(css, /\.hero-art \[pathLength\]\{animation:art-draw var\(--art-seg\)[^}]*animation-delay:calc\(var\(--i, 0\) \* var\(--art-step\)\)/);
+  assert.ok(!css.includes('.art-crane [pathLength]{animation-delay'), 'no blanket group delay any more');
 });
