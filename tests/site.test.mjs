@@ -282,3 +282,39 @@ test('qualification titles share a top line and descriptions start on one shared
   assert.ok(!/text-align:center/.test(stat), 'text stays left-aligned as before');
   assert.match(cssRule(css, '.stat .num'), /align-self:start/, 'titles share one top line');
 });
+
+const creds = (html) => [...html.matchAll(/<li><span class="cred-name">([^<]+)<\/span><span class="cred-meta">([^<]+)<\/span><\/li>/g)]
+  .map(([, n, m]) => [n, m.replace(/&middot;/g, '·').replace(/&amp;/g, '&')]);
+
+test('home certifications list only work and qualification credentials', () => {
+  const section = read('index.html').match(/<section class="block" id="certifications">[\s\S]*?<\/section>/)[0];
+  assert.match(section, /<h2 class="section-title">Certifications and memberships<\/h2>/);
+  const groups = [...section.matchAll(/<h3 class="cred-heading">([^<]+)<\/h3>\s*<ul class="cred-list">([\s\S]*?)<\/ul>/g)];
+  assert.deepEqual(groups.map((g) => g[1]), ['Professional certifications', 'Professional memberships']);
+  assert.deepEqual(creds(groups[0][2]), [
+    ['Project Management Professional (PMP)', 'Project Management Institute · 2026'],
+    ['Certified Associate in Project Management (CAPM)', 'Project Management Institute · 2025'],
+  ]);
+  assert.deepEqual(creds(groups[1][2]), [
+    ['Member (MIEAust)', 'Engineers Australia · 2025'],
+    ['Member (MIET)', 'Institution of Engineering and Technology · 2025'],
+    ['Member (M.ASCE)', 'American Society of Civil Engineers · 2025'],
+    ['Member', 'Project Management Institute, Queensland Australia Chapter · 2025'],
+  ]);
+  for (const notHere of ['placeholder', 'PRC', 'Diploma', 'White Card', 'MIDAS', 'PICE']) {
+    assert.ok(!section.includes(notHere), `home certifications should not include ${notHere}`);
+  }
+});
+
+test('resume holds the diploma and the training and CPD list', () => {
+  const html = read('resume.html');
+  assert.match(html, /<div class="edu-name">Diploma of Project Management \(BSB50820\)<\/div>\s*<div class="edu-meta">Canterbury Technical Institute, Brisbane &middot; 2024<\/div>/);
+  const training = html.match(/<section class="block" id="training">[\s\S]*?<\/section>/);
+  assert.ok(training, 'training section');
+  assert.match(training[0], /<h2 class="section-title">Training and CPD<\/h2>/);
+  const rows = [...training[0].matchAll(/<div class="t-date">([^<]+)<\/div>\s*<div>\s*<div class="t-role">([^<]+)<\/div>\s*<div class="t-org">([^<]+)<\/div>/g)].map((m) => m.slice(1));
+  assert.deepEqual(rows.map((r) => r[0]), ['Sep 2023', 'Nov 2022', 'Nov 2022', 'Jul 2022', 'Apr 2022', 'Mar 2022']);
+  assert.equal(rows.length, 6);
+  assert.ok(html.indexOf('id="training"') < html.indexOf('id="expertise"'), 'training sits before expertise');
+  assert.ok(!html.includes('PRC'), 'no PRC licence');
+});
