@@ -273,12 +273,12 @@ test('qualifications table is open at the sides with extended top and bottom lin
   assert.match(cssRule(css, '.stat .num'), /font-size:18px/);
 });
 
-test('qualification titles share a centre line and descriptions start on one shared line', () => {
+test('qualification titles share a top line and descriptions start on one shared line', () => {
   const css = read('styles.css');
   const stat = cssRule(css, '.stat');
   assert.match(stat, /display:grid/);
   assert.match(stat, /grid-row:span 2/);
   assert.match(stat, /grid-template-rows:subgrid/, 'titles in a row share one height so descriptions align');
   assert.ok(!/text-align:center/.test(stat), 'text stays left-aligned as before');
-  assert.match(cssRule(css, '.stat .num'), /align-self:center/, 'titles are vertically centred against each other');
+  assert.match(cssRule(css, '.stat .num'), /align-self:start/, 'titles share one top line');
 });
