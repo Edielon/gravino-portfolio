@@ -151,10 +151,6 @@ test('stats read as a divided grid with no accent bars', () => {
   assert.ok(!/border-top/.test(stat), 'no burgundy bar on top of each stat');
   const stats = css.match(/\n\.stats\{([^}]*)\}/)[1];
   assert.match(stats, /gap:1px/, 'hairline gaps between cells');
-  assert.match(stats, /background-clip:content-box/, 'lines only between cells, not in the side padding');
-  const num = css.match(/\.stat \.num\{([^}]*)\}/)[1];
-  const max = Number(num.match(/font-size:clamp\([^,]+,[^,]+,\s*(\d+)px\)/)[1]);
-  assert.ok(max <= 28, `stat figure max ${max}px`);
 });
 
 test('band contains its children margins (no light gap above the stats)', () => {
@@ -238,18 +234,18 @@ test('read the case is a filled button with readable burgundy text', () => {
 
 test('band under the hero photo lists qualifications, not numbers', () => {
   const html = read('index.html');
-  const band = html.match(/<ul class="wrap stats" aria-label="Qualifications">([\s\S]*?)<\/ul>/);
-  assert.ok(band, 'qualifications list in the graphite band');
+  const band = html.match(/<div class="wrap"><ul class="stats" aria-label="Qualifications">([\s\S]*?)<\/ul><\/div>/);
+  assert.ok(band, 'qualifications table in the graphite band');
   assert.ok(html.indexOf('class="hero-photo"') < html.indexOf('aria-label="Qualifications"'), 'band stays under the large photo');
   const items = [...band[1].matchAll(/<li class="stat"><div class="num">([^<]+)<\/div><div class="cap">([^<]+)<\/div><\/li>/g)]
-    .map(([, title, cap]) => [title.replace('&amp;', '&'), cap]);
+    .map(([, title, cap]) => [title.replace('&amp;', '&'), cap.replace(/&amp;/g, '&')]);
   assert.deepEqual(items.map(([t]) => t), ['PMP', 'MIEAust', 'Structural Designer & Engineer', 'Estimator', 'Project Coordinator']);
   assert.deepEqual(items.map(([, c]) => c), [
-    'Project Management Professional, PMI',
-    'Member, Engineers Australia',
-    'Seismic design and retrofit, Philippines',
-    'Housing and construction estimating, Australia',
-    'Construction projects, Philippines',
+    'Project Management Professional, certified by PMI. Plans schedules, procurement and cost control with Gantt charts and S-curves.',
+    'Member of Engineers Australia, the professional body for engineers practising in Australia.',
+    'Seismic-resistant design and retrofit in ETABS, VisualFoundation and AutoCAD, Digos City, Philippines, 2020 to 2023.',
+    'Housing estimator and estimating software support at Senterprisys Limited, Queensland, since 2023. Cost estimates, BOQ and BOM.',
+    'Coordinated architects, contractors and suppliers through construction at WMCabardo Engineering and ADRA Constructions.',
   ]);
   for (const gone of ['3,000 m&sup2;</div>', '6 storeys', '2 countries']) assert.ok(!band[1].includes(gone), `no old stat ${gone}`);
 });
@@ -263,4 +259,13 @@ test('qualifications grid leaves no empty cells at any breakpoint', () => {
 
 test('qualifications stack one per row below 640px so long titles are not squeezed', () => {
   assert.match(read('styles.css'), /@media \(max-width:640px\)\{\.stats\{grid-template-columns:1fr;/);
+});
+
+test('qualifications render as a bordered table with compact titles', () => {
+  const css = read('styles.css');
+  const stats = cssRule(css, '.stats');
+  assert.match(stats, /border:1px solid var\(--band-line\)/, 'outer table border');
+  assert.match(stats, /background:var\(--band-line\)/, 'inner cell lines');
+  assert.ok(!/background-clip/.test(stats), 'no side padding trick needed any more');
+  assert.match(cssRule(css, '.stat .num'), /font-size:18px/);
 });
