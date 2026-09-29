@@ -235,29 +235,29 @@
     </div>
   </section>
 
-  <section class="block" id="certifications">
-    <div class="wrap">
+  <section class="band creds-band" id="certifications">
+    <div class="wrap creds-wrap">
       <h2 class="section-title">Certifications and memberships</h2>
-      <div class="creds">
-        <div class="cred-group">
-          <h3 class="cred-heading">Professional certifications</h3>
-          <ul class="cred-list">
-            <li><span class="cred-name">Project Management Professional (PMP)</span><span class="cred-meta">Project Management Institute &middot; 2026</span></li>
-            <li><span class="cred-name">Certified Associate in Project Management (CAPM)</span><span class="cred-meta">Project Management Institute &middot; 2025</span></li>
-          </ul>
-        </div>
-        <div class="cred-group">
-          <h3 class="cred-heading">Professional memberships</h3>
-          <ul class="cred-list">
-            <li><span class="cred-name">Member (MIEAust)</span><span class="cred-meta">Engineers Australia &middot; 2025</span></li>
-            <li><span class="cred-name">Member (MIET)</span><span class="cred-meta">Institution of Engineering and Technology &middot; 2025</span></li>
-            <li><span class="cred-name">Member (M.ASCE)</span><span class="cred-meta">American Society of Civil Engineers &middot; 2025</span></li>
-            <li><span class="cred-name">Member</span><span class="cred-meta">Project Management Institute, Queensland Australia Chapter &middot; 2025</span></li>
-          </ul>
-        </div>
+      <div class="quals cred-table">
+        <ul class="cred-grid" aria-label="Certifications and memberships">
+          <li class="cred-cell"><a class="cred-open" href="assets/certificates/pmp.jpg" data-title="Project Management Professional (PMP)" aria-haspopup="dialog"><span class="cred-title">PMP</span><span class="cred-desc">Project Management Professional, Project Management Institute &middot; 2026</span><span class="cred-view">View certificate</span></a></li>
+          <li class="cred-cell"><a class="cred-open" href="assets/certificates/capm.jpg" data-title="Certified Associate in Project Management (CAPM)" aria-haspopup="dialog"><span class="cred-title">CAPM</span><span class="cred-desc">Certified Associate in Project Management, Project Management Institute &middot; 2025</span><span class="cred-view">View certificate</span></a></li>
+          <li class="cred-cell"><a class="cred-open" href="assets/certificates/engineers-australia.jpg" data-title="Member, Engineers Australia (MIEAust)" aria-haspopup="dialog"><span class="cred-title">MIEAust</span><span class="cred-desc">Member, Engineers Australia &middot; 2025</span><span class="cred-view">View certificate</span></a></li>
+          <li class="cred-cell"><a class="cred-open" href="assets/certificates/iet.jpg" data-title="Member, Institution of Engineering and Technology (MIET)" aria-haspopup="dialog"><span class="cred-title">MIET</span><span class="cred-desc">Member, Institution of Engineering and Technology &middot; 2025</span><span class="cred-view">View certificate</span></a></li>
+          <li class="cred-cell"><a class="cred-open" href="assets/certificates/asce.jpg" data-title="Member, American Society of Civil Engineers (M.ASCE)" aria-haspopup="dialog"><span class="cred-title">M.ASCE</span><span class="cred-desc">Member, American Society of Civil Engineers &middot; 2025</span><span class="cred-view">View certificate</span></a></li>
+          <li class="cred-cell"><a class="cred-open" href="assets/certificates/pmi-member.jpg" data-title="Project Management Institute membership" aria-haspopup="dialog"><span class="cred-title">PMI Member</span><span class="cred-desc">Project Management Institute, Queensland Australia Chapter &middot; 2025</span><span class="cred-view">View certificate</span></a></li>
+        </ul>
       </div>
     </div>
   </section>
+
+  <dialog class="cert-dialog" aria-labelledby="cert-dialog-title">
+    <div class="cert-dialog-bar">
+      <h3 id="cert-dialog-title"></h3>
+      <button class="cert-close" type="button" aria-label="Close certificate">&times;</button>
+    </div>
+    <img class="cert-image" alt="" src="" decoding="async">
+  </dialog>
 </main>
 
 <footer class="site-foot wrap">
@@ -294,6 +294,29 @@
       }
     });
   });
+})();
+</script>
+<script>
+(() => {
+  const dialog = document.querySelector('.cert-dialog');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  const image = dialog.querySelector('.cert-image');
+  const title = dialog.querySelector('#cert-dialog-title');
+  let opener = null;
+  document.querySelectorAll('.cred-open').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      opener = link;
+      image.src = link.getAttribute('href');
+      image.alt = link.dataset.title + ' certificate';
+      title.textContent = link.dataset.title;
+      dialog.showModal();
+    });
+  });
+  dialog.querySelector('.cert-close').addEventListener('click', () => dialog.close());
+  // A click on the dimmed backdrop lands on the dialog element itself.
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', () => { if (opener) opener.focus(); });
 })();
 </script>
 </body>

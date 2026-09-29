@@ -283,27 +283,42 @@ test('qualification titles share a top line and descriptions start on one shared
   assert.match(cssRule(css, '.stat .num'), /align-self:start/, 'titles share one top line');
 });
 
-const creds = (html) => [...html.matchAll(/<li><span class="cred-name">([^<]+)<\/span><span class="cred-meta">([^<]+)<\/span><\/li>/g)]
-  .map(([, n, m]) => [n, m.replace(/&middot;/g, '·').replace(/&amp;/g, '&')]);
-
-test('home certifications list only work and qualification credentials', () => {
-  const section = read('index.html').match(/<section class="block" id="certifications">[\s\S]*?<\/section>/)[0];
-  assert.match(section, /<h2 class="section-title">Certifications and memberships<\/h2>/);
-  const groups = [...section.matchAll(/<h3 class="cred-heading">([^<]+)<\/h3>\s*<ul class="cred-list">([\s\S]*?)<\/ul>/g)];
-  assert.deepEqual(groups.map((g) => g[1]), ['Professional certifications', 'Professional memberships']);
-  assert.deepEqual(creds(groups[0][2]), [
-    ['Project Management Professional (PMP)', 'Project Management Institute · 2026'],
-    ['Certified Associate in Project Management (CAPM)', 'Project Management Institute · 2025'],
+test('home certifications sit on the graphite band and each opens its certificate', () => {
+  const html = read('index.html');
+  const section = html.match(/<section class="band creds-band" id="certifications">[\s\S]*?<\/section>/);
+  assert.ok(section, 'certifications section on the graphite band');
+  assert.match(section[0], /<h2 class="section-title">Certifications and memberships<\/h2>/);
+  const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-title">([^<]+)<\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
+    .map(([, href, dataTitle, title, desc]) => ({ href, dataTitle, title, desc: desc.replace(/&middot;/g, '·') }));
+  assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'MIEAust', 'MIET', 'M.ASCE', 'PMI Member']);
+  assert.deepEqual(cells.map((c) => c.desc), [
+    'Project Management Professional, Project Management Institute · 2026',
+    'Certified Associate in Project Management, Project Management Institute · 2025',
+    'Member, Engineers Australia · 2025',
+    'Member, Institution of Engineering and Technology · 2025',
+    'Member, American Society of Civil Engineers · 2025',
+    'Project Management Institute, Queensland Australia Chapter · 2025',
   ]);
-  assert.deepEqual(creds(groups[1][2]), [
-    ['Member (MIEAust)', 'Engineers Australia · 2025'],
-    ['Member (MIET)', 'Institution of Engineering and Technology · 2025'],
-    ['Member (M.ASCE)', 'American Society of Civil Engineers · 2025'],
-    ['Member', 'Project Management Institute, Queensland Australia Chapter · 2025'],
-  ]);
+  for (const c of cells) assert.ok(existsSync(new URL(`../${c.href}`, import.meta.url)), `${c.href} exists`);
   for (const notHere of ['placeholder', 'PRC', 'Diploma', 'White Card', 'MIDAS', 'PICE']) {
-    assert.ok(!section.includes(notHere), `home certifications should not include ${notHere}`);
+    assert.ok(!section[0].includes(notHere), `home certifications should not include ${notHere}`);
   }
+});
+
+test('certificate pop-up is an accessible dialog', () => {
+  const html = read('index.html');
+  assert.match(html, /<dialog class="cert-dialog" aria-labelledby="cert-dialog-title">/);
+  assert.match(html, /<h3 id="cert-dialog-title"><\/h3>/);
+  assert.match(html, /<button class="cert-close" type="button" aria-label="Close certificate">/);
+  assert.match(html, /<img class="cert-image" alt="" src="" decoding="async">/);
+  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n');
+  for (const needle of ['.cred-open', 'showModal', 'preventDefault', 'event.target === dialog', 'opener.focus()']) {
+    assert.ok(scripts.includes(needle), `dialog script handles ${needle}`);
+  }
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.cred-grid'), /grid-template-columns:repeat\(3, 1fr\)/);
+  assert.match(cssRule(css, '.cert-dialog::backdrop'), /background:/);
+  assert.match(cssRule(css, '.cert-image'), /object-fit:contain/);
 });
 
 test('resume holds the diploma and the training and CPD list', () => {

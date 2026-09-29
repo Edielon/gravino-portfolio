@@ -6,6 +6,8 @@ The site is also published as the Claude artifact https://claude.ai/artifact/LiK
 
 The CV download on `resume.html` serves `assets/Hanny-Gravino-CV.pdf` (currently a placeholder). To update it, replace that file and update the "PDF · N KB" size label next to the button.
 
+Certificate images for the home page pop-up live in `assets/certificates/` as compressed JPGs. Certification numbers, member IDs, QR codes and citizenship are pixelated before publishing; never add an unredacted scan. The PRC licence number is intentionally not shown.
+
 The contact form needs a real Web3Forms access key in place of `YOUR_WEB3FORMS_ACCESS_KEY` in `contact.html`.
 
 ## Workflow for changes
