@@ -261,13 +261,15 @@ test('qualifications stack one per row below 640px so long titles are not squeez
   assert.match(read('styles.css'), /@media \(max-width:640px\)\{\.stats\{grid-template-columns:1fr;/);
 });
 
-test('qualifications table is open at the sides with extended top and bottom lines', () => {
+test('band tables are closed frames with small rounded outer corners', () => {
   const css = read('styles.css');
   const stats = cssRule(css, '.stats');
-  assert.ok(!/border/.test(stats), 'no box border around the table');
-  assert.match(cssRule(css, '.quals::before, .quals::after'), /height:1px/, 'top and bottom rules drawn by the wrapper');
-  assert.match(css, /@media \(min-width:1240px\)\{\s*\.quals::before, \.quals::after\{left:-40px; right:-40px;\}\s*\}/, 'rules extend past the table on wide screens');
-  assert.match(cssRule(css, '.band'), /overflow-x:clip/, 'extended rules can never cause sideways scrolling');
+  for (const grid of ['.stats', '.cred-grid']) {
+    assert.match(cssRule(css, grid), /border:1px solid var\(--band-line\)/, `${grid} has a closed frame`);
+    assert.match(cssRule(css, grid), /border-radius:6px/, `${grid} has tight rounded outer corners`);
+  }
+  assert.ok(!css.includes('.quals::before'), 'no extended top and bottom rules any more');
+  assert.ok(!css.includes('.cred-table::before'), 'no extended rules on the certifications table');
   assert.ok(!/background-clip/.test(stats), 'no side padding trick needed any more');
   // Dividers are drawn on each cell's left and top edge and clipped at the table edge, so sub-pixel
   // rounding can never expose a stray line down the right side.

@@ -227,14 +227,10 @@ header.site-nav{
   padding:0;
   list-style:none;
   overflow:hidden;
+  border:1px solid var(--band-line);
+  border-radius:6px;
 }
-.quals{position:relative; padding-block:48px;}
-.quals::before, .quals::after{content:""; position:absolute; left:0; right:0; height:1px; background:var(--band-line);}
-.quals::before{top:47px;}
-.quals::after{bottom:47px;}
-@media (min-width:1240px){
-  .quals::before, .quals::after{left:-40px; right:-40px;}
-}
+.quals{padding-block:48px;}
 .stat{display:grid; grid-row:span 2; grid-template-rows:subgrid; row-gap:10px; background:var(--band); box-shadow:-1px 0 0 var(--band-line), 0 -1px 0 var(--band-line); padding:26px 24px 28px;}
 .stat .num{
   font-family:var(--font-display);
@@ -252,7 +248,7 @@ header.site-nav{
   .stat{grid-column:span 2;}
   .stat:nth-child(n+4){grid-column:span 3;}
 }
-@media (max-width:640px){.stats{grid-template-columns:1fr;} .quals{padding-block:32px;} .quals::before{top:31px;} .quals::after{bottom:31px;} .stat, .stat:nth-child(n+4){grid-column:auto; padding:22px 20px;}}
+@media (max-width:640px){.stats{grid-template-columns:1fr;} .quals{padding-block:32px;} .stat, .stat:nth-child(n+4){grid-column:auto; padding:22px 20px;}}
 
 .career{
   display:grid;
@@ -410,7 +406,7 @@ section.work{border-top:none;}
 .band .section-title{color:var(--band-ink);}
 .creds-wrap{padding-block:72px 24px;}
 .cred-table{margin-top:8px;}
-.cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden;}
+.cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border:1px solid var(--band-line); border-radius:6px;}
 .cred-cell{display:flex; background:var(--band); box-shadow:-1px 0 0 var(--band-line), 0 -1px 0 var(--band-line);}
 .cred-open{
   display:flex;
@@ -431,7 +427,6 @@ section.work{border-top:none;}
 .cred-open:hover .cred-view::after{transform:translateX(3px);}
 @media (max-width:1024px){ .cred-grid{grid-template-columns:repeat(2, 1fr);} }
 @media (max-width:640px){ .cred-grid{grid-template-columns:1fr;} .creds-wrap{padding-block:56px 16px;} }
-@media (max-width:1239px){ .cred-table::before, .cred-table::after{left:-20px; right:-20px;} }
 @media (prefers-reduced-motion: reduce){ .cred-open, .cred-view::after{transition:none;} }
 
 .cert-dialog{
