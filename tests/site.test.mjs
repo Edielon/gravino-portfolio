@@ -404,3 +404,13 @@ test('line art draws stroke by stroke and finishes in 1.5 seconds', () => {
   assert.match(css, /\.hero-art \[pathLength\]\{animation:art-draw var\(--art-seg\)[^}]*animation-delay:calc\(var\(--i, 0\) \* var\(--art-step\)\)/);
   assert.ok(!css.includes('.art-crane [pathLength]{animation-delay'), 'no blanket group delay any more');
 });
+
+test('crane swing is clearly visible but the hook never reaches the roof', () => {
+  const css = read('styles.css');
+  const angle = Number(cssRule(css, '.art-jib').match(/rotate\(calc\(var\(--p, 0\) \* -([\d.]+)deg\)\)/)[1]);
+  assert.ok(angle >= 10, `jib swings ${angle}deg`);
+  const hookTravel = Number(cssRule(css, '.art-hook').match(/translateY\(calc\(var\(--p, 0\) \* ([\d.]+)px\)\)/)[1]);
+  // Hook tip sits at y=162, 78 units left of the jib pivot (x=190); the building roof is at y=210.
+  const hookBottom = 162 + 78 * Math.sin((angle * Math.PI) / 180) + hookTravel;
+  assert.ok(hookBottom < 210, `hook bottom ${hookBottom.toFixed(1)} stays above the roof`);
+});

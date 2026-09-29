@@ -576,7 +576,7 @@ footer.site-foot{
   /* Each stroke draws on its own, one after another, like a pen drafting the drawing. */
   .hero-art [pathLength]{animation:art-draw var(--art-seg) cubic-bezier(0.4, 0, 0.2, 1) both; animation-delay:calc(var(--i, 0) * var(--art-step));}
 }
-.art-jib{transform-box:view-box; transform-origin:190px 44px; transform:rotate(calc(var(--p, 0) * -4deg));}
+.art-jib{transform-box:view-box; transform-origin:190px 44px; transform:rotate(calc(var(--p, 0) * -10deg));}
 .art-hook-line{transform-box:view-box; transform-origin:112px 48px; transform:scaleY(calc(1 + var(--p, 0) * 0.25));}
 .art-hook{transform:translateY(calc(var(--p, 0) * 25.5px));}
 .art-frame{transform-box:view-box; transform-origin:130px 318px; transform:scaleY(calc(0.94 + var(--p, 0) * 0.06));}
