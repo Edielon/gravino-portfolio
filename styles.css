@@ -233,11 +233,11 @@ header.site-nav{
 @media (min-width:1240px){
   .quals::before, .quals::after{left:-40px; right:-40px;}
 }
-.stat{display:grid; grid-row:span 2; grid-template-rows:subgrid; row-gap:10px; text-align:center; background:var(--band); padding:26px 24px 28px;}
+.stat{display:grid; grid-row:span 2; grid-template-rows:subgrid; row-gap:10px; background:var(--band); padding:26px 24px 28px;}
 .stat .num{
   font-family:var(--font-display);
   font-weight:600;
-  align-self:end;
+  align-self:center;
   font-size:18px;
   line-height:1.3;
   letter-spacing:-0.01em;
