@@ -339,3 +339,10 @@ test('resume holds the diploma and the training and CPD list', () => {
   assert.ok(html.indexOf('id="training"') < html.indexOf('id="expertise"'), 'training sits before expertise');
   assert.ok(!html.includes('PRC'), 'no PRC licence');
 });
+
+test('view certificate label stays readable on the graphite band', () => {
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.cred-view'), /color:var\(--accent-on-band\)/);
+  const ratio = contrast(hex(token(css, '--accent-on-band')), hex(token(css, '--band')));
+  assert.ok(ratio >= 4.5, `label contrast ${ratio.toFixed(2)}`);
+});
