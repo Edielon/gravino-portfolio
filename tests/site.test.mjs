@@ -235,3 +235,32 @@ test('read the case is a filled button with readable burgundy text', () => {
   }
   assert.ok(contrast(hex(token(css, '--button-soft')), hex(token(css, '--bg'))) > 1.2, 'fill is visibly darker than the page');
 });
+
+test('band under the hero photo lists qualifications, not numbers', () => {
+  const html = read('index.html');
+  const band = html.match(/<ul class="wrap stats" aria-label="Qualifications">([\s\S]*?)<\/ul>/);
+  assert.ok(band, 'qualifications list in the graphite band');
+  assert.ok(html.indexOf('class="hero-photo"') < html.indexOf('aria-label="Qualifications"'), 'band stays under the large photo');
+  const items = [...band[1].matchAll(/<li class="stat"><div class="num">([^<]+)<\/div><div class="cap">([^<]+)<\/div><\/li>/g)]
+    .map(([, title, cap]) => [title.replace('&amp;', '&'), cap]);
+  assert.deepEqual(items.map(([t]) => t), ['PMP', 'MIEAust', 'Structural Designer & Engineer', 'Estimator', 'Project Coordinator']);
+  assert.deepEqual(items.map(([, c]) => c), [
+    'Project Management Professional, PMI',
+    'Member, Engineers Australia',
+    'Seismic design and retrofit, Philippines',
+    'Housing and construction estimating, Australia',
+    'Construction projects, Philippines',
+  ]);
+  for (const gone of ['3,000 m&sup2;</div>', '6 storeys', '2 countries']) assert.ok(!band[1].includes(gone), `no old stat ${gone}`);
+});
+
+test('qualifications grid leaves no empty cells at any breakpoint', () => {
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.stats'), /grid-template-columns:repeat\(5, 1fr\)/);
+  assert.match(css, /@media \(max-width:1024px\)\{[^}]*\.stats\{grid-template-columns:repeat\(6, 1fr\);\}[^}]*\}/);
+  assert.match(css, /\.stat\{grid-column:span 2;\}\s*\.stat:nth-child\(n\+4\)\{grid-column:span 3;\}/);
+});
+
+test('qualifications stack one per row below 640px so long titles are not squeezed', () => {
+  assert.match(read('styles.css'), /@media \(max-width:640px\)\{\.stats\{grid-template-columns:1fr;/);
+});
