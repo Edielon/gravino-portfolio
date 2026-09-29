@@ -348,3 +348,40 @@ test('view certificate label stays readable on the graphite band', () => {
   const ratio = contrast(hex(token(css, '--accent-on-band')), hex(token(css, '--band')));
   assert.ok(ratio >= 4.5, `label contrast ${ratio.toFixed(2)}`);
 });
+
+test('hero line art is structured for draw-in and scroll motion', () => {
+  const html = read('index.html');
+  const left = html.match(/<svg class="hero-art hero-art--left"[\s\S]*?<\/svg>/)[0];
+  const right = html.match(/<svg class="hero-art hero-art--right"[\s\S]*?<\/svg>/)[0];
+  for (const cls of ['art-building', 'art-crane', 'art-jib', 'art-hook-line', 'art-hook']) assert.match(left, new RegExp(`class="${cls}"`), `left art has ${cls}`);
+  for (const cls of ['art-frame', 'art-truss']) assert.match(right, new RegExp(`class="${cls}"`), `right art has ${cls}`);
+  for (const svg of [left, right]) {
+    const shapes = [...svg.matchAll(/<(line|rect|polyline|path)\b[^>]*>/g)].map((m) => m[0]);
+    assert.ok(shapes.length > 10);
+    for (const s of shapes) assert.match(s, /pathLength="1"/, `every stroke can draw in: ${s.slice(0, 40)}`);
+  }
+  assert.ok(left.indexOf('class="art-jib"') < left.indexOf('class="art-hook-line"'), 'hook swings with the jib');
+});
+
+test('hero line art motion respects reduced motion and stays cheap', () => {
+  const css = read('styles.css');
+  assert.match(css, /@keyframes art-draw\{from\{stroke-dashoffset:1;?\}\s*to\{stroke-dashoffset:0;?\}\}/);
+  assert.match(css, /@media \(prefers-reduced-motion: no-preference\)\{[^@]*\.hero-art \[pathLength\]\{animation:art-draw/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{\s*\.hero-stage\{--p:1;\}\s*\}/, 'reduced motion shows the finished drawing');
+  for (const sel of ['.art-jib', '.art-hook-line', '.art-hook', '.art-frame']) {
+    assert.match(cssRule(css, sel), /transform:/, `${sel} moves with transform only`);
+    assert.ok(!/(^|;)\s*(top|left|width|height):/.test(cssRule(css, sel)), `${sel} does not animate layout`);
+  }
+  const script = [...read('index.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('.hero-stage'));
+  assert.ok(script, 'scroll script present');
+  for (const needle of ["prefers-reduced-motion: reduce", 'requestAnimationFrame', 'passive: true', 'IntersectionObserver', "setProperty('--p'"]) {
+    assert.ok(script.includes(needle), `scroll script uses ${needle}`);
+  }
+});
+
+test('building frame grows from the ground so it never sinks below it', () => {
+  const frame = cssRule(read('styles.css'), '.art-frame');
+  assert.match(frame, /transform-origin:130px 318px/, 'anchored at ground level');
+  assert.match(frame, /transform:scaleY\(calc\(0\.94 \+ var\(--p, 0\) \* 0\.06\)\)/);
+  assert.ok(!/translateY/.test(frame), 'no downward shift below the ground line');
+});
