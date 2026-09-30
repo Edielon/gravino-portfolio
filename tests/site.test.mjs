@@ -134,15 +134,17 @@ test('footer repeats the nav links plus back to top on every page', () => {
   }
 });
 
-test('resume page offers the CV download right under the header', () => {
+test('resume page offers the CV download right below the tabs', () => {
   const html = read('resume.html');
-  const head = (html.match(/<div class="wrap page-head">[\s\S]*?\n  <\/div>/) || [''])[0];
-  const link = head.match(/<a class="btn btn-primary" href="([^"]+)" download="([^"]+)"[^>]*>Download CV<\/a>/);
-  assert.ok(link, 'Download CV button inside the page header');
+  const head = html.match(/<div class="wrap page-head">[\s\S]*?\n  <\/div>/)[0];
+  assert.ok(!head.includes('Download CV'), 'no longer in the page header');
+  const side = html.indexOf('<div class="career-side">');
+  const block = html.slice(html.lastIndexOf('</section>', side), side);
+  const link = block.match(/<a class="btn btn-primary" href="([^"]+)" download="([^"]+)"[^>]*>Download CV<\/a>/);
+  assert.ok(link, 'Download CV button right after the last tab panel');
   assert.equal(link[2], 'Hanny-Gravino-CV.pdf');
   assert.ok(existsSync(new URL(`../${link[1]}`, import.meta.url)), `${link[1]} exists`);
-  assert.ok(head.indexOf('</h1>') < head.indexOf('Download CV'), 'button comes after the heading');
-  assert.match(head, /PDF &middot; \d+ KB/);
+  assert.match(block, /PDF &middot; \d+ KB/);
 });
 
 test('stats read as a divided grid with no accent bars', () => {
@@ -452,9 +454,9 @@ test('resume page header has no small label above the heading', () => {
 
 test('timelines fill with burgundy as the page scrolls', () => {
   const css = read('styles.css');
-  assert.match(cssRule(css, '.timeline.tl-anim .t-row::before'), /background:var\(--heading\)/, 'dots start graphite');
+  assert.match(cssRule(css, '.timeline.tl-anim .t-row::before'), /background:var\(--rule-strong\)/, 'dots start light grey so the burgundy fill stands out');
   assert.match(css, /\.timeline\.tl-anim \.t-row:first-child::before, \.timeline\.tl-anim \.t-row\.is-filled::before\{background:var\(--accent\);\}/, 'first dot starts burgundy; others fill');
-  assert.match(cssRule(css, '.timeline.tl-anim::before'), /background:var\(--heading\)/, 'rail starts graphite');
+  assert.match(cssRule(css, '.timeline.tl-anim::before'), /background:var\(--rule-strong\)/, 'rail starts light grey');
   assert.match(cssRule(css, '.timeline.tl-anim::after'), /height:var\(--fill, 0px\)/, 'burgundy liquid height follows scroll');
   assert.match(cssRule(css, '.timeline.tl-anim::after'), /background:var\(--accent\)/);
   const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
