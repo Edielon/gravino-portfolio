@@ -550,3 +550,19 @@ test('tab labels give a small expanding pop when a visitor selects them', () => 
   assert.match(script, /animationend/, 'class is cleared so it can replay');
   assert.match(script, /select\(0, false, false\)/, 'no pop on page load');
 });
+
+test('case number sits beside the title with a divider between them', () => {
+  const html = read('index.html');
+  const heads = [...html.matchAll(/<div class="case-head">\s*<span class="case-num" aria-hidden="true">(\d\d)<\/span>\s*<div class="case-heading">\s*<h3>([^<]+)<\/h3>\s*<p class="case-meta">([^<]+)<\/p>\s*<\/div>\s*<\/div>/g)];
+  assert.equal(heads.length, 3, 'number, then title, then location and date');
+  assert.deepEqual(heads.map((m) => m[1]), ['01', '02', '03']);
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.case-head'), /display:flex/);
+  assert.match(cssRule(css, '.case-heading'), /border-left:1px solid var\(--rule\)/, 'divider between number and title');
+});
+
+test('case numbers share one width so the dividers line up', () => {
+  const num = cssRule(read('styles.css'), '.case-num');
+  assert.match(num, /font-variant-numeric:tabular-nums/);
+  assert.match(num, /width:1\.2em/);
+});
