@@ -332,8 +332,8 @@ test('certificate pop-up is an accessible dialog', () => {
 test('resume holds the diploma and the training and CPD list', () => {
   const html = read('resume.html');
   assert.match(html, /<div class="t-date">2024<\/div>\s*<div>\s*<div class="t-role">Diploma of Project Management \(BSB50820\)<\/div>\s*<div class="t-org">Canterbury Technical Institute, Brisbane<\/div>/);
-  const training = html.match(/<section class="block" id="training">[\s\S]*?<\/section>/);
-  assert.ok(training, 'training section');
+  const training = html.match(/<section class="tab-panel" id="training"[^>]*>[\s\S]*?<\/section>/);
+  assert.ok(training, 'training panel');
   assert.match(training[0], /<h2 class="section-title">Training and CPD<\/h2>/);
   const rows = [...training[0].matchAll(/<div class="t-date">([^<]+)<\/div>\s*<div>\s*<div class="t-role">([^<]+)<\/div>\s*<div class="t-org">([^<]+)<\/div>/g)].map((m) => m.slice(1));
   assert.deepEqual(rows.map((r) => r[0]), ['Sep 2023', 'Nov 2022', 'Nov 2022', 'Jul 2022', 'Apr 2022', 'Mar 2022']);
@@ -413,4 +413,34 @@ test('crane swing is clearly visible but the hook never reaches the roof', () =>
   // Hook tip sits at y=162, 78 units left of the jib pivot (x=190); the building roof is at y=210.
   const hookBottom = 162 + 78 * Math.sin((angle * Math.PI) / 180) + hookTravel;
   assert.ok(hookBottom < 210, `hook bottom ${hookBottom.toFixed(1)} stays above the roof`);
+});
+
+test('resume career, education and training sit in accessible tabs', () => {
+  const html = read('resume.html');
+  const list = html.match(/<div class="tab-list" role="tablist" aria-label="Resume sections" hidden>([\s\S]*?)<\/div>/);
+  assert.ok(list, 'tablist starts hidden so the page works without JavaScript');
+  const tabs = [...list[1].matchAll(/<button class="tab" type="button" role="tab" id="([^"]+)" aria-controls="([^"]+)" aria-selected="(true|false)" tabindex="(-1|0)">([^<]+)<\/button>/g)]
+    .map(([, id, controls, selected, tabindex, label]) => ({ id, controls, selected, tabindex, label }));
+  assert.deepEqual(tabs.map((t) => t.label), ['Career', 'Education', 'Training and CPD']);
+  assert.deepEqual(tabs.map((t) => t.selected), ['true', 'false', 'false']);
+  assert.deepEqual(tabs.map((t) => t.tabindex), ['0', '-1', '-1']);
+  for (const t of tabs) {
+    const panel = html.match(new RegExp(`<section class="tab-panel" id="${t.controls}" role="tabpanel" aria-labelledby="${t.id}" tabindex="0">([\\s\\S]*?)</section>`));
+    assert.ok(panel, `panel for ${t.label}`);
+    assert.match(panel[1], /<div class="timeline">/, `${t.label} keeps the timeline`);
+  }
+  assert.ok(!html.includes('<section class="block" id="training">'), 'training no longer a separate long section');
+  const script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('[role="tab"]'));
+  assert.ok(script, 'tab script present');
+  for (const needle of ['ArrowRight', 'ArrowLeft', 'Home', 'End', 'aria-selected', '.hidden', 'tabs-ready']) {
+    assert.ok(script.includes(needle), `tab script handles ${needle}`);
+  }
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.tab[aria-selected="true"]'), /box-shadow:inset 0 -2px 0 var\(--accent\)/, 'active tab underlined in burgundy like the nav');
+  assert.match(cssRule(css, '.tab'), /min-height:44px/);
+});
+
+test('the hidden attribute always wins over component display rules', () => {
+  // Without it, .tab-list and .case-toggle would show as dead controls when JavaScript is off.
+  assert.match(read('styles.css'), /\[hidden\]\{display:none !important;\}/);
 });

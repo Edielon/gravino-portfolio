@@ -35,8 +35,14 @@
     </div>
   </div>
 
-    <div class="wrap career">
-      <div>
+  <div class="wrap career">
+    <div class="resume-tabs">
+      <div class="tab-list" role="tablist" aria-label="Resume sections" hidden>
+        <button class="tab" type="button" role="tab" id="tab-career" aria-controls="career" aria-selected="true" tabindex="0">Career</button>
+        <button class="tab" type="button" role="tab" id="tab-education" aria-controls="education" aria-selected="false" tabindex="-1">Education</button>
+        <button class="tab" type="button" role="tab" id="tab-training" aria-controls="training" aria-selected="false" tabindex="-1">Training and CPD</button>
+      </div>
+      <section class="tab-panel" id="career" role="tabpanel" aria-labelledby="tab-career" tabindex="0">
         <h2 class="section-title">Career</h2>
         <div class="timeline">
           <div class="t-row">
@@ -61,8 +67,8 @@
             </div>
           </div>
         </div>
-      </div>
-      <div>
+      </section>
+      <section class="tab-panel" id="education" role="tabpanel" aria-labelledby="tab-education" tabindex="0">
         <h2 class="section-title">Education</h2>
         <div class="timeline">
           <div class="t-row">
@@ -82,17 +88,10 @@
             </div>
           </div>
         </div>
-        <div class="placeholder headshot">
-          <span class="ph-tag">Placeholder</span>
-          <p>Add headshot photo.</p>
-        </div>
-      </div>
-    </div>
-
-  <section class="block" id="training">
-    <div class="wrap">
-      <h2 class="section-title">Training and CPD</h2>
-      <div class="timeline">
+      </section>
+      <section class="tab-panel" id="training" role="tabpanel" aria-labelledby="tab-training" tabindex="0">
+        <h2 class="section-title">Training and CPD</h2>
+        <div class="timeline">
           <div class="t-row">
             <div class="t-date">Sep 2023</div>
             <div>
@@ -135,9 +134,16 @@
               <div class="t-org">MIDAS webinar</div>
             </div>
           </div>
+        </div>
+      </section>
+    </div>
+    <div class="career-side">
+      <div class="placeholder headshot">
+        <span class="ph-tag">Placeholder</span>
+        <p>Add headshot photo.</p>
       </div>
     </div>
-  </section>
+  </div>
 
   <section class="block" id="expertise">
     <div class="wrap">
@@ -179,5 +185,37 @@
     </ul>
   </nav>
 </footer>
+<script>
+(() => {
+  // Resume tabs: progressive enhancement. Without JavaScript all three timelines simply stack.
+  const root = document.querySelector('.resume-tabs');
+  if (!root) return;
+  const list = root.querySelector('[role="tablist"]');
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
+  const select = (index, focus) => {
+    tabs.forEach((tab, i) => {
+      const on = i === index;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+      panels[i].hidden = !on;
+    });
+    if (focus) tabs[index].focus();
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(i, false));
+    tab.addEventListener('keydown', (event) => {
+      const last = tabs.length - 1;
+      const next = { ArrowRight: i === last ? 0 : i + 1, ArrowLeft: i === 0 ? last : i - 1, Home: 0, End: last }[event.key];
+      if (next === undefined) return;
+      event.preventDefault();
+      select(next, true);
+    });
+  });
+  list.hidden = false;
+  root.classList.add('tabs-ready');
+  select(0, false);
+})();
+</script>
 </body>
 </html>
