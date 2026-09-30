@@ -1,5 +1,6 @@
 :root{
   --hero-measure:980px;
+  --tab-bar-height:44px;
   --bg:#DCDCD9;
   --panel:#E9E9E6;
   --heading:#1A1B1D;
@@ -25,6 +26,7 @@
 *{box-sizing:border-box;}
 body{margin:0;}
 [hidden]{display:none !important;}
+.sr-only{position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap;}
 body{
   background:var(--bg);
   color:var(--ink);
@@ -307,9 +309,12 @@ header.site-nav{
 .t-logo{display:block; width:48px; height:48px; object-fit:contain; object-position:left center; margin-bottom:10px;}
 .timeline--logos{gap:44px;}
 .career .placeholder{margin-top:24px;}
+/* The headshot's top edge sits on the divider under the tab buttons. */
+.career-side{margin-top:var(--tab-bar-height);}
+.career-side .placeholder{margin-top:0;}
 .tab-list{display:flex; flex-wrap:wrap; gap:4px 28px; border-bottom:1px solid var(--rule);}
 .tab{
-  min-height:44px;
+  min-height:var(--tab-bar-height);
   padding:10px 0;
   background:none;
   border:0;
@@ -338,6 +343,7 @@ header.site-nav{
 @keyframes tab-in{from{opacity:0.35;} to{opacity:1;}}
 @media (max-width:860px){
   .career{grid-template-columns:1fr; gap:36px; padding-block:48px 56px;}
+  .career-side{margin-top:0;}
 }
 @media (max-width:520px){
   .t-row{grid-template-columns:1fr; gap:4px;}
@@ -437,28 +443,6 @@ section.work{border-top:none;}
   .case{grid-template-columns:1fr; gap:24px;}
 }
 
-.legend{margin-top:36px; border-top:1px solid var(--rule);}
-.legend-row{
-  display:grid;
-  grid-template-columns:260px 1fr;
-  gap:24px;
-  padding-block:20px;
-  border-bottom:1px solid var(--rule);
-  align-items:baseline;
-}
-.legend-row .cat{
-  font-family:var(--font-display);
-  font-weight:600;
-  font-size:20px;
-  letter-spacing:-0.01em;
-  color:var(--heading);
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-.legend-row .cat::before{content:""; width:10px; height:24px; background:var(--accent); flex:none;}
-.legend-row .items{color:var(--ink-muted);}
-@media (max-width:640px){.legend-row{grid-template-columns:1fr; gap:6px;}}
 
 .band .section-title{color:var(--band-ink);}
 .creds-wrap{padding-block:72px 24px;}

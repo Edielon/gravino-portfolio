@@ -136,8 +136,7 @@ test('footer repeats the nav links plus back to top on every page', () => {
 
 test('resume page offers the CV download right below the tabs', () => {
   const html = read('resume.html');
-  const head = html.match(/<div class="wrap page-head">[\s\S]*?\n  <\/div>/)[0];
-  assert.ok(!head.includes('Download CV'), 'no longer in the page header');
+  assert.ok(html.indexOf('Download CV') > html.indexOf('class="tab-list"'), 'not above the tabs');
   const side = html.indexOf('<div class="career-side">');
   const block = html.slice(html.lastIndexOf('</section>', side), side);
   const link = block.match(/<a class="btn btn-primary" href="([^"]+)" download="([^"]+)"[^>]*>Download CV<\/a>/);
@@ -439,7 +438,8 @@ test('resume career, education and training sit in accessible tabs', () => {
   }
   const css = read('styles.css');
   assert.match(cssRule(css, '.tab[aria-selected="true"]'), /box-shadow:inset 0 -2px 0 var\(--accent\)/, 'active tab underlined in burgundy like the nav');
-  assert.match(cssRule(css, '.tab'), /min-height:44px/);
+  assert.match(cssRule(css, '.tab'), /min-height:var\(--tab-bar-height\)/);
+  assert.match(css, /--tab-bar-height:44px;/, 'tabs keep a 44px touch target');
 });
 
 test('the hidden attribute always wins over component display rules', () => {
@@ -447,9 +447,10 @@ test('the hidden attribute always wins over component display rules', () => {
   assert.match(read('styles.css'), /\[hidden\]\{display:none !important;\}/);
 });
 
-test('resume page header has no small label above the heading', () => {
-  const head = read('resume.html').match(/<div class="wrap page-head">[\s\S]*?<\/h1>/)[0];
-  assert.ok(!head.includes('class="label"'), 'no RESUME label or dash');
+test('resume page has no small label above the tabs', () => {
+  const html = read('resume.html');
+  const top = html.slice(html.indexOf('<main>'), html.indexOf('class="tab-list"'));
+  assert.ok(!top.includes('class="label"'), 'no RESUME label or dash');
 });
 
 test('timelines fill with burgundy as the page scrolls', () => {
@@ -504,4 +505,30 @@ test('education timeline lists schooling with school logos', () => {
     assert.match(img, /loading="lazy"/);
   }
   assert.match(cssRule(read('styles.css'), '.t-logo'), /margin-bottom/, 'logo sits above the text');
+});
+
+test('resume page opens on the tabs with a screen-reader-only heading', () => {
+  const html = read('resume.html');
+  assert.ok(!html.includes('class="wrap page-head"'), 'no visible page heading block');
+  assert.match(html, /<h1 class="sr-only">Resume of Hanny Gravino<\/h1>/, 'page keeps an h1 for assistive tech and search');
+  assert.ok(html.indexOf('<h1') < html.indexOf('class="tab-list"'), 'heading comes first in the document');
+  assert.match(cssRule(read('styles.css'), '.sr-only'), /clip-path:inset\(50%\)/);
+});
+
+test('headshot top lines up with the tab divider', () => {
+  const css = read('styles.css');
+  assert.match(css, /--tab-bar-height:44px;/);
+  assert.match(cssRule(css, '.career-side'), /margin-top:var\(--tab-bar-height\)/);
+  assert.match(cssRule(css, '.tab'), /min-height:var\(--tab-bar-height\)/, 'tab bar height and headshot offset share one value');
+});
+
+test('resume expertise uses the graphite table from the home page', () => {
+  const html = read('resume.html');
+  const section = html.match(/<section class="band creds-band" id="expertise">[\s\S]*?<\/section>/);
+  assert.ok(section, 'expertise sits on the graphite band');
+  assert.match(section[0], /<h2 class="section-title">Expertise<\/h2>/);
+  const items = [...section[0].matchAll(/<li class="stat"><div class="num">([^<]+)<\/div><div class="cap">([^<]+)<\/div><\/li>/g)].map((m) => m[1]);
+  assert.deepEqual(items, ['Structural analysis', 'Seismic and retrofit', 'Project management', 'Codes and compliance', 'Software and platforms']);
+  assert.match(section[0], /<div class="quals"><ul class="stats" aria-label="Expertise">/);
+  assert.ok(!html.includes('class="legend'), 'old legend rows removed');
 });
