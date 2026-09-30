@@ -331,7 +331,7 @@ test('certificate pop-up is an accessible dialog', () => {
 
 test('resume holds the diploma and the training and CPD list', () => {
   const html = read('resume.html');
-  assert.match(html, /<div class="t-date">2024<\/div>\s*<div>\s*<div class="t-role">Diploma of Project Management \(BSB50820\)<\/div>\s*<div class="t-org">Canterbury Technical Institute, Brisbane<\/div>/);
+  assert.match(html, /<div class="t-date">2024<\/div>\s*<div>\s*(?:<img class="t-logo"[^>]*>\s*)?<div class="t-role">Diploma of Project Management \(BSB50820\)<\/div>\s*<div class="t-org">Canterbury Technical Institute, Brisbane<\/div>/);
   const training = html.match(/<section class="tab-panel" id="training"[^>]*>[\s\S]*?<\/section>/);
   assert.ok(training, 'training panel');
   assert.match(training[0], /<h2 class="section-title">Training and CPD<\/h2>/);
@@ -489,12 +489,12 @@ test('education timeline lists schooling with school logos', () => {
     .map(([, date, body]) => ({ date, logo: (body.match(/<img class="t-logo" src="([^"]+)"/) || [])[1], role: body.match(/<div class="t-role">([^<]+)<\/div>/)[1], org: body.match(/<div class="t-org">([^<]+)/)[1] }));
   assert.deepEqual(rows.map((r) => [r.date, r.role]), [
     ['2024', 'Diploma of Project Management (BSB50820)'],
-    ['2014 to 2019', 'Cor Jesu College'],
+    ['2014 to 2019', 'BS Civil Engineering'],
     ['2010 to 2014', 'Kapatagan National High School'],
     ['2003 to 2010', 'Rizal Central Elementary School'],
   ]);
-  assert.deepEqual(rows.map((r) => r.org.split(' &middot; ')[0]), ['Canterbury Technical Institute, Brisbane', 'College', 'High school', 'Elementary']);
-  assert.deepEqual(rows.map((r) => r.logo), [undefined, 'assets/schools/cor-jesu-college.png', 'assets/schools/kapatagan-nhs.png', 'assets/schools/rizal-central-es.png']);
+  assert.deepEqual(rows.map((r) => r.org.split(' &middot; ')[0]), ['Canterbury Technical Institute, Brisbane', 'Cor Jesu College', 'High school', 'Elementary']);
+  assert.deepEqual(rows.map((r) => r.logo), ['assets/schools/cti.png', 'assets/schools/cor-jesu-college.png', 'assets/schools/kapatagan-nhs.png', 'assets/schools/rizal-central-es.png']);
   for (const r of rows.filter((x) => x.logo)) assert.ok(existsSync(new URL(`../${r.logo}`, import.meta.url)), `${r.logo} exists`);
   for (const img of panel.match(/<img class="t-logo"[^>]*>/g)) {
     assert.match(img, /alt=""/, 'logo is decorative: the school name is already in the text');
