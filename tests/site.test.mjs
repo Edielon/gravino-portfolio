@@ -612,3 +612,23 @@ test('opening a case grows the divider into a burgundy tile and centres the numb
   const script = [...read('index.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('.case-toggle'));
   assert.match(script, /button\.closest\('\.case'\)\.classList\.toggle\('is-open', expand\)/);
 });
+
+test('case details sit beside the photo and the figures divider starts at the photo bottom', () => {
+  const html = read('index.html');
+  const bodies = [...html.matchAll(/<div class="case-body">([\s\S]*?)\n          <\/div>\n        <\/article>/g)].map((m) => m[1]);
+  assert.equal(bodies.length, 3);
+  for (const b of bodies) {
+    const main = b.indexOf('<div class="case-main">'), extra = b.indexOf('<div class="case-extra">');
+    assert.ok(main >= 0 && extra > main, 'main details, then the extra block');
+    assert.ok(b.indexOf('case-head') > main && b.indexOf('case-story') > main && b.indexOf('case-story') < extra, 'header and story in the main block');
+    assert.ok(b.indexOf('case-figures') > extra && b.indexOf('case-toggle') > extra, 'figures and button in the extra block');
+  }
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.case-body'), /display:contents/, 'main and extra join the case grid');
+  assert.match(cssRule(css, '.case-main'), /grid-column:2/);
+  assert.match(cssRule(css, '.case-main'), /grid-row:1/);
+  assert.match(cssRule(css, '.case-extra'), /grid-column:2/);
+  assert.match(cssRule(css, '.case-extra'), /grid-row:2/);
+  assert.match(cssRule(css, '.case'), /row-gap:0/, 'second row starts exactly at the photo bottom');
+  assert.match(cssRule(css, '.case-figures'), /margin:0/, 'divider sits at the top of the second row');
+});
