@@ -134,13 +134,15 @@ test('footer repeats the nav links plus back to top on every page', () => {
   }
 });
 
-test('resume page offers the CV download right below the tabs', () => {
+test('resume page offers the CV download right below the headshot', () => {
   const html = read('resume.html');
-  assert.ok(html.indexOf('Download CV') > html.indexOf('class="tab-list"'), 'not above the tabs');
-  const side = html.indexOf('<div class="career-side">');
-  const block = html.slice(html.lastIndexOf('</section>', side), side);
+  const side = html.match(/<div class="career-side">([\s\S]*?)\n    <\/div>\n  <\/div>/);
+  assert.ok(side, 'right-hand column found');
+  const block = side[1];
+  assert.ok(block.indexOf('headshot') < block.indexOf('Download CV'), 'button sits under the headshot');
+  assert.ok(!html.slice(html.indexOf('class="resume-tabs"'), html.indexOf('<div class="career-side">')).includes('Download CV'), 'left column is free of the button');
   const link = block.match(/<a class="btn btn-primary" href="([^"]+)" download="([^"]+)"[^>]*>Download CV<\/a>/);
-  assert.ok(link, 'Download CV button right after the last tab panel');
+  assert.ok(link, 'Download CV button in the right-hand column');
   assert.equal(link[2], 'Hanny-Gravino-CV.pdf');
   assert.ok(existsSync(new URL(`../${link[1]}`, import.meta.url)), `${link[1]} exists`);
   assert.match(block, /PDF &middot; \d+ KB/);
@@ -539,4 +541,14 @@ test('resume expertise uses the table format on the light page background', () =
   assert.match(cssRule(css, '.quals--light .stat .num'), /color:var\(--heading\)/);
   assert.match(cssRule(css, '.quals--light .stat .cap'), /color:var\(--ink-muted\)/);
   assert.match(cssRule(css, 'section.block'), /border-top:1px solid var\(--rule\)/, 'divider between sections');
+});
+
+test('tab labels give a small expanding pop when a visitor selects them', () => {
+  const css = read('styles.css');
+  assert.match(css, /@keyframes tab-pop\{[^}]*transform:scale\(1\)[^}]*\}[^}]*transform:scale\(1\.08\)/, 'label expands then settles');
+  assert.match(css, /@media \(prefers-reduced-motion: no-preference\)\{[^@]*\.tab\.is-popping\{animation:tab-pop/, 'only when motion is allowed');
+  const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('[role="tab"]') && s.includes('select'));
+  assert.match(script, /is-popping/, 'script triggers the pop');
+  assert.match(script, /animationend/, 'class is cleared so it can replay');
+  assert.match(script, /select\(0, false, false\)/, 'no pop on page load');
 });

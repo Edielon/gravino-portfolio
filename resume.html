@@ -145,15 +145,15 @@
           </div>
         </div>
       </section>
-      <div class="cv-download">
-        <a class="btn btn-primary" href="assets/Hanny-Gravino-CV.pdf" download="Hanny-Gravino-CV.pdf">Download CV</a>
-        <span class="cv-meta">PDF &middot; 238 KB</span>
-      </div>
     </div>
     <div class="career-side">
       <div class="placeholder headshot">
         <span class="ph-tag">Placeholder</span>
         <p>Add headshot photo.</p>
+      </div>
+      <div class="cv-download">
+        <a class="btn btn-primary" href="assets/Hanny-Gravino-CV.pdf" download="Hanny-Gravino-CV.pdf">Download CV</a>
+        <span class="cv-meta">PDF &middot; 238 KB</span>
       </div>
     </div>
   </div>
@@ -191,7 +191,7 @@
   const list = root.querySelector('[role="tablist"]');
   const tabs = [...list.querySelectorAll('[role="tab"]')];
   const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
-  const select = (index, focus) => {
+  const select = (index, focus, pop) => {
     tabs.forEach((tab, i) => {
       const on = i === index;
       tab.setAttribute('aria-selected', String(on));
@@ -199,20 +199,27 @@
       panels[i].hidden = !on;
     });
     if (focus) tabs[index].focus();
+    if (pop) {
+      // Restart the small "expand" pop on the chosen label.
+      tabs[index].classList.remove('is-popping');
+      void tabs[index].offsetWidth;
+      tabs[index].classList.add('is-popping');
+    }
   };
+  tabs.forEach((tab) => tab.addEventListener('animationend', () => tab.classList.remove('is-popping')));
   tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => select(i, false));
+    tab.addEventListener('click', () => select(i, false, true));
     tab.addEventListener('keydown', (event) => {
       const last = tabs.length - 1;
       const next = { ArrowRight: i === last ? 0 : i + 1, ArrowLeft: i === 0 ? last : i - 1, Home: 0, End: last }[event.key];
       if (next === undefined) return;
       event.preventDefault();
-      select(next, true);
+      select(next, true, true);
     });
   });
   list.hidden = false;
   root.classList.add('tabs-ready');
-  select(0, false);
+  select(0, false, false);
 })();
 </script>
 <script>
