@@ -365,7 +365,8 @@ section.block{
   border-top:1px solid var(--rule);
 }
 section.work{border-top:none;}
-.cases{margin-top:56px; display:grid; gap:112px;}
+.cases{margin-top:56px; display:grid; gap:56px;}
+.case + .case{border-top:1px solid var(--rule); padding-top:56px;}
 .case{
   display:grid;
   grid-template-columns:6fr 5fr;
@@ -491,7 +492,8 @@ section.work{border-top:none;}
   .case-tools{margin-left:0;}
 }
 @media (max-width:860px){
-  .cases{gap:80px;}
+  .cases{gap:40px;}
+  .case + .case{padding-top:40px;}
   .case{grid-template-columns:1fr; row-gap:24px;}
   .case-media, .case-main, .case-extra{grid-column:1; grid-row:auto;}
 }

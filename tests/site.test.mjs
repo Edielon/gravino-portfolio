@@ -632,3 +632,14 @@ test('case details sit beside the photo and the figures divider starts at the ph
   assert.match(cssRule(css, '.case'), /row-gap:0/, 'second row starts exactly at the photo bottom');
   assert.match(cssRule(css, '.case-figures'), /margin:0/, 'divider sits at the top of the second row');
 });
+
+test('a divider separates each case from the next, centred in the space between them', () => {
+  const css = read('styles.css');
+  const gap = Number(cssRule(css, '.cases').match(/gap:(\d+)px/)[1]);
+  const next = cssRule(css, '.case + .case');
+  assert.match(next, /border-top:1px solid var\(--rule\)/);
+  const pad = Number(next.match(/padding-top:(\d+)px/)[1]);
+  assert.equal(pad, gap, 'equal space above and below the divider');
+  assert.match(css, /@media \(max-width:860px\)\{[^}]*\.cases\{gap:40px;\}[^}]*\}/, 'tighter on small screens');
+  assert.match(css, /\.case \+ \.case\{padding-top:40px;\}/);
+});
