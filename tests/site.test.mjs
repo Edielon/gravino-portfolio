@@ -331,7 +331,7 @@ test('certificate pop-up is an accessible dialog', () => {
 
 test('resume holds the diploma and the training and CPD list', () => {
   const html = read('resume.html');
-  assert.match(html, /<div class="edu-name">Diploma of Project Management \(BSB50820\)<\/div>\s*<div class="edu-meta">Canterbury Technical Institute, Brisbane &middot; 2024<\/div>/);
+  assert.match(html, /<div class="t-date">2024<\/div>\s*<div>\s*<div class="t-role">Diploma of Project Management \(BSB50820\)<\/div>\s*<div class="t-org">Canterbury Technical Institute, Brisbane<\/div>/);
   const training = html.match(/<section class="block" id="training">[\s\S]*?<\/section>/);
   assert.ok(training, 'training section');
   assert.match(training[0], /<h2 class="section-title">Training and CPD<\/h2>/);
