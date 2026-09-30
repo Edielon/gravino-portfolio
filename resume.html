@@ -224,58 +224,70 @@
 </script>
 <script>
 (() => {
-  // Timeline "liquid fill": burgundy flows down each rail as the page scrolls; dots fill as it reaches them.
-  // Reduced motion (and no JavaScript) keeps the complete burgundy timeline.
+  // Timeline "liquid fill": hovering an entry fills the rail with burgundy from the first dot down to it,
+  // lighting each dot as the liquid passes; leaving the timeline drains it back to the first dot.
+  // Tapping an entry does the same on touch screens. Reduced motion (and no JavaScript) keeps the
+  // complete burgundy timeline.
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const timelines = [...document.querySelectorAll('.timeline')];
   if (!timelines.length) return;
   const DOT_CENTER = 11.5; // dot top offset (6px) + half its 11px size
-  let ticking = false;
+  const DURATION = 450;    // ms for the liquid to run the full rail
+  const states = new Map();
 
-  // Each timeline remembers where it stood when it became visible (page load or tab switch), so it always
-  // starts with only its first dot filled and the liquid flows from there as the page scrolls.
-  const states = new Map(timelines.map((tl) => [tl, { visible: false, baseline: 0, baselineScroll: 0 }]));
-
-  const update = () => {
-    ticking = false;
-    const reference = window.innerHeight * 0.6;
-    // On tall screens a short page may run out of scroll before the liquid reaches the last dot.
-    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
-    const measured = [];
-    for (const tl of timelines) {
-      const state = states.get(tl);
-      if (tl.offsetParent === null) { state.visible = false; continue; }
-      const rows = [...tl.querySelectorAll('.t-row')];
-      const dots = rows.map((row) => row.offsetTop + DOT_CENTER);
-      const railTop = dots[0];
-      const railHeight = dots[dots.length - 1] - railTop;
-      const top = tl.getBoundingClientRect().top + railTop;
-      const raw = Math.max(0, reference - top);
-      if (!state.visible) { state.visible = true; state.baseline = raw; state.baselineScroll = window.scrollY; state.moved = false; }
-      if (window.scrollY !== state.baselineScroll) state.moved = true;
-      const scrolled = state.moved;
-      const fill = atBottom && scrolled ? railHeight : Math.min(railHeight, Math.max(0, raw - state.baseline));
-      measured.push({ tl, rows, dots, railTop, railHeight, fill });
-    }
-    for (const { tl, rows, dots, railTop, railHeight, fill } of measured) {
-      tl.style.setProperty('--rail-top', railTop + 'px');
-      tl.style.setProperty('--rail-height', railHeight + 'px');
-      tl.style.setProperty('--fill', fill + 'px');
-      rows.forEach((row, i) => row.classList.toggle('is-filled', dots[i] - railTop <= fill + 0.5));
-    }
+  const measure = (tl) => {
+    if (tl.offsetParent === null) return;
+    const rows = [...tl.querySelectorAll('.t-row')];
+    const dots = rows.map((row) => row.offsetTop + DOT_CENTER);
+    const railTop = dots[0];
+    const railHeight = dots[dots.length - 1] - railTop;
+    tl.style.setProperty('--rail-top', railTop + 'px');
+    tl.style.setProperty('--rail-height', railHeight + 'px');
+    const state = states.get(tl) || { index: 0, fill: 0 };
+    states.set(tl, { ...state, rows, dots, railTop, railHeight });
   };
-  const schedule = () => { if (!ticking) { ticking = true; window.requestAnimationFrame(update); } };
 
-  timelines.forEach((tl) => tl.classList.add('tl-anim'));
-  window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule);
-  // Switching resume tabs reveals a different timeline: refresh it straight away.
-  document.querySelectorAll('[role="tab"]').forEach((tab) => {
-    tab.addEventListener('click', schedule);
-    tab.addEventListener('keydown', schedule);
+  const fillTo = (tl, index) => {
+    const state = states.get(tl);
+    if (!state || !state.rows) return;
+    const from = state.fill;
+    const to = state.dots[index] - state.railTop;
+    const distance = Math.abs(to - from);
+    const duration = state.railHeight ? Math.round(DURATION * distance / state.railHeight) : 0;
+    tl.style.setProperty('--fill-duration', duration + 'ms');
+    tl.style.setProperty('--fill', to + 'px');
+    state.rows.forEach((row, i) => {
+      const y = state.dots[i] - state.railTop;
+      const filled = i <= index;
+      // Dots light up when the liquid reaches them on the way down; they empty straight away on the way up.
+      const delay = filled && y > from && distance ? Math.round(duration * (y - from) / distance) : 0;
+      row.style.setProperty('--dot-delay', delay + 'ms');
+      row.classList.toggle('is-filled', filled);
+    });
+    state.fill = to;
+    state.index = index;
+  };
+
+  timelines.forEach((tl) => {
+    tl.classList.add('tl-anim');
+    measure(tl);
+    fillTo(tl, 0);
+    [...tl.querySelectorAll('.t-row')].forEach((row, i) => {
+      row.addEventListener('mouseenter', () => fillTo(tl, i));
+      row.addEventListener('click', () => fillTo(tl, i));
+    });
+    tl.addEventListener('mouseleave', () => fillTo(tl, 0));
   });
-  if (document.fonts) document.fonts.ready.then(schedule);
-  update();
+
+  const remeasure = () => timelines.forEach((tl) => {
+    const wasHidden = !states.has(tl) || !states.get(tl).rows;
+    measure(tl);
+    if (states.get(tl) && states.get(tl).rows) fillTo(tl, wasHidden ? 0 : states.get(tl).index);
+  });
+  // Switching resume tabs reveals a different timeline; resizing and late-loading fonts shift the dots.
+  document.querySelectorAll('[role="tab"]').forEach((tab) => tab.addEventListener('click', () => window.requestAnimationFrame(remeasure)));
+  window.addEventListener('resize', remeasure);
+  if (document.fonts) document.fonts.ready.then(remeasure);
 })();
 </script>
 </body>

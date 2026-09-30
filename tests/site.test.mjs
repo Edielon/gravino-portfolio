@@ -455,18 +455,27 @@ test('resume page has no small label above the tabs', () => {
   assert.ok(!top.includes('class="label"'), 'no RESUME label or dash');
 });
 
-test('timelines fill with burgundy as the page scrolls', () => {
+const timelineScript = () => [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
+
+test('timelines fill with burgundy up to the hovered entry', () => {
   const css = read('styles.css');
   assert.match(cssRule(css, '.timeline.tl-anim .t-row::before'), /background:var\(--rule-strong\)/, 'dots start light grey so the burgundy fill stands out');
   assert.match(css, /\.timeline\.tl-anim \.t-row:first-child::before, \.timeline\.tl-anim \.t-row\.is-filled::before\{background:var\(--accent\);\}/, 'first dot starts burgundy; others fill');
   assert.match(cssRule(css, '.timeline.tl-anim::before'), /background:var\(--rule-strong\)/, 'rail starts light grey');
-  assert.match(cssRule(css, '.timeline.tl-anim::after'), /height:var\(--fill, 0px\)/, 'burgundy liquid height follows scroll');
-  assert.match(cssRule(css, '.timeline.tl-anim::after'), /background:var\(--accent\)/);
-  const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
+  assert.match(cssRule(css, '.timeline.tl-anim::after'), /height:var\(--fill, 0px\)/, 'burgundy liquid height set by the hovered entry');
+  assert.match(cssRule(css, '.timeline.tl-anim::after'), /transition:height var\(--fill-duration\)/, 'liquid flows rather than jumps');
+  assert.match(cssRule(css, '.timeline.tl-anim .t-row::before'), /var\(--dot-delay, 0ms\)/, 'each dot lights up as the liquid reaches it');
+  const script = timelineScript();
   assert.ok(script, 'timeline fill script present');
-  for (const needle of ["prefers-reduced-motion: reduce", 'requestAnimationFrame', 'passive: true', "setProperty('--fill'", "'is-filled'", '0.6']) {
+  for (const needle of ["prefers-reduced-motion: reduce", "'mouseenter'", "'mouseleave'", "'click'", "setProperty('--fill'", "setProperty('--dot-delay'", "'is-filled'"]) {
     assert.ok(script.includes(needle), `fill script uses ${needle}`);
   }
+  assert.ok(!/addEventListener\('scroll'/.test(script), 'no longer driven by scrolling');
+});
+
+test('leaving a timeline drains it back to the first dot', () => {
+  const script = timelineScript();
+  assert.match(script, /addEventListener\('mouseleave', \(\) => fillTo\(tl, 0\)\)/);
 });
 
 test('timeline rail is thick enough for the burgundy fill to read', () => {
@@ -475,17 +484,6 @@ test('timeline rail is thick enough for the burgundy fill to read', () => {
   assert.match(rail, /left:4\.5px/, 'centred on the 11px dots');
 });
 
-test('every timeline starts with only its first dot filled when it appears', () => {
-  const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
-  assert.match(script, /baseline/, 'fill is measured from where the timeline was when it became visible');
-  assert.match(script, /raw - state\.baseline/, 'fill subtracts the starting position');
-});
-
-test('timelines finish filling at the bottom of the page so no dot is unreachable', () => {
-  const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
-  assert.match(script, /atBottom/, 'detects the end of the page');
-  assert.match(script, /atBottom && scrolled \? railHeight/, 'completes the fill there once the visitor has scrolled');
-});
 
 test('education timeline lists schooling with school logos', () => {
   const panel = read('resume.html').match(/<section class="tab-panel" id="education"[\s\S]*?<\/section>/)[0];
