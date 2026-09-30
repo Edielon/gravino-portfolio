@@ -444,3 +444,28 @@ test('the hidden attribute always wins over component display rules', () => {
   // Without it, .tab-list and .case-toggle would show as dead controls when JavaScript is off.
   assert.match(read('styles.css'), /\[hidden\]\{display:none !important;\}/);
 });
+
+test('resume page header has no small label above the heading', () => {
+  const head = read('resume.html').match(/<div class="wrap page-head">[\s\S]*?<\/h1>/)[0];
+  assert.ok(!head.includes('class="label"'), 'no RESUME label or dash');
+});
+
+test('timelines fill with burgundy as the page scrolls', () => {
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.timeline.tl-anim .t-row::before'), /background:var\(--heading\)/, 'dots start graphite');
+  assert.match(css, /\.timeline\.tl-anim \.t-row:first-child::before, \.timeline\.tl-anim \.t-row\.is-filled::before\{background:var\(--accent\);\}/, 'first dot starts burgundy; others fill');
+  assert.match(cssRule(css, '.timeline.tl-anim::before'), /background:var\(--heading\)/, 'rail starts graphite');
+  assert.match(cssRule(css, '.timeline.tl-anim::after'), /height:var\(--fill, 0px\)/, 'burgundy liquid height follows scroll');
+  assert.match(cssRule(css, '.timeline.tl-anim::after'), /background:var\(--accent\)/);
+  const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
+  assert.ok(script, 'timeline fill script present');
+  for (const needle of ["prefers-reduced-motion: reduce", 'requestAnimationFrame', 'passive: true', "setProperty('--fill'", "'is-filled'", '0.6']) {
+    assert.ok(script.includes(needle), `fill script uses ${needle}`);
+  }
+});
+
+test('timeline rail is thick enough for the burgundy fill to read', () => {
+  const rail = cssRule(read('styles.css'), '.timeline.tl-anim::before, .timeline.tl-anim::after');
+  assert.match(rail, /width:2px/);
+  assert.match(rail, /left:4\.5px/, 'centred on the 11px dots');
+});

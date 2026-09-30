@@ -27,7 +27,6 @@
 
 <main>
   <div class="wrap page-head">
-    <div class="label">Resume</div>
     <h1>Career, education and expertise</h1>
     <div class="cv-download">
       <a class="btn btn-primary" href="assets/Hanny-Gravino-CV.pdf" download="Hanny-Gravino-CV.pdf">Download CV</a>
@@ -215,6 +214,49 @@
   list.hidden = false;
   root.classList.add('tabs-ready');
   select(0, false);
+})();
+</script>
+<script>
+(() => {
+  // Timeline "liquid fill": burgundy flows down each rail as the page scrolls; dots fill as it reaches them.
+  // Reduced motion (and no JavaScript) keeps the complete burgundy timeline.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const timelines = [...document.querySelectorAll('.timeline')];
+  if (!timelines.length) return;
+  const DOT_CENTER = 11.5; // dot top offset (6px) + half its 11px size
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+    const reference = window.innerHeight * 0.6;
+    const measured = timelines.filter((tl) => tl.offsetParent !== null).map((tl) => {
+      const rows = [...tl.querySelectorAll('.t-row')];
+      const dots = rows.map((row) => row.offsetTop + DOT_CENTER);
+      const railTop = dots[0];
+      const railHeight = dots[dots.length - 1] - railTop;
+      const top = tl.getBoundingClientRect().top + railTop;
+      const fill = Math.min(railHeight, Math.max(0, reference - top));
+      return { tl, rows, dots, railTop, railHeight, fill };
+    });
+    for (const { tl, rows, dots, railTop, railHeight, fill } of measured) {
+      tl.style.setProperty('--rail-top', railTop + 'px');
+      tl.style.setProperty('--rail-height', railHeight + 'px');
+      tl.style.setProperty('--fill', fill + 'px');
+      rows.forEach((row, i) => row.classList.toggle('is-filled', dots[i] - railTop <= fill + 0.5));
+    }
+  };
+  const schedule = () => { if (!ticking) { ticking = true; window.requestAnimationFrame(update); } };
+
+  timelines.forEach((tl) => tl.classList.add('tl-anim'));
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', schedule);
+  // Switching resume tabs reveals a different timeline: refresh it straight away.
+  document.querySelectorAll('[role="tab"]').forEach((tab) => {
+    tab.addEventListener('click', schedule);
+    tab.addEventListener('keydown', schedule);
+  });
+  if (document.fonts) document.fonts.ready.then(schedule);
+  update();
 })();
 </script>
 </body>

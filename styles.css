@@ -287,6 +287,14 @@ header.site-nav{
   background:var(--rule);
 }
 .timeline .t-row:last-child::after{display:none;}
+/* Liquid fill (enabled by script): a graphite rail with burgundy flowing down it as the page scrolls. */
+.timeline.tl-anim{position:relative;}
+.timeline.tl-anim .t-row::after{display:none;}
+.timeline.tl-anim::before, .timeline.tl-anim::after{content:""; position:absolute; left:4.5px; top:var(--rail-top, 0px); width:2px; z-index:0;}
+.timeline.tl-anim::before{height:var(--rail-height, 0px); background:var(--heading);}
+.timeline.tl-anim::after{height:var(--fill, 0px); background:var(--accent); transition:height 140ms linear;}
+.timeline.tl-anim .t-row::before{z-index:1; background:var(--heading); transition:background-color 250ms ease-out;}
+.timeline.tl-anim .t-row:first-child::before, .timeline.tl-anim .t-row.is-filled::before{background:var(--accent);}
 .t-date{
   font-family:var(--font-body);
   font-size:12.5px;
