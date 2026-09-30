@@ -469,3 +469,15 @@ test('timeline rail is thick enough for the burgundy fill to read', () => {
   assert.match(rail, /width:2px/);
   assert.match(rail, /left:4\.5px/, 'centred on the 11px dots');
 });
+
+test('every timeline starts with only its first dot filled when it appears', () => {
+  const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
+  assert.match(script, /baseline/, 'fill is measured from where the timeline was when it became visible');
+  assert.match(script, /raw - state\.baseline/, 'fill subtracts the starting position');
+});
+
+test('timelines finish filling at the bottom of the page so no dot is unreachable', () => {
+  const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
+  assert.match(script, /atBottom/, 'detects the end of the page');
+  assert.match(script, /atBottom && scrolled \? railHeight/, 'completes the fill there once the visitor has scrolled');
+});

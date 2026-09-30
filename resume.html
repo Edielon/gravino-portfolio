@@ -226,18 +226,31 @@
   const DOT_CENTER = 11.5; // dot top offset (6px) + half its 11px size
   let ticking = false;
 
+  // Each timeline remembers where it stood when it became visible (page load or tab switch), so it always
+  // starts with only its first dot filled and the liquid flows from there as the page scrolls.
+  const states = new Map(timelines.map((tl) => [tl, { visible: false, baseline: 0, baselineScroll: 0 }]));
+
   const update = () => {
     ticking = false;
     const reference = window.innerHeight * 0.6;
-    const measured = timelines.filter((tl) => tl.offsetParent !== null).map((tl) => {
+    // On tall screens a short page may run out of scroll before the liquid reaches the last dot.
+    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+    const measured = [];
+    for (const tl of timelines) {
+      const state = states.get(tl);
+      if (tl.offsetParent === null) { state.visible = false; continue; }
       const rows = [...tl.querySelectorAll('.t-row')];
       const dots = rows.map((row) => row.offsetTop + DOT_CENTER);
       const railTop = dots[0];
       const railHeight = dots[dots.length - 1] - railTop;
       const top = tl.getBoundingClientRect().top + railTop;
-      const fill = Math.min(railHeight, Math.max(0, reference - top));
-      return { tl, rows, dots, railTop, railHeight, fill };
-    });
+      const raw = Math.max(0, reference - top);
+      if (!state.visible) { state.visible = true; state.baseline = raw; state.baselineScroll = window.scrollY; state.moved = false; }
+      if (window.scrollY !== state.baselineScroll) state.moved = true;
+      const scrolled = state.moved;
+      const fill = atBottom && scrolled ? railHeight : Math.min(railHeight, Math.max(0, raw - state.baseline));
+      measured.push({ tl, rows, dots, railTop, railHeight, fill });
+    }
     for (const { tl, rows, dots, railTop, railHeight, fill } of measured) {
       tl.style.setProperty('--rail-top', railTop + 'px');
       tl.style.setProperty('--rail-height', railHeight + 'px');
