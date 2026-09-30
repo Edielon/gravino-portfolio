@@ -558,7 +558,10 @@ test('case number sits beside the title with a divider between them', () => {
   assert.deepEqual(heads.map((m) => m[1]), ['01', '02', '03']);
   const css = read('styles.css');
   assert.match(cssRule(css, '.case-head'), /display:flex/);
-  assert.match(cssRule(css, '.case-heading'), /border-left:1px solid var\(--rule\)/, 'divider between number and title');
+  const divider = cssRule(css, '.case-heading::before');
+  assert.match(divider, /right:100%/, 'divider sits at the left edge of the title block');
+  assert.match(divider, /clip-path:inset\(0 0 0 calc\(100% - 1px\)\)/, 'closed: only a 1px line shows');
+  assert.match(divider, /background:var\(--rule\)/);
 });
 
 test('case numbers share one width so the dividers line up', () => {
@@ -584,4 +587,24 @@ test('expanded cases turn Problem/Approach/Result into burgundy buttons that gro
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^}]*\.story-row dt\{transition:none;\}/);
   const script = [...read('index.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('.case-toggle'));
   assert.match(script, /story\.classList\.toggle\('is-expanded', expand\)/);
+});
+
+test('opening a case grows the divider into a burgundy tile and centres the number in white', () => {
+  const css = read('styles.css');
+  const open = cssRule(css, '.case.is-open .case-heading::before');
+  assert.match(open, /clip-path:inset\(0\)/, 'divider expands leftward into a full block');
+  assert.match(open, /background:var\(--accent\)/, 'block turns burgundy');
+  const openTransition = open.match(/transition:([^;]+)/)[1];
+  const colourDelay = Number(openTransition.match(/background-color \d+ms [a-z-]+ (\d+)ms/)[1]);
+  const clipDelay = Number((openTransition.match(/clip-path \d+ms cubic-bezier\([^)]*\)\s*(\d+)?/) || [])[1] || 0);
+  assert.ok(colourDelay > clipDelay, 'colour change comes after the expansion starts');
+  const num = cssRule(css, '.case.is-open .case-num');
+  assert.match(num, /color:var\(--accent-on\)/, 'number turns white');
+  assert.match(num, /transform:translateX\(10px\)/, 'number moves to the centre of the tile (half the 20px gap)');
+  assert.match(num, /transition:transform 260ms cubic-bezier\([^)]*\) 450ms/, 'number moves last');
+  assert.match(cssRule(css, '.case-num'), /text-align:center/);
+  assert.match(cssRule(css, '.case-heading::before'), /width:calc\(var\(--num-size\) \* 1\.2 \+ 20px\)/, 'tile spans the number column plus the gap');
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^}]*\.case-heading::before, \.case-num\{transition:none;\}/);
+  const script = [...read('index.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('.case-toggle'));
+  assert.match(script, /button\.closest\('\.case'\)\.classList\.toggle\('is-open', expand\)/);
 });
