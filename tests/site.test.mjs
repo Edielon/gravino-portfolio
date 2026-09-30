@@ -16,7 +16,7 @@ test('index.html is a full document that uses the shared stylesheet', () => {
 
 test('styles.css keeps the design tokens', () => {
   const css = read('styles.css');
-  for (const token of ['--heading:', '--accent:', "--font-display:'Space Grotesk'", "--font-body:'Inter'"]) {
+  for (const token of ['--heading:', '--accent:', "--font-display:'Archivo'", "--font-body:'Inter'"]) {
     assert.ok(css.includes(token), `missing ${token}`);
   }
 });
@@ -642,4 +642,19 @@ test('a divider separates each case from the next, centred in the space between 
   assert.equal(pad, gap, 'equal space above and below the divider');
   assert.match(css, /@media \(max-width:860px\)\{[^}]*\.cases\{gap:40px;\}[^}]*\}/, 'tighter on small screens');
   assert.match(css, /\.case \+ \.case\{padding-top:40px;\}/);
+});
+
+test('every page loads Archivo for headings and Inter for text, and nothing else', () => {
+  for (const page of ['index.html', 'resume.html', 'contact.html']) {
+    const html = read(page);
+    assert.match(html, /<link href="https:\/\/fonts\.googleapis\.com\/css2\?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">/, `${page} loads Archivo + Inter`);
+    assert.ok(!html.includes('Space+Grotesk'), `${page} no longer loads Space Grotesk`);
+  }
+});
+
+test('headings use gentle tracking so the narrower Archivo letters are not crowded', () => {
+  const css = read('styles.css');
+  const track = (sel) => Number(cssRule(css, sel).match(/letter-spacing:(-?[\d.]+)em/)[1]);
+  assert.ok(track('.hero h1') >= -0.01, `hero headline tracking ${track('.hero h1')}em`);
+  assert.ok(track('h1,h2,h3') >= -0.01, `heading tracking ${track('h1,h2,h3')}em`);
 });

@@ -17,7 +17,7 @@ The contact form needs a real Web3Forms access key in place of `YOUR_WEB3FORMS_A
 
 ## Design system
 
-- Fonts: Space Grotesk for headings (`--font-display`), Inter for everything else (`--font-body`). No other typefaces.
+- Fonts: Archivo for headings (`--font-display`), Inter for everything else (`--font-body`). No other typefaces.
 - Headings are near-black graphite (`--heading`), sentence case. Burgundy (`--accent`) is for small accents only (rules, labels, primary button, corner block), never for headline text.
 - Audience is potential clients: copy must be professional and specific, grounded in real project facts.
 - Positioning: Hanny's main specialty is project management (PMP-certified), backed by structural engineering. Lead with PM, then structural design and seismic retrofit.
