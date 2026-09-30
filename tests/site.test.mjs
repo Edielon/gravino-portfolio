@@ -427,7 +427,7 @@ test('resume career, education and training sit in accessible tabs', () => {
   for (const t of tabs) {
     const panel = html.match(new RegExp(`<section class="tab-panel" id="${t.controls}" role="tabpanel" aria-labelledby="${t.id}" tabindex="0">([\\s\\S]*?)</section>`));
     assert.ok(panel, `panel for ${t.label}`);
-    assert.match(panel[1], /<div class="timeline">/, `${t.label} keeps the timeline`);
+    assert.match(panel[1], /<div class="timeline[ "]/, `${t.label} keeps the timeline`);
   }
   assert.ok(!html.includes('<section class="block" id="training">'), 'training no longer a separate long section');
   const script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('[role="tab"]'));
@@ -480,4 +480,26 @@ test('timelines finish filling at the bottom of the page so no dot is unreachabl
   const script = [...read('resume.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('tl-anim'));
   assert.match(script, /atBottom/, 'detects the end of the page');
   assert.match(script, /atBottom && scrolled \? railHeight/, 'completes the fill there once the visitor has scrolled');
+});
+
+test('education timeline lists schooling with school logos', () => {
+  const panel = read('resume.html').match(/<section class="tab-panel" id="education"[\s\S]*?<\/section>/)[0];
+  assert.ok(!panel.includes('Placeholder'), 'degree placeholder replaced');
+  const rows = [...panel.matchAll(/<div class="t-row">\s*<div class="t-date">([^<]+)<\/div>\s*<div>([\s\S]*?)<\/div>\s*<\/div>/g)]
+    .map(([, date, body]) => ({ date, logo: (body.match(/<img class="t-logo" src="([^"]+)"/) || [])[1], role: body.match(/<div class="t-role">([^<]+)<\/div>/)[1], org: body.match(/<div class="t-org">([^<]+)/)[1] }));
+  assert.deepEqual(rows.map((r) => [r.date, r.role]), [
+    ['2024', 'Diploma of Project Management (BSB50820)'],
+    ['2014 to 2019', 'Cor Jesu College'],
+    ['2010 to 2014', 'Kapatagan National High School'],
+    ['2003 to 2010', 'Rizal Central Elementary School'],
+  ]);
+  assert.deepEqual(rows.map((r) => r.org.split(' &middot; ')[0]), ['Canterbury Technical Institute, Brisbane', 'College', 'High school', 'Elementary']);
+  assert.deepEqual(rows.map((r) => r.logo), [undefined, 'assets/schools/cor-jesu-college.png', 'assets/schools/kapatagan-nhs.png', 'assets/schools/rizal-central-es.png']);
+  for (const r of rows.filter((x) => x.logo)) assert.ok(existsSync(new URL(`../${r.logo}`, import.meta.url)), `${r.logo} exists`);
+  for (const img of panel.match(/<img class="t-logo"[^>]*>/g)) {
+    assert.match(img, /alt=""/, 'logo is decorative: the school name is already in the text');
+    assert.match(img, /width="48" height="48"/, 'reserves space so the timeline does not jump');
+    assert.match(img, /loading="lazy"/);
+  }
+  assert.match(cssRule(read('styles.css'), '.t-logo'), /margin-bottom/, 'logo sits above the text');
 });
