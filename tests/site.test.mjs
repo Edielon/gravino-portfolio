@@ -522,13 +522,21 @@ test('headshot top lines up with the tab divider', () => {
   assert.match(cssRule(css, '.tab'), /min-height:var\(--tab-bar-height\)/, 'tab bar height and headshot offset share one value');
 });
 
-test('resume expertise uses the graphite table from the home page', () => {
+test('resume expertise uses the table format on the light page background', () => {
   const html = read('resume.html');
-  const section = html.match(/<section class="band creds-band" id="expertise">[\s\S]*?<\/section>/);
-  assert.ok(section, 'expertise sits on the graphite band');
+  const section = html.match(/<section class="block" id="expertise">[\s\S]*?<\/section>/);
+  assert.ok(section, 'expertise is a regular light section with the divider above it');
+  assert.ok(!/<section class="band[^"]*" id="expertise">/.test(html), 'no graphite band');
   assert.match(section[0], /<h2 class="section-title">Expertise<\/h2>/);
   const items = [...section[0].matchAll(/<li class="stat"><div class="num">([^<]+)<\/div><div class="cap">([^<]+)<\/div><\/li>/g)].map((m) => m[1]);
   assert.deepEqual(items, ['Structural analysis', 'Seismic and retrofit', 'Project management', 'Codes and compliance', 'Software and platforms']);
-  assert.match(section[0], /<div class="quals"><ul class="stats" aria-label="Expertise">/);
+  assert.match(section[0], /<div class="quals quals--light"><ul class="stats" aria-label="Expertise">/);
   assert.ok(!html.includes('class="legend'), 'old legend rows removed');
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.quals--light .stats'), /border-color:var\(--rule\)/, 'light frame');
+  assert.match(cssRule(css, '.quals--light .stat'), /background:var\(--bg\)/, 'cells match the page background');
+  assert.match(cssRule(css, '.quals--light .stat'), /box-shadow:-1px 0 0 var\(--rule\), 0 -1px 0 var\(--rule\)/, 'light inner dividers');
+  assert.match(cssRule(css, '.quals--light .stat .num'), /color:var\(--heading\)/);
+  assert.match(cssRule(css, '.quals--light .stat .cap'), /color:var\(--ink-muted\)/);
+  assert.match(cssRule(css, 'section.block'), /border-top:1px solid var\(--rule\)/, 'divider between sections');
 });

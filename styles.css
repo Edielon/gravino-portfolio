@@ -251,6 +251,12 @@ header.site-nav{
   .stat{grid-column:span 2;}
   .stat:nth-child(n+4){grid-column:span 3;}
 }
+/* Light variant of the table for sections on the page background. */
+.quals--light{padding-block:40px 0;}
+.quals--light .stats{border-color:var(--rule);}
+.quals--light .stat{background:var(--bg); box-shadow:-1px 0 0 var(--rule), 0 -1px 0 var(--rule);}
+.quals--light .stat .num{color:var(--heading);}
+.quals--light .stat .cap{color:var(--ink-muted);}
 @media (max-width:640px){.stats{grid-template-columns:1fr;} .quals{padding-block:32px;} .stat, .stat:nth-child(n+4){grid-column:auto; padding:22px 20px;}}
 
 .career{
