@@ -601,7 +601,11 @@ test('opening a case grows the divider into a burgundy tile and centres the numb
   const num = cssRule(css, '.case.is-open .case-num');
   assert.match(num, /color:var\(--accent-on\)/, 'number turns white');
   assert.match(num, /transform:translateX\(10px\)/, 'number moves to the centre of the tile (half the 20px gap)');
-  assert.match(num, /transition:transform 260ms cubic-bezier\([^)]*\) 450ms/, 'number moves last');
+  // The number slides in lockstep with the divider: same duration, easing and delay, opening and closing.
+  const clipOf = (rule) => cssRule(css, rule).match(/clip-path (\d+ms cubic-bezier\([^)]*\)(?: \d+ms)?)/)[1];
+  const moveOf = (rule) => cssRule(css, rule).match(/transform (\d+ms cubic-bezier\([^)]*\)(?: \d+ms)?)/)[1];
+  assert.equal(moveOf('.case.is-open .case-num'), clipOf('.case.is-open .case-heading::before'), 'opening: number moves with the divider');
+  assert.equal(moveOf('.case-num'), clipOf('.case-heading::before'), 'closing: number moves back with the divider');
   assert.match(cssRule(css, '.case-num'), /text-align:center/);
   assert.match(cssRule(css, '.case-heading::before'), /width:calc\(var\(--num-size\) \* 1\.2 \+ 20px\)/, 'tile spans the number column plus the gap');
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^}]*\.case-heading::before, \.case-num\{transition:none;\}/);
