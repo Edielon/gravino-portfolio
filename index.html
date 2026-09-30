@@ -307,6 +307,7 @@
       story.querySelectorAll('.story-long').forEach((el) => { el.hidden = !expand; });
       story.querySelectorAll('.case-tools').forEach((el) => { el.hidden = !expand; });
       button.setAttribute('aria-expanded', String(expand));
+      story.classList.toggle('is-expanded', expand);
       button.textContent = expand ? 'Show less' : 'Read the case';
       const to = story.offsetHeight;
       if (!reduceMotion.matches && story.animate) {

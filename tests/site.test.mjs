@@ -566,3 +566,22 @@ test('case numbers share one width so the dividers line up', () => {
   assert.match(num, /font-variant-numeric:tabular-nums/);
   assert.match(num, /width:1\.2em/);
 });
+
+test('expanded cases turn Problem/Approach/Result into burgundy buttons that grow slightly', () => {
+  const css = read('styles.css');
+  const open = cssRule(css, '.case-story.is-expanded .story-row dt');
+  assert.match(open, /background:var\(--accent\)/);
+  assert.match(open, /color:var\(--accent-on\)/, 'white text');
+  assert.match(open, /transform:scale\(1\.08\)/, 'label expands a little');
+  const dt = cssRule(css, '.story-row dt');
+  assert.match(dt, /transform-origin:left center/, 'grows rightward from its left edge');
+  assert.match(dt, /transition:/);
+  // The widest label (APPROACH, ~77px at 12px) plus 8px padding each side, scaled 1.08, must fit the label column.
+  const column = Number(cssRule(css, '.story-row').match(/grid-template-columns:(\d+)px 1fr/)[1]);
+  assert.ok((77 + 16) * 1.08 <= column, `expanded label fits the ${column}px column`);
+  assert.match(cssRule(css, '.case-tools'), new RegExp(`margin:16px 0 0 ${column + 16}px`), 'tools line stays aligned with the text column');
+  assert.ok(!/font-size/.test(open), 'no layout-changing font-size swap; the subtext never moves');
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^}]*\.story-row dt\{transition:none;\}/);
+  const script = [...read('index.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('.case-toggle'));
+  assert.match(script, /story\.classList\.toggle\('is-expanded', expand\)/);
+});

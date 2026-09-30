@@ -417,16 +417,25 @@ section.work{border-top:none;}
 .case-figures span{font-size:13.5px; color:var(--ink-muted);}
 .case-story{margin-top:20px; overflow:hidden;}
 .case-story dl{margin:0; display:grid; gap:12px;}
-.story-row{display:grid; grid-template-columns:92px 1fr; gap:16px; align-items:baseline;}
+.story-row{display:grid; grid-template-columns:108px 1fr; gap:16px; align-items:baseline;}
 .story-row dt{
+  justify-self:start;
+  /* Padding is always present (pulled back with a negative margin while closed) so opening a case
+     never changes the row height or pushes the description sideways. */
+  padding:3px 8px;
+  margin-left:-8px;
   font-size:12px;
   font-weight:600;
   letter-spacing:0.1em;
   text-transform:uppercase;
   color:var(--accent-text);
+  transform-origin:left center;
+  transition:background-color 220ms ease-out, color 220ms ease-out, margin-left 220ms ease-out, transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+.case-story.is-expanded .story-row dt{background:var(--accent); color:var(--accent-on); margin-left:0; transform:scale(1.08);}
+@media (prefers-reduced-motion: reduce){ .story-row dt{transition:none;} }
 .story-row dd{margin:0; font-size:16px; line-height:1.55; max-width:52ch; text-wrap:pretty;}
-.case-tools{margin:16px 0 0 108px; font-size:14px; color:var(--ink-muted);}
+.case-tools{margin:16px 0 0 124px; font-size:14px; color:var(--ink-muted);}
 .case-toggle{
   margin-top:28px;
   display:inline-flex;
