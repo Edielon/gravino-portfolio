@@ -216,12 +216,13 @@ header.site-nav{
   z-index:1;
 }
 .headshot{
-  aspect-ratio:4/5;
+  display:block;
+  width:100%;
   max-width:260px;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  align-items:flex-start;
+  height:auto;
+  aspect-ratio:4/5;
+  object-fit:cover;
+  background:var(--panel);
 }
 @media (max-width:860px){
   .hero{padding-block:44px 36px;}

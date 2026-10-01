@@ -243,6 +243,16 @@ test('resume page offers the CV download right below the headshot', () => {
   assert.match(block, /PDF &middot; \d+ KB/);
 });
 
+test('resume page shows the headshot photo instead of a placeholder', () => {
+  const html = read('resume.html');
+  assert.ok(!html.includes('Add headshot photo'), 'placeholder removed');
+  const img = html.match(/<img class="headshot" src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"[^>]*>/);
+  assert.ok(img, 'headshot image with alt text and reserved size');
+  assert.equal(img[2], 'Hanny Gravino');
+  assert.equal(img[3] * 5, img[4] * 4, '4:5 ratio');
+  assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)), `${img[1]} exists`);
+});
+
 test('stats read as a divided grid with no accent bars', () => {
   const css = read('styles.css');
   const stat = css.match(/\n\.stat\{([^}]*)\}/)[1];
