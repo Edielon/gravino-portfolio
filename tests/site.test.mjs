@@ -23,7 +23,12 @@ test('styles.css keeps the design tokens', () => {
 
 export function assertNav(html, current) {
   const nav = navOf(html);
-  assert.match(nav, /<a class="wordmark" href="index.html">H. Gravino<\/a>/);
+  // The wordmark always lands at the top of the home page, even when already on it (a bare index.html
+  // link reloads and restores the scroll position instead).
+  assert.match(nav, /<a class="wordmark" href="index.html#top">H. Gravino<\/a>/);
+  // #top is an empty marker at y=0, first thing in <body>. Not the sticky header (it scrolls to wherever the
+  // header is stuck) and not <body> (taller than the viewport, so scroll-padding only nudges it by 80-120px).
+  assert.match(html, /<body>\s*<div id="top"><\/div>\s*<header class="site-nav">/);
   const links = [...nav.matchAll(/<li><a href="([^"]+)"([^>]*)>([^<]+)<\/a><\/li>/g)]
     .map(([, href, attrs, label]) => ({ href, label, current: attrs.includes('aria-current="page"') }));
   assert.deepEqual(links.map((l) => [l.label, l.href]), [
