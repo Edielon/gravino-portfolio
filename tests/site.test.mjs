@@ -198,6 +198,27 @@ test('footer repeats the nav links plus back to top on every page', () => {
       ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Contact', 'contact.html'], ['Back to top', '#top'],
     ], page);
     assert.deepEqual(links.filter((l) => l.current).map((l) => l.label), current ? [current] : [], `${page} current`);
+    // Full-bleed graphite footer: the background spans the page, the content stays in the wrap.
+    assert.match(foot, /^<footer class="site-foot">\s*<div class="wrap foot-inner">/, `${page} footer is full width with an inner wrap`);
+  }
+});
+
+test('footer is graphite with light text and a visible current-page underline', () => {
+  const css = read('styles.css');
+  const foot = cssRule(css, 'footer.site-foot');
+  assert.match(foot, /background:var\(--band\)/);
+  assert.match(foot, /color:var\(--band-muted\)/);
+  assert.match(foot, /border-top:1px solid var\(--band-line\)/, 'separates it from the graphite contact band');
+  // Short pages on tall screens: the canvas below the footer continues the graphite, not the grey page.
+  assert.match(css, /\nhtml\{background:var\(--band\);\}/);
+  assert.match(css, /\nbody\{\n  background:var\(--bg\);/);
+  assert.match(cssRule(css, '.foot-links a'), /color:var\(--band-ink\)/);
+  assert.match(cssRule(css, '.foot-links a:hover'), /color:var\(--accent-on-band\)/);
+  assert.match(cssRule(css, '.foot-links a[aria-current="page"]'), /var\(--accent-on-band\)/);
+  const band = hex(token(css, '--band'));
+  for (const t of ['--band-muted', '--band-ink', '--accent-on-band']) {
+    const ratio = contrast(hex(token(css, t)), band);
+    assert.ok(ratio >= 4.5, `${t} on graphite: ${ratio.toFixed(2)}`);
   }
 });
 
