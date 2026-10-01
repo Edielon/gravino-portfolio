@@ -366,7 +366,7 @@ test('home certifications sit on the graphite band and each opens its certificat
   const section = html.match(/<section class="band creds-band" id="certifications">[\s\S]*?<\/section>/);
   assert.ok(section, 'certifications section on the graphite band');
   assert.match(section[0], /<h2 class="section-title">Certifications and Memberships<\/h2>/);
-  const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-title">([^<]+)<\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
+  const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-head"><span class="cred-title">([^<]+)<\/span><span class="cred-logo"><img src="assets\/issuers\/[a-z-]+\.png" alt="" width="\d+" height="\d+"><\/span><\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
     .map(([, href, dataTitle, title, desc]) => ({ href, dataTitle, title, desc: desc.replace(/&middot;/g, '·') }));
   assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'MIEAust', 'MIET', 'M.ASCE', 'PMI Member']);
   assert.deepEqual(cells.map((c) => c.desc), [
@@ -381,6 +381,26 @@ test('home certifications sit on the graphite band and each opens its certificat
   for (const notHere of ['placeholder', 'PRC', 'Diploma', 'White Card', 'MIDAS', 'PICE']) {
     assert.ok(!section[0].includes(notHere), `home certifications should not include ${notHere}`);
   }
+});
+
+test('each certification shows its issuer logo on a white tile, centred on the title', () => {
+  const html = read('index.html');
+  const section = html.match(/<section class="band creds-band" id="certifications">[\s\S]*?<\/section>/)[0];
+  const logos = [...section.matchAll(/<span class="cred-logo"><img src="(assets\/issuers\/[a-z-]+\.png)" alt=""/g)].map((m) => m[1]);
+  assert.deepEqual(logos, [
+    'assets/issuers/pmi.png', 'assets/issuers/pmi.png', 'assets/issuers/engineers-australia.png',
+    'assets/issuers/iet.png', 'assets/issuers/asce.png', 'assets/issuers/pmi.png',
+  ]);
+  for (const src of new Set(logos)) assert.ok(existsSync(new URL(`../${src}`, import.meta.url)), `${src} exists`);
+  const css = read('styles.css');
+  // One row as tall as the tile, title centred on it: no negative margins or offsets.
+  assert.match(css, /--cred-logo:40px;/);
+  assert.match(cssRule(css, '.cred-head'), /display:flex;[^}]*align-items:center;[^}]*justify-content:space-between;[^}]*min-height:var\(--cred-logo\)/);
+  const tile = cssRule(css, '.cred-logo');
+  assert.match(tile, /width:var\(--cred-logo\); height:var\(--cred-logo\)/);
+  assert.match(tile, /background:#FFFFFF/);
+  assert.match(tile, /border-radius:4px/);
+  assert.ok(!/margin/.test(tile), 'tile is not nudged with margins');
 });
 
 test('certificate pop-up is an accessible dialog', () => {
