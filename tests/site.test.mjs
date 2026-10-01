@@ -641,6 +641,15 @@ test('opening a case grows the divider into a burgundy tile and centres the numb
   const moveOf = (rule) => cssRule(css, rule).match(/transform (\d+ms cubic-bezier\([^)]*\)(?: \d+ms)?)/)[1];
   assert.equal(moveOf('.case.is-open .case-num'), clipOf('.case.is-open .case-heading::before'), 'opening: number moves with the divider');
   assert.equal(moveOf('.case-num'), clipOf('.case-heading::before'), 'closing: number moves back with the divider');
+  // Snappy: the open sequence (slide + colour) finishes within ~220ms; closing starts almost immediately.
+  const ends = (t) => [...t.matchAll(/(\d+)ms(?: [a-z-]+| cubic-bezier\([^)]*\))?(?: (\d+)ms)?/g)].map((m) => Number(m[1]) + Number(m[2] || 0));
+  for (const rule of ['.case.is-open .case-heading::before', '.case.is-open .case-num']) {
+    assert.ok(Math.max(...ends(cssRule(css, rule).match(/transition:([^;]+)/)[1])) <= 220, `${rule} finishes within 220ms`);
+  }
+  for (const rule of ['.case-heading::before', '.case-num']) {
+    const delays = [...cssRule(css, rule).match(/transition:([^;]+)/)[1].matchAll(/ms(?: [a-z-]+| cubic-bezier\([^)]*\)) (\d+)ms/g)].map((m) => Number(m[1]));
+    assert.ok(delays.every((d) => d <= 80), `${rule} closes without a long wait`);
+  }
   assert.match(cssRule(css, '.case-num'), /text-align:center/);
   assert.match(cssRule(css, '.case-heading::before'), /width:calc\(var\(--num-size\) \* 1\.2 \+ 20px\)/, 'tile spans the number column plus the gap');
   assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^}]*\.case-heading::before, \.case-num\{transition:none;\}/);

@@ -400,14 +400,14 @@ section.work{border-top:none;}
   width:calc(var(--num-size) * 1.2 + 20px);
   background:var(--rule);
   clip-path:inset(0 0 0 calc(100% - 1px));
-  transition:clip-path 300ms cubic-bezier(0.4, 0, 0.2, 1) 250ms, background-color 200ms ease 150ms;
+  transition:clip-path 180ms cubic-bezier(0.2, 0, 0, 1) 60ms, background-color 120ms ease;
 }
 .case.is-open .case-heading::before{
   clip-path:inset(0);
   background:var(--accent);
-  transition:clip-path 300ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms ease 300ms;
+  transition:clip-path 200ms cubic-bezier(0.2, 0, 0, 1), background-color 120ms ease 60ms;
 }
-.case.is-open .case-num{color:var(--accent-on); transform:translateX(10px); transition:transform 300ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms ease 300ms;}
+.case.is-open .case-num{color:var(--accent-on); transform:translateX(10px); transition:transform 200ms cubic-bezier(0.2, 0, 0, 1), color 120ms ease 60ms;}
 @media (prefers-reduced-motion: reduce){ .case-heading::before, .case-num{transition:none;} }
 .case-num{
   display:block;
@@ -416,7 +416,7 @@ section.work{border-top:none;}
   z-index:1;
   width:1.2em;
   text-align:center;
-  transition:transform 300ms cubic-bezier(0.4, 0, 0.2, 1) 250ms, color 150ms ease;
+  transition:transform 180ms cubic-bezier(0.2, 0, 0, 1) 60ms, color 120ms ease;
   font-variant-numeric:tabular-nums;
   font-family:var(--font-display);
   font-weight:500;
