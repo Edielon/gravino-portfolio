@@ -59,11 +59,11 @@ test('contact page', () => {
   const html = read('contact.html');
   assert.match(html, /<link rel="stylesheet" href="styles.css">/);
   assertNav(html, 'Contact');
-  const rows = [...html.matchAll(/<div class="k">([^<]+)<\/div>/g)].map((m) => m[1]);
+  const rows = [...html.matchAll(/<span class="k">[\s\S]*?<span class="k-label">([^<]+)<\/span><\/span>/g)].map((m) => m[1]);
   assert.deepEqual(rows, ['Email', 'Phone', 'LinkedIn']);
   assert.match(html, /<form id="contact-form" action="https:\/\/api.web3forms.com\/submit" method="POST"/);
   assert.match(html, /name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY"/);
-  for (const [id, required] of [['cf-name', true], ['cf-email', true], ['cf-company', false], ['cf-subject', true], ['cf-message', true]]) {
+  for (const [id, required] of [['cf-name', true], ['cf-email', true], ['cf-subject', true], ['cf-message', true]]) {
     assert.match(html, new RegExp(`<label for="${id}"`), `label for ${id}`);
     const field = html.match(new RegExp(`<(input|select|textarea)[^>]*id="${id}"[^>]*>`));
     assert.ok(field, `field ${id}`);
@@ -76,6 +76,41 @@ test('contact page', () => {
   assert.ok(!html.includes('<select'), 'no dropdown left');
   assert.match(script, /form\.subject\.value = 'Portfolio enquiry: ' \+ /, 'email subject line uses the visitor subject');
   assert.ok(script.indexOf("'Portfolio enquiry: '") < script.indexOf('fetch('), 'subject set before sending');
+});
+
+test('contact form has no company field', () => {
+  const html = read('contact.html');
+  assert.ok(!html.includes('cf-company'), 'company field removed');
+  assert.ok(!/name="company"/.test(html), 'no company input');
+});
+
+test('contact details have icons, copy buttons and a LinkedIn link', () => {
+  const html = read('contact.html');
+  const lines = html.match(/<div class="contact-lines">([\s\S]*?)<p class="sr-only" id="c-copy-status"/);
+  assert.ok(lines, 'copy status region follows the contact lines');
+  const icons = [...lines[1].matchAll(/<svg class="c-icon"[^>]*>/g)];
+  assert.equal(icons.length, 3, 'one icon per row');
+  for (const [tag] of icons) assert.match(tag, /aria-hidden="true"/);
+  assert.match(html, /id="c-copy-status"[^>]*role="status"/);
+
+  const copies = [...lines[1].matchAll(/<button class="c-row c-action" type="button" data-copy="([^"]+)"[^>]*>/g)].map((m) => m[1]);
+  assert.deepEqual(copies, ['hcbgravino@gmail.com', '+639620723288']);
+  assert.match(lines[1], /\+63 962 072 3288/, 'phone shown in readable groups');
+
+  const li = lines[1].match(/<a class="c-row c-action"[^>]*>/);
+  assert.ok(li, 'LinkedIn row is a link');
+  assert.match(li[0], /href="https:\/\/www\.linkedin\.com\/"/);
+  assert.match(li[0], /target="_blank"/);
+  assert.match(li[0], /rel="noopener noreferrer"/);
+
+  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n');
+  assert.match(scripts, /navigator\.clipboard\.writeText/);
+  assert.match(scripts, /execCommand\('copy'\)/, 'fallback for blocked clipboard');
+  assert.match(scripts, /Copied/);
+
+  const css = read('styles.css');
+  assert.match(css, /\.c-action:hover \.c-icon[^{]*\{[^}]*transform:/, 'icon hover lift');
+  assert.match(css, /prefers-reduced-motion: reduce\)[\s\S]*?\.c-icon/, 'reduced motion handled for icons');
 });
 
 test('hero line art is decorative and outside the headline', () => {

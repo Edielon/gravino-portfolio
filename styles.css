@@ -590,6 +590,58 @@ section.work{border-top:none;}
   color:var(--band-muted);
 }
 .c-row .v{font-family:var(--font-body); font-size:14px; color:var(--band-ink);}
+
+/* Contact rows as actions: email/phone copy, LinkedIn opens. Icon lifts and tints, value underline slides in. */
+.c-action{
+  grid-template-columns:120px 1fr auto;
+  align-items:center;
+  width:100%;
+  margin:0;
+  padding-inline:0;
+  border:0;
+  border-bottom:1px solid var(--band-line);
+  background:none;
+  font:inherit;
+  color:var(--band-ink);
+  text-align:left;
+  text-decoration:none;
+  cursor:pointer;
+}
+.c-action .k{display:flex; align-items:center; gap:10px;}
+.c-icon{
+  flex:none;
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.5;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  color:var(--band-muted);
+  transition:transform 200ms ease-out, color 200ms ease-out;
+}
+.c-val{
+  background:linear-gradient(var(--accent-on-band), var(--accent-on-band)) no-repeat left bottom / 0 1px;
+  padding-bottom:2px;
+  transition:background-size 250ms ease-out;
+}
+.c-hint{
+  font-family:var(--font-body);
+  font-size:11.5px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:var(--accent-on-band);
+  opacity:0;
+  transition:opacity 200ms ease-out;
+}
+.c-action:hover .c-icon, .c-action:focus-visible .c-icon{transform:translateY(-2px); color:var(--accent-on-band);}
+.c-action:hover .c-val, .c-action:focus-visible .c-val{background-size:100% 1px;}
+.c-action:hover .c-hint, .c-action:focus-visible .c-hint, .c-action.is-copied .c-hint{opacity:1;}
+.c-action:focus-visible{outline:2px solid var(--band-ink); outline-offset:4px;}
+@media (prefers-reduced-motion: reduce){
+  .c-icon, .c-val, .c-hint{transition:none;}
+  .c-action:hover .c-icon, .c-action:focus-visible .c-icon{transform:none;}
+}
 @media (max-width:760px){.contact-grid{grid-template-columns:1fr; gap:36px;}}
 
 footer.site-foot{
