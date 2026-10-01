@@ -123,15 +123,18 @@ test('contact rows: burgundy tile on hover, check-mark pop on copy', () => {
   assert.match(rows[2], /<span class="c-arrow">&#8599;<\/span>/);
 
   // Tile grows from the left like the case-number divider, with the same snappy ease-out.
-  assert.match(css, /\n\.c-badge::before\{[^}]*background:var\(--accent\)[^}]*clip-path:inset\(0 100% 0 0\)[^}]*transition:clip-path 180ms cubic-bezier\(0\.2, 0, 0, 1\)/);
-  assert.match(css, /\.c-action:hover \.c-badge::before[^{]*\{clip-path:inset\(0\);\}/);
-  assert.match(css, /\.c-action:hover \.c-icon[^{]*\{color:var\(--accent-on\);\}/, 'icon turns white on the tile');
+  // The tile covers the icon and its label together.
+  assert.match(css, /\n\.c-action \.k::before\{[^}]*background:var\(--accent\)[^}]*clip-path:inset\(0 100% 0 0\)[^}]*transition:clip-path 180ms cubic-bezier\(0\.2, 0, 0, 1\)/);
+  assert.match(css, /\n\.c-action \.k\{[^}]*position:relative[^}]*width:fit-content/, 'tile hugs icon + label');
+  assert.match(css, /\.c-action:hover \.k::before[^{]*\{clip-path:inset\(0\);\}/);
+  assert.match(css, /\.c-action:hover \.c-icon, [^{]*\.c-action:hover \.k-label[^{]*\{color:var\(--accent-on\);\}/, 'icon and label turn white on the tile');
+  assert.ok(!css.includes('.c-badge::before'), 'no separate icon-only tile');
   assert.match(css, /\.c-action:hover \.c-arrow[^{]*\{transform:translate\(2px, -2px\);\}/);
   // Copy: icon swaps to a check that draws in with the tab-pop overshoot; the hint rises in.
   assert.match(css, /\.c-action\.is-copied \.c-badge\{animation:c-pop 260ms cubic-bezier\(0\.34, 1\.56, 0\.64, 1\);\}/);
   assert.match(css, /\.c-action\.is-copied \.c-check path\{animation:c-draw 220ms/);
   assert.match(css, /\.c-action\.is-copied \.c-hint\{[^}]*animation:c-rise/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^@]*\.c-badge::before[^@]*animation:none/, 'no motion when reduced');
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^@]*\.c-action \.k::before[^@]*animation:none/, 'no motion when reduced');
 
   const script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('data-copy'));
   assert.match(script, /void row\.offsetWidth/, 'replays the pop on repeat clicks');
