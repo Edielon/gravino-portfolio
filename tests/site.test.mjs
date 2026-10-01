@@ -746,9 +746,44 @@ test('case number sits beside the title with a divider between them', () => {
   const css = read('styles.css');
   assert.match(cssRule(css, '.case-head'), /display:flex/);
   const divider = cssRule(css, '.case-heading::before');
-  assert.match(divider, /left:0/, 'divider sits at the left edge of the title block');
-  assert.match(divider, /width:1px/, 'a plain 1px line');
+  assert.match(divider, /right:100%/, 'divider sits at the left edge of the title block');
+  assert.match(divider, /clip-path:inset\(0 0 0 calc\(100% - 1px\)\)/, 'at rest only a 1px line shows');
   assert.match(divider, /background:var\(--rule\)/);
+});
+
+test('hovering Read the Full Case grows the number tile and turns the story labels into burgundy buttons', () => {
+  const css = read('styles.css');
+  // Triggered from the case's own link (hover, or keyboard focus); no script involved.
+  const on = (target) => `.case:has(.case-link:hover) ${target}, .case:has(.case-link:focus-visible) ${target}`;
+  const tile = cssRule(css, on('.case-heading::before'));
+  assert.match(tile, /clip-path:inset\(0\)/, 'divider expands leftward into a full tile');
+  assert.match(tile, /background:var\(--accent\)/, 'tile turns burgundy');
+  const num = cssRule(css, on('.case-num'));
+  assert.match(num, /color:var\(--accent-on\)/, 'number turns white');
+  assert.match(num, /transform:translateX\(10px\)/, 'number moves to the centre of the tile (half the 20px gap)');
+  assert.match(cssRule(css, '.case-heading::before'), /width:calc\(var\(--num-size\) \* 1\.2 \+ 20px\)/, 'tile spans the number column plus the gap');
+  // Number slides in lockstep with the tile, both ways, and the whole thing stays snappy.
+  const clipOf = (rule) => cssRule(css, rule).match(/clip-path (\d+ms cubic-bezier\([^)]*\)(?: \d+ms)?)/)[1];
+  const moveOf = (rule) => cssRule(css, rule).match(/transform (\d+ms cubic-bezier\([^)]*\)(?: \d+ms)?)/)[1];
+  assert.equal(moveOf(on('.case-num')), clipOf(on('.case-heading::before')), 'in: number moves with the tile');
+  assert.equal(moveOf('.case-num'), clipOf('.case-heading::before'), 'out: number moves back with the tile');
+  const ends = (t) => [...t.matchAll(/(\d+)ms(?: [a-z-]+| cubic-bezier\([^)]*\))?(?: (\d+)ms)?/g)].map((m) => Number(m[1]) + Number(m[2] || 0));
+  for (const rule of [on('.case-heading::before'), on('.case-num')]) {
+    assert.ok(Math.max(...ends(cssRule(css, rule).match(/transition:([^;]+)/)[1])) <= 220, `${rule} finishes within 220ms`);
+  }
+  // Labels: burgundy button, white text, slight growth, without moving the description text.
+  const dt = cssRule(css, on('.story-row dt'));
+  assert.match(dt, /background:var\(--accent\)/);
+  assert.match(dt, /color:var\(--accent-on\)/);
+  assert.match(dt, /transform:scale\(1\.08\)/);
+  assert.ok(!/font-size/.test(dt), 'no font-size swap, so the description never moves');
+  const rest = cssRule(css, '.story-row dt');
+  assert.match(rest, /padding:3px 8px/);
+  assert.match(rest, /margin-left:-8px/, 'padding is pulled back at rest so the row never shifts');
+  assert.match(rest, /transform-origin:left center/);
+  const column = Number(cssRule(css, '.story-row').match(/grid-template-columns:(\d+)px 1fr/)[1]);
+  assert.ok((77 + 16) * 1.08 <= column, `grown label fits the ${column}px column`);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{ \.case-heading::before, \.case-num, \.story-row dt\{transition:none;\} \}/);
 });
 
 test('case numbers share one width so the dividers line up', () => {

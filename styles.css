@@ -398,8 +398,24 @@ section.work{border-top:none;}
 }
 .case-head{--num-size:clamp(44px, 4.4vw, 60px); display:flex; align-items:center; gap:20px;}
 .case-heading{position:relative; min-width:0; padding-left:20px;}
-/* A 1px divider between the number and the title block. */
-.case-heading::before{content:""; position:absolute; top:0; bottom:0; left:0; width:1px; background:var(--rule);}
+/* The divider: a tile the width of the number column plus the gap, clipped to a 1px line at rest.
+   Hovering (or focusing) the case's "Read the Full Case" link unclips it leftward, turns it burgundy
+   and centres the number in white; leaving reverses it. */
+.case-heading::before{
+  content:"";
+  position:absolute;
+  top:0; bottom:0; right:100%;
+  width:calc(var(--num-size) * 1.2 + 20px);
+  background:var(--rule);
+  clip-path:inset(0 0 0 calc(100% - 1px));
+  transition:clip-path 180ms cubic-bezier(0.2, 0, 0, 1) 60ms, background-color 120ms ease;
+}
+.case:has(.case-link:hover) .case-heading::before, .case:has(.case-link:focus-visible) .case-heading::before{
+  clip-path:inset(0);
+  background:var(--accent);
+  transition:clip-path 200ms cubic-bezier(0.2, 0, 0, 1), background-color 120ms ease 60ms;
+}
+.case:has(.case-link:hover) .case-num, .case:has(.case-link:focus-visible) .case-num{color:var(--accent-on); transform:translateX(10px); transition:transform 200ms cubic-bezier(0.2, 0, 0, 1), color 120ms ease 60ms;}
 .case-num{
   display:block;
   flex:none;
@@ -407,6 +423,7 @@ section.work{border-top:none;}
   z-index:1;
   width:1.2em;
   text-align:center;
+  transition:transform 180ms cubic-bezier(0.2, 0, 0, 1) 60ms, color 120ms ease;
   font-variant-numeric:tabular-nums;
   font-family:var(--font-display);
   font-weight:500;
@@ -438,12 +455,21 @@ section.work{border-top:none;}
 .case-story dl{margin:0; display:grid; gap:12px;}
 .story-row{display:grid; grid-template-columns:108px 1fr; gap:16px; align-items:baseline;}
 .story-row dt{
+  justify-self:start;
+  /* Padding is always present (pulled back with a negative margin at rest) so the hover state
+     never changes the row height or pushes the description sideways. */
+  padding:3px 8px;
+  margin-left:-8px;
   font-size:12px;
   font-weight:600;
   letter-spacing:0.1em;
   text-transform:uppercase;
   color:var(--accent-text);
+  transform-origin:left center;
+  transition:background-color 220ms ease-out, color 220ms ease-out, margin-left 220ms ease-out, transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
+.case:has(.case-link:hover) .story-row dt, .case:has(.case-link:focus-visible) .story-row dt{background:var(--accent); color:var(--accent-on); margin-left:0; transform:scale(1.08);}
+@media (prefers-reduced-motion: reduce){ .case-heading::before, .case-num, .story-row dt{transition:none;} }
 .story-row dd{margin:0; font-size:16px; line-height:1.55; max-width:52ch; text-wrap:pretty;}
 .case-link{
   margin-top:28px;
