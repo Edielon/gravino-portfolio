@@ -2,7 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 
-export const read = (f) => readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
+// Normalise line endings so checks don't depend on how git checked the files out (core.autocrlf).
+export const read = (f) => readFileSync(new URL(`../${f}`, import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 export const navOf = (html) => (html.match(/<header class="site-nav"[^>]*>[\s\S]*?<\/header>/) || [''])[0];
 
 test('index.html is a full document that uses the shared stylesheet', () => {
@@ -266,7 +267,13 @@ test('band contains its children margins (no light gap above the stats)', () => 
   assert.match(band, /display:flow-root/);
 });
 
-test('each case shows short problem/approach/result that expand in place', () => {
+export const CASES = [
+  { file: 'case-cor-jesu-law.html', title: 'Center for Law and Graduate Studies, Cor Jesu College' },
+  { file: 'case-norbert-retrofit.html', title: 'Norbert Building Retrofit, Cor Jesu College' },
+  { file: 'case-project-derisk.html', title: 'Project DeRisk, Senterprisys Limited' },
+];
+
+test('each home page case shows only the short story and links to its full case page', () => {
   const html = read('index.html');
   const work = html.match(/<section class="block work" id="work">[\s\S]*?<\/section>/);
   assert.ok(work, 'work section uses the editorial layout');
@@ -274,28 +281,60 @@ test('each case shows short problem/approach/result that expand in place', () =>
   assert.equal(cases.length, 3);
   cases.forEach((c, i) => {
     assert.match(c, new RegExp(`<span class="case-num" aria-hidden="true">0${i + 1}</span>`));
-    assert.match(c, /<h3>[^<]+<\/h3>/);
-    const id = `case-${i + 1}-story`;
-    assert.match(c, new RegExp(`<div class="case-story" id="${id}">`), `${id} region`);
+    assert.match(c, new RegExp(`<h3>${CASES[i].title}</h3>`));
+    assert.match(c, /<div class="case-story">/);
     for (const term of ['Problem', 'Approach', 'Result']) {
-      const row = c.match(new RegExp(`<dt>${term}</dt>\\s*<dd>([\\s\\S]*?)</dd>`));
-      assert.ok(row, `${term} row in case ${i + 1}`);
-      const short = row[1].match(/<span class="story-short">([^<]+)<\/span>/);
-      const long = row[1].match(/<span class="story-long" hidden>([\s\S]+?)<\/span>/);
-      assert.ok(short && long, `${term} has short and hidden long text`);
-      assert.ok(long[1].length > short[1].length, `${term} long text is longer than short`);
+      const row = c.match(new RegExp(`<dt>${term}</dt>\\s*<dd>([^<]+)</dd>`));
+      assert.ok(row, `${term} row in case ${i + 1} holds plain short text`);
     }
-    assert.match(c, /<p class="case-tools" hidden>/);
-    assert.match(c, new RegExp(`<button class="case-toggle" type="button" aria-expanded="false" aria-controls="${id}" hidden>Read the case</button>`));
-    assert.ok(!c.includes('<details'), 'no separate expanding block below');
-    assert.ok(!c.includes('case-outcome'), 'outcome sentence replaced by the short rows');
+    assert.match(c, new RegExp(`<a class="case-link" href="${CASES[i].file}">Read the Full Case</a>`));
+    for (const gone of ['story-long', 'story-short', 'case-tools', 'case-toggle', 'aria-expanded', '<button']) {
+      assert.ok(!c.includes(gone), `no expand-in-place leftovers (${gone}) in case ${i + 1}`);
+    }
   });
-  const script = html.match(/<script>([\s\S]*?)<\/script>/);
-  assert.ok(script, 'toggle script present');
-  for (const needle of ['.case-toggle', 'aria-expanded', '.story-short', '.story-long', '.case-tools', 'prefers-reduced-motion']) {
-    assert.ok(script[1].includes(needle), `script handles ${needle}`);
+  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n');
+  assert.ok(!scripts.includes('.case-toggle'), 'expand script removed');
+  const css = read('styles.css');
+  for (const gone of ['.case-toggle', '.is-open', '.is-expanded', '.story-long']) {
+    assert.ok(!css.includes(gone), `no ${gone} styles left`);
   }
-  assert.match(script[1], /setTimeout\(\(\) => animation\.cancel\(\)/, 'a stalled height animation is cancelled so text is never left clipped');
+});
+
+test('each case has its own page with the full story, figures and a next-case link', () => {
+  CASES.forEach(({ file, title }, i) => {
+    assert.ok(existsSync(new URL(`../${file}`, import.meta.url)), `${file} exists`);
+    const html = read(file);
+    assert.match(html, /^<!doctype html>/i);
+    assert.match(html, /<link rel="stylesheet" href="styles.css">/);
+    assert.match(html, new RegExp(`<title>${title.split(',')[0]} · Gravino Engineering</title>`));
+    assert.match(html, /<body>\s*<div id="top"><\/div>/);
+    // Nav: Work is the current section (not a page), so it uses aria-current="true".
+    const nav = navOf(html);
+    assert.match(nav, /<a class="wordmark" href="index.html#top">H. Gravino<\/a>/);
+    assert.match(nav, /<li><a href="index.html#work" aria-current="true">Work<\/a><\/li>/);
+    assert.match(html, /<a class="case-back" href="index.html#work">All work<\/a>/);
+    assert.match(html, new RegExp(`<span class="case-num" aria-hidden="true">0${i + 1}</span>\\s*<div class="case-heading">\\s*<h1>${title}</h1>\\s*<p class="case-meta">[^<]+</p>`));
+    assert.match(html, /<div class="case-photo"><span>Add project photo or drawing<\/span><\/div>/);
+    assert.match(html, /<ul class="case-figures">\s*<li><strong>/);
+    // Placeholder copy: the current long text, one section per step.
+    const home = read('index.html');
+    for (const term of ['Problem', 'Approach', 'Result']) {
+      const sec = html.match(new RegExp(`<section class="case-section">\\s*<h2>${term}</h2>\\s*<p>([\\s\\S]+?)</p>\\s*</section>`));
+      assert.ok(sec, `${file} ${term} section`);
+      assert.ok(sec[1].length > 60, `${file} ${term} uses the full text`);
+      // Some short lines are the opening of the long text, so check the full passage is gone from the home page.
+      assert.ok(!home.replace(/\s+/g, ' ').includes(sec[1].trim()), `${term} long text no longer sits on the home page`);
+    }
+    const next = CASES[(i + 1) % CASES.length];
+    assert.match(html, new RegExp(`<a class="case-next" href="${next.file}">\\s*<span class="case-next-label">Next case</span>\\s*<span class="case-next-title">0${((i + 1) % 3) + 1} &middot; ${next.title.split(',')[0]}</span>`));
+    const foot = html.match(/<footer class="site-foot">[\s\S]*?<\/footer>/);
+    assert.ok(foot, `${file} graphite footer`);
+    assert.match(foot[0], /<li><a href="#top">Back to top<\/a><\/li>/);
+  });
+  const css = read('styles.css');
+  assert.match(css, /\.nav-links a\[aria-current\]\{box-shadow:inset 0 -2px 0 var\(--accent\);\}/, 'current section underlined');
+  assert.match(cssRule(css, '.case-section'), /grid-template-columns:/);
+  assert.match(css, /@media \(max-width:640px\)\{[^}]*\.case-section\{grid-template-columns:1fr;/);
 });
 
 const cssRule = (css, sel) => {
@@ -306,12 +345,12 @@ const cssRule = (css, sel) => {
 test('selected work keeps photos on the left with no stray lines', () => {
   const css = read('styles.css');
   assert.match(cssRule(css, 'section.work'), /border-top:none/);
-  for (const sel of ['.case', '.case-photo', '.case-toggle']) {
+  for (const sel of ['.case', '.case-photo', '.case-link']) {
     assert.ok(cssRule(css, sel), `${sel} rule exists`);
     assert.ok(!/border(-top|-bottom)?:\s*[1-9]/.test(cssRule(css, sel)), `${sel} has no border line`);
   }
   assert.ok(!/nth-child\(even\)[^{]*\.case-media/.test(css), 'no alternating image sides');
-  assert.match(cssRule(css, '.case'), /align-items:start/, 'photo stays at the top when a case is expanded');
+  assert.match(cssRule(css, '.case'), /align-items:start/, 'photo stays at the top of the case');
 });
 
 test('case numbers are burgundy and figures sit under a hairline', () => {
@@ -324,14 +363,17 @@ test('section titles have no accent bar above them', () => {
   assert.ok(!read('styles.css').includes('.section-title::before'));
 });
 
-test('read the case is a filled button with readable burgundy text', () => {
+test('read the full case is a filled button link with readable burgundy text', () => {
   const css = read('styles.css');
-  const btn = cssRule(css, '.case-toggle');
+  const btn = cssRule(css, '.case-link');
   assert.match(btn, /background:var\(--button-soft\)/, 'filled with the soft button grey');
   assert.match(btn, /color:var\(--accent-text\)/, 'burgundy label');
   assert.match(btn, /padding:12px 20px/);
   assert.match(btn, /min-height:44px/);
-  assert.match(cssRule(css, '.case-toggle:hover'), /background:var\(--button-soft-hover\)/);
+  assert.match(cssRule(css, '.case-link:hover'), /background:var\(--button-soft-hover\)/);
+  assert.match(btn, /text-decoration:none/);
+  assert.match(cssRule(css, '.case-link::after'), /content:"\\2192"/, 'arrow instead of a plus');
+  assert.match(cssRule(css, '.case-link:hover::after'), /transform:translateX\(3px\)/);
   const burgundy = hex(token(css, '--accent-text'));
   for (const fill of ['--button-soft', '--button-soft-hover']) {
     const ratio = contrast(burgundy, hex(token(css, fill)));
@@ -590,7 +632,7 @@ test('resume career, education and training sit in accessible tabs', () => {
 });
 
 test('the hidden attribute always wins over component display rules', () => {
-  // Without it, .tab-list and .case-toggle would show as dead controls when JavaScript is off.
+  // Without it, .tab-list would show as a dead control when JavaScript is off.
   assert.match(read('styles.css'), /\[hidden\]\{display:none !important;\}/);
 });
 
@@ -704,8 +746,8 @@ test('case number sits beside the title with a divider between them', () => {
   const css = read('styles.css');
   assert.match(cssRule(css, '.case-head'), /display:flex/);
   const divider = cssRule(css, '.case-heading::before');
-  assert.match(divider, /right:100%/, 'divider sits at the left edge of the title block');
-  assert.match(divider, /clip-path:inset\(0 0 0 calc\(100% - 1px\)\)/, 'closed: only a 1px line shows');
+  assert.match(divider, /left:0/, 'divider sits at the left edge of the title block');
+  assert.match(divider, /width:1px/, 'a plain 1px line');
   assert.match(divider, /background:var\(--rule\)/);
 });
 
@@ -713,58 +755,6 @@ test('case numbers share one width so the dividers line up', () => {
   const num = cssRule(read('styles.css'), '.case-num');
   assert.match(num, /font-variant-numeric:tabular-nums/);
   assert.match(num, /width:1\.2em/);
-});
-
-test('expanded cases turn Problem/Approach/Result into burgundy buttons that grow slightly', () => {
-  const css = read('styles.css');
-  const open = cssRule(css, '.case-story.is-expanded .story-row dt');
-  assert.match(open, /background:var\(--accent\)/);
-  assert.match(open, /color:var\(--accent-on\)/, 'white text');
-  assert.match(open, /transform:scale\(1\.08\)/, 'label expands a little');
-  const dt = cssRule(css, '.story-row dt');
-  assert.match(dt, /transform-origin:left center/, 'grows rightward from its left edge');
-  assert.match(dt, /transition:/);
-  // The widest label (APPROACH, ~77px at 12px) plus 8px padding each side, scaled 1.08, must fit the label column.
-  const column = Number(cssRule(css, '.story-row').match(/grid-template-columns:(\d+)px 1fr/)[1]);
-  assert.ok((77 + 16) * 1.08 <= column, `expanded label fits the ${column}px column`);
-  assert.match(cssRule(css, '.case-tools'), new RegExp(`margin:16px 0 0 ${column + 16}px`), 'tools line stays aligned with the text column');
-  assert.ok(!/font-size/.test(open), 'no layout-changing font-size swap; the subtext never moves');
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^}]*\.story-row dt\{transition:none;\}/);
-  const script = [...read('index.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('.case-toggle'));
-  assert.match(script, /story\.classList\.toggle\('is-expanded', expand\)/);
-});
-
-test('opening a case grows the divider into a burgundy tile and centres the number in white', () => {
-  const css = read('styles.css');
-  const open = cssRule(css, '.case.is-open .case-heading::before');
-  assert.match(open, /clip-path:inset\(0\)/, 'divider expands leftward into a full block');
-  assert.match(open, /background:var\(--accent\)/, 'block turns burgundy');
-  const openTransition = open.match(/transition:([^;]+)/)[1];
-  const colourDelay = Number(openTransition.match(/background-color \d+ms [a-z-]+ (\d+)ms/)[1]);
-  const clipDelay = Number((openTransition.match(/clip-path \d+ms cubic-bezier\([^)]*\)\s*(\d+)?/) || [])[1] || 0);
-  assert.ok(colourDelay > clipDelay, 'colour change comes after the expansion starts');
-  const num = cssRule(css, '.case.is-open .case-num');
-  assert.match(num, /color:var\(--accent-on\)/, 'number turns white');
-  assert.match(num, /transform:translateX\(10px\)/, 'number moves to the centre of the tile (half the 20px gap)');
-  // The number slides in lockstep with the divider: same duration, easing and delay, opening and closing.
-  const clipOf = (rule) => cssRule(css, rule).match(/clip-path (\d+ms cubic-bezier\([^)]*\)(?: \d+ms)?)/)[1];
-  const moveOf = (rule) => cssRule(css, rule).match(/transform (\d+ms cubic-bezier\([^)]*\)(?: \d+ms)?)/)[1];
-  assert.equal(moveOf('.case.is-open .case-num'), clipOf('.case.is-open .case-heading::before'), 'opening: number moves with the divider');
-  assert.equal(moveOf('.case-num'), clipOf('.case-heading::before'), 'closing: number moves back with the divider');
-  // Snappy: the open sequence (slide + colour) finishes within ~220ms; closing starts almost immediately.
-  const ends = (t) => [...t.matchAll(/(\d+)ms(?: [a-z-]+| cubic-bezier\([^)]*\))?(?: (\d+)ms)?/g)].map((m) => Number(m[1]) + Number(m[2] || 0));
-  for (const rule of ['.case.is-open .case-heading::before', '.case.is-open .case-num']) {
-    assert.ok(Math.max(...ends(cssRule(css, rule).match(/transition:([^;]+)/)[1])) <= 220, `${rule} finishes within 220ms`);
-  }
-  for (const rule of ['.case-heading::before', '.case-num']) {
-    const delays = [...cssRule(css, rule).match(/transition:([^;]+)/)[1].matchAll(/ms(?: [a-z-]+| cubic-bezier\([^)]*\)) (\d+)ms/g)].map((m) => Number(m[1]));
-    assert.ok(delays.every((d) => d <= 80), `${rule} closes without a long wait`);
-  }
-  assert.match(cssRule(css, '.case-num'), /text-align:center/);
-  assert.match(cssRule(css, '.case-heading::before'), /width:calc\(var\(--num-size\) \* 1\.2 \+ 20px\)/, 'tile spans the number column plus the gap');
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^}]*\.case-heading::before, \.case-num\{transition:none;\}/);
-  const script = [...read('index.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('.case-toggle'));
-  assert.match(script, /button\.closest\('\.case'\)\.classList\.toggle\('is-open', expand\)/);
 });
 
 test('case details sit beside the photo and the figures divider starts at the photo bottom', () => {
@@ -775,7 +765,7 @@ test('case details sit beside the photo and the figures divider starts at the ph
     const main = b.indexOf('<div class="case-main">'), extra = b.indexOf('<div class="case-extra">');
     assert.ok(main >= 0 && extra > main, 'main details, then the extra block');
     assert.ok(b.indexOf('case-head') > main && b.indexOf('case-story') > main && b.indexOf('case-story') < extra, 'header and story in the main block');
-    assert.ok(b.indexOf('case-figures') > extra && b.indexOf('case-toggle') > extra, 'figures and button in the extra block');
+    assert.ok(b.indexOf('case-figures') > extra && b.indexOf('case-link') > extra, 'figures and link in the extra block');
   }
   const css = read('styles.css');
   assert.match(cssRule(css, '.case-body'), /display:contents/, 'main and extra join the case grid');
