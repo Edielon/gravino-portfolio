@@ -368,14 +368,15 @@ test('home certifications sit on the graphite band and each opens its certificat
   assert.match(section[0], /<h2 class="section-title">Certifications and Memberships<\/h2>/);
   const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-logo"><img src="assets\/issuers\/[a-z-]+\.png" alt="" width="\d+" height="\d+"><\/span><span class="cred-title">([^<]+)<\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
     .map(([, href, dataTitle, title, desc]) => ({ href, dataTitle, title, desc: desc.replace(/&middot;/g, '·') }));
-  assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'MIEAust', 'MIET', 'M.ASCE', 'PMI Member']);
+  // PMI credentials share the top row; engineering memberships sit below.
+  assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'PMI Member', 'MIEAust', 'MIET', 'M.ASCE']);
   assert.deepEqual(cells.map((c) => c.desc), [
     'Project Management Professional, Project Management Institute · 2026',
     'Certified Associate in Project Management, Project Management Institute · 2025',
+    'Project Management Institute, Queensland Australia Chapter · 2025',
     'Member, Engineers Australia · 2025',
     'Member, Institution of Engineering and Technology · 2025',
     'Member, American Society of Civil Engineers · 2025',
-    'Project Management Institute, Queensland Australia Chapter · 2025',
   ]);
   for (const c of cells) assert.ok(existsSync(new URL(`../${c.href}`, import.meta.url)), `${c.href} exists`);
   for (const notHere of ['placeholder', 'PRC', 'Diploma', 'White Card', 'MIDAS', 'PICE']) {
@@ -388,8 +389,8 @@ test('each certification stacks its issuer logo above the title, like the Educat
   const section = html.match(/<section class="band creds-band" id="certifications">[\s\S]*?<\/section>/)[0];
   const logos = [...section.matchAll(/<span class="cred-logo"><img src="(assets\/issuers\/[a-z-]+\.png)" alt=""/g)].map((m) => m[1]);
   assert.deepEqual(logos, [
-    'assets/issuers/pmi.png', 'assets/issuers/pmi.png', 'assets/issuers/engineers-australia.png',
-    'assets/issuers/iet.png', 'assets/issuers/asce.png', 'assets/issuers/pmi.png',
+    'assets/issuers/pmi.png', 'assets/issuers/pmi.png', 'assets/issuers/pmi.png',
+    'assets/issuers/engineers-australia.png', 'assets/issuers/iet.png', 'assets/issuers/asce.png',
   ]);
   for (const src of new Set(logos)) assert.ok(existsSync(new URL(`../${src}`, import.meta.url)), `${src} exists`);
   const css = read('styles.css');
