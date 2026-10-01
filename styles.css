@@ -591,7 +591,9 @@ section.work{border-top:none;}
 }
 .c-row .v{font-family:var(--font-body); font-size:14px; color:var(--band-ink);}
 
-/* Contact rows as actions: email/phone copy, LinkedIn opens. Icon lifts and tints, value underline slides in. */
+/* Contact rows as actions: email/phone copy, LinkedIn opens.
+   Hover grows a burgundy tile behind the icon from the left (same move as the case-number divider);
+   copying swaps the icon for a check that draws in with a small pop. */
 .c-action{
   grid-template-columns:120px 1fr auto;
   align-items:center;
@@ -608,22 +610,41 @@ section.work{border-top:none;}
   cursor:pointer;
 }
 .c-action .k{display:flex; align-items:center; gap:10px;}
-.c-icon{
+.c-badge{
+  position:relative;
   flex:none;
-  width:18px;
-  height:18px;
+  display:grid;
+  place-items:center;
+  width:28px;
+  height:28px;
+  margin-block:-6px;
+}
+.c-badge::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:var(--accent);
+  clip-path:inset(0 100% 0 0);
+  transition:clip-path 180ms cubic-bezier(0.2, 0, 0, 1);
+}
+.c-icon, .c-check{
+  position:relative;
+  grid-area:1 / 1;
+  width:16px;
+  height:16px;
   fill:none;
   stroke:currentColor;
   stroke-width:1.5;
   stroke-linecap:round;
   stroke-linejoin:round;
-  color:var(--band-muted);
-  transition:transform 200ms ease-out, color 200ms ease-out;
 }
+.c-icon{color:var(--band-muted); transition:color 120ms ease, opacity 120ms ease;}
+.c-check{color:var(--accent-on); stroke-width:2; opacity:0;}
+.c-check path{stroke-dasharray:1; stroke-dashoffset:1;}
 .c-val{
   background:linear-gradient(var(--accent-on-band), var(--accent-on-band)) no-repeat left bottom / 0 1px;
   padding-bottom:2px;
-  transition:background-size 250ms ease-out;
+  transition:background-size 180ms cubic-bezier(0.2, 0, 0, 1);
 }
 .c-hint{
   font-family:var(--font-body);
@@ -632,15 +653,28 @@ section.work{border-top:none;}
   text-transform:uppercase;
   color:var(--accent-on-band);
   opacity:0;
-  transition:opacity 200ms ease-out;
+  transition:opacity 150ms ease;
 }
-.c-action:hover .c-icon, .c-action:focus-visible .c-icon{transform:translateY(-2px); color:var(--accent-on-band);}
+.c-arrow{display:inline-block; transition:transform 180ms cubic-bezier(0.2, 0, 0, 1);}
+.c-action:hover .c-badge::before, .c-action:focus-visible .c-badge::before, .c-action.is-copied .c-badge::before{clip-path:inset(0);}
+.c-action:hover .c-icon, .c-action:focus-visible .c-icon{color:var(--accent-on);}
 .c-action:hover .c-val, .c-action:focus-visible .c-val{background-size:100% 1px;}
 .c-action:hover .c-hint, .c-action:focus-visible .c-hint, .c-action.is-copied .c-hint{opacity:1;}
+.c-action:hover .c-arrow, .c-action:focus-visible .c-arrow{transform:translate(2px, -2px);}
 .c-action:focus-visible{outline:2px solid var(--band-ink); outline-offset:4px;}
+.c-action.is-copied .c-icon{opacity:0; transition:none;}
+.c-action.is-copied .c-check{opacity:1;}
+.c-action.is-copied .c-badge{animation:c-pop 260ms cubic-bezier(0.34, 1.56, 0.64, 1);}
+.c-action.is-copied .c-check path{animation:c-draw 220ms cubic-bezier(0.2, 0, 0, 1) 40ms forwards;}
+.c-action.is-copied .c-hint{opacity:1; animation:c-rise 200ms cubic-bezier(0.2, 0, 0, 1);}
+@keyframes c-pop{50%{transform:scale(1.15);}}
+@keyframes c-draw{to{stroke-dashoffset:0;}}
+@keyframes c-rise{from{opacity:0; transform:translateY(6px);}}
 @media (prefers-reduced-motion: reduce){
-  .c-icon, .c-val, .c-hint{transition:none;}
-  .c-action:hover .c-icon, .c-action:focus-visible .c-icon{transform:none;}
+  .c-badge::before, .c-icon, .c-val, .c-hint, .c-arrow{transition:none;}
+  .c-action.is-copied .c-badge, .c-action.is-copied .c-hint{animation:none;}
+  .c-action.is-copied .c-check path{animation:none; stroke-dashoffset:0;}
+  .c-action:hover .c-arrow, .c-action:focus-visible .c-arrow{transform:none;}
 }
 @media (max-width:760px){.contact-grid{grid-template-columns:1fr; gap:36px;}}
 

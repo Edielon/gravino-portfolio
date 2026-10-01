@@ -109,8 +109,32 @@ test('contact details have icons, copy buttons and a LinkedIn link', () => {
   assert.match(scripts, /Copied/);
 
   const css = read('styles.css');
-  assert.match(css, /\.c-action:hover \.c-icon[^{]*\{[^}]*transform:/, 'icon hover lift');
   assert.match(css, /prefers-reduced-motion: reduce\)[\s\S]*?\.c-icon/, 'reduced motion handled for icons');
+});
+
+test('contact rows: burgundy tile on hover, check-mark pop on copy', () => {
+  const html = read('contact.html');
+  const css = read('styles.css');
+  const rows = [...html.matchAll(/<(?:button|a) class="c-row c-action"[\s\S]*?<\/(?:button|a)>/g)].map((m) => m[0]);
+  assert.equal(rows.length, 3);
+  for (const row of rows) assert.match(row, /<span class="c-badge"><svg class="c-icon"/, 'icon sits in a badge');
+  rows.slice(0, 2).forEach((row) => assert.match(row, /<svg class="c-check" viewBox="0 0 24 24" aria-hidden="true"><path pathLength="1"/, 'copy rows carry a drawable check'));
+  assert.ok(!rows[2].includes('c-check'), 'LinkedIn has nothing to copy');
+  assert.match(rows[2], /<span class="c-arrow">&#8599;<\/span>/);
+
+  // Tile grows from the left like the case-number divider, with the same snappy ease-out.
+  assert.match(css, /\n\.c-badge::before\{[^}]*background:var\(--accent\)[^}]*clip-path:inset\(0 100% 0 0\)[^}]*transition:clip-path 180ms cubic-bezier\(0\.2, 0, 0, 1\)/);
+  assert.match(css, /\.c-action:hover \.c-badge::before[^{]*\{clip-path:inset\(0\);\}/);
+  assert.match(css, /\.c-action:hover \.c-icon[^{]*\{color:var\(--accent-on\);\}/, 'icon turns white on the tile');
+  assert.match(css, /\.c-action:hover \.c-arrow[^{]*\{transform:translate\(2px, -2px\);\}/);
+  // Copy: icon swaps to a check that draws in with the tab-pop overshoot; the hint rises in.
+  assert.match(css, /\.c-action\.is-copied \.c-badge\{animation:c-pop 260ms cubic-bezier\(0\.34, 1\.56, 0\.64, 1\);\}/);
+  assert.match(css, /\.c-action\.is-copied \.c-check path\{animation:c-draw 220ms/);
+  assert.match(css, /\.c-action\.is-copied \.c-hint\{[^}]*animation:c-rise/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{[^@]*\.c-badge::before[^@]*animation:none/, 'no motion when reduced');
+
+  const script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).find((s) => s.includes('data-copy'));
+  assert.match(script, /void row\.offsetWidth/, 'replays the pop on repeat clicks');
 });
 
 test('hero line art is decorative and outside the headline', () => {
