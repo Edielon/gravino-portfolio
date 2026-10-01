@@ -124,9 +124,9 @@ test('contact rows: burgundy tile on hover, check-mark pop on copy', () => {
 
   // Tile grows from the left like the case-number divider, with the same snappy ease-out.
   // The tile covers the icon and its label together.
-  assert.match(css, /\n\.c-action \.k::before\{[^}]*background:var\(--accent\)[^}]*clip-path:inset\(0 100% 0 0\)[^}]*transition:clip-path 180ms cubic-bezier\(0\.2, 0, 0, 1\)/);
+  assert.match(css, /\n\.c-action \.k::before\{[^}]*background:var\(--accent\)[^}]*clip-path:inset\(0 100% 0 0 round 4px\)[^}]*transition:clip-path 180ms cubic-bezier\(0\.2, 0, 0, 1\)/);
   assert.match(css, /\n\.c-action \.k\{[^}]*position:relative[^}]*width:fit-content/, 'tile hugs icon + label');
-  assert.match(css, /\.c-action:hover \.k::before[^{]*\{clip-path:inset\(0\);\}/);
+  assert.match(css, /\.c-action:hover \.k::before[^{]*\{clip-path:inset\(0 round 4px\);\}/, 'corners stay rounded (4px) throughout the reveal');
   assert.match(css, /\.c-action:hover \.c-icon, [^{]*\.c-action:hover \.k-label[^{]*\{color:var\(--accent-on\);\}/, 'icon and label turn white on the tile');
   assert.ok(!css.includes('.c-badge::before'), 'no separate icon-only tile');
   assert.match(css, /\.c-action:hover \.c-arrow[^{]*\{transform:translate\(2px, -2px\);\}/);

@@ -634,7 +634,7 @@ section.work{border-top:none;}
   position:absolute;
   inset:0;
   background:var(--accent);
-  clip-path:inset(0 100% 0 0);
+  clip-path:inset(0 100% 0 0 round 4px);
   transition:clip-path 180ms cubic-bezier(0.2, 0, 0, 1);
 }
 .c-icon, .c-check{
@@ -666,7 +666,7 @@ section.work{border-top:none;}
   transition:opacity 150ms ease;
 }
 .c-arrow{display:inline-block; transition:transform 180ms cubic-bezier(0.2, 0, 0, 1);}
-.c-action:hover .k::before, .c-action:focus-visible .k::before, .c-action.is-copied .k::before{clip-path:inset(0);}
+.c-action:hover .k::before, .c-action:focus-visible .k::before, .c-action.is-copied .k::before{clip-path:inset(0 round 4px);}
 .c-action:hover .c-icon, .c-action:focus-visible .c-icon, .c-action:hover .k-label, .c-action:focus-visible .k-label, .c-action.is-copied .k-label{color:var(--accent-on);}
 .c-action:hover .c-val, .c-action:focus-visible .c-val{background-size:100% 1px;}
 .c-action:hover .c-hint, .c-action:focus-visible .c-hint, .c-action.is-copied .c-hint{opacity:1;}
