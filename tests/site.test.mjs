@@ -361,10 +361,10 @@ test('qualification titles share a top line and descriptions start on one shared
   assert.match(cssRule(css, '.stat .num'), /align-self:start/, 'titles share one top line');
 });
 
-test('home certifications sit on the graphite band and each opens its certificate', () => {
+test('home certifications sit in a white section and each opens its certificate', () => {
   const html = read('index.html');
-  const section = html.match(/<section class="band creds-band" id="certifications">[\s\S]*?<\/section>/);
-  assert.ok(section, 'certifications section on the graphite band');
+  const section = html.match(/<section class="creds-band" id="certifications">[\s\S]*?<\/section>/);
+  assert.ok(section, 'certifications section is white, not a graphite band');
   assert.match(section[0], /<h2 class="section-title">Certifications and Memberships<\/h2>/);
   const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-logo"><img src="assets\/issuers\/[a-z-]+\.png" alt="" width="\d+" height="\d+"><\/span><span class="cred-title">([^<]+)<\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
     .map(([, href, dataTitle, title, desc]) => ({ href, dataTitle, title, desc: desc.replace(/&middot;/g, '·') }));
@@ -386,7 +386,7 @@ test('home certifications sit on the graphite band and each opens its certificat
 
 test('each certification stacks its issuer logo above the title, like the Education tab', () => {
   const html = read('index.html');
-  const section = html.match(/<section class="band creds-band" id="certifications">[\s\S]*?<\/section>/)[0];
+  const section = html.match(/<section class="creds-band" id="certifications">[\s\S]*?<\/section>/)[0];
   const logos = [...section.matchAll(/<span class="cred-logo"><img src="(assets\/issuers\/[a-z-]+\.png)" alt=""/g)].map((m) => m[1]);
   assert.deepEqual(logos, [
     'assets/issuers/pmi.png', 'assets/issuers/pmi.png', 'assets/issuers/pmi.png',
@@ -410,6 +410,11 @@ test('certification cards are white with dark text and a burgundy link', () => {
   const css = read('styles.css');
   assert.match(css, /--card:#FFFFFF;/);
   assert.match(cssRule(css, '.cred-cell'), /background:var\(--card\)/);
+  // Whole section is white: graphite headline colour, and a light frame so the table reads on white.
+  assert.match(cssRule(css, '.creds-band'), /background:var\(--card\)/);
+  assert.match(cssRule(css, '.creds-band'), /display:flow-root/, 'no margin collapse gap above the section');
+  assert.ok(!/\.creds-band \.section-title\{[^}]*band-ink/.test(css), 'headline is not the light band colour');
+  assert.match(cssRule(css, '.cred-grid'), /border:1px solid var\(--card-line\)/);
   // Third shadow fills the 1px corner where dividers cross, or the graphite band shows through as a dot.
   assert.match(cssRule(css, '.cred-cell'), /box-shadow:-1px 0 0 var\(--card-line\), 0 -1px 0 var\(--card-line\), -1px -1px 0 var\(--card-line\)/);
   assert.match(cssRule(css, '.cred-open'), /color:var\(--heading\)/);

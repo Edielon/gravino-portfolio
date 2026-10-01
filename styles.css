@@ -503,10 +503,12 @@ section.work{border-top:none;}
 
 
 .band .section-title{color:var(--band-ink);}
-.creds-wrap{padding-block:72px 24px;}
+/* Certifications sit in a white section: graphite headline, light-framed white table. */
+.creds-band{display:flow-root; background:var(--card);}
+.creds-wrap{padding-block:72px;}
 .cred-table{margin-top:8px;}
-.cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border-radius:6px;}
-/* White cards on the graphite band: issuer logos keep their own colours without a backing tile. */
+.cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border:1px solid var(--card-line); border-radius:6px;}
+/* White cards: issuer logos keep their own colours without a backing tile. */
 .cred-cell{display:flex; background:var(--card); box-shadow:-1px 0 0 var(--card-line), 0 -1px 0 var(--card-line), -1px -1px 0 var(--card-line);}
 .cred-open{
   display:flex;
@@ -530,7 +532,7 @@ section.work{border-top:none;}
 .cred-view::after{content:"\2192"; font-size:15px; letter-spacing:0; transition:transform 180ms;}
 .cred-open:hover .cred-view::after{transform:translateX(3px);}
 @media (max-width:1024px){ .cred-grid{grid-template-columns:repeat(2, 1fr);} }
-@media (max-width:640px){ .cred-grid{grid-template-columns:1fr;} .creds-wrap{padding-block:56px 16px;} }
+@media (max-width:640px){ .cred-grid{grid-template-columns:1fr;} .creds-wrap{padding-block:56px;} }
 @media (prefers-reduced-motion: reduce){ .cred-open, .cred-view::after{transition:none;} }
 
 .cert-dialog{
