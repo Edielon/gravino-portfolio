@@ -400,7 +400,7 @@ test('each certification stacks its issuer logo above the title, like the Educat
   const tile = cssRule(css, '.cred-logo');
   assert.match(tile, /width:var\(--cred-logo\); height:var\(--cred-logo\)/);
   assert.match(tile, /background:#FFFFFF/);
-  assert.match(tile, /border-radius:4px/);
+  assert.match(tile, /border-radius:50%/, 'round tile');
   assert.ok(!/margin/.test(tile), 'tile is not nudged with margins');
 });
 
