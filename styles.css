@@ -19,6 +19,9 @@
   --band-hover:#3B3E43;
   --accent-on-band:#E6A3B0;
   --band-muted:#B4B6B8;
+  --card:#FFFFFF;
+  --card-line:#E2E2DF;
+  --card-hover:#F4F4F2;
 
   --font-display:'Archivo','Segoe UI',sans-serif;
   --font-body:'Inter','Segoe UI',sans-serif;
@@ -502,27 +505,28 @@ section.work{border-top:none;}
 .band .section-title{color:var(--band-ink);}
 .creds-wrap{padding-block:72px 24px;}
 .cred-table{margin-top:8px;}
-.cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border:1px solid var(--band-line); border-radius:6px;}
-.cred-cell{display:flex; background:var(--band); box-shadow:-1px 0 0 var(--band-line), 0 -1px 0 var(--band-line);}
+.cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border-radius:6px;}
+/* White cards on the graphite band: issuer logos keep their own colours without a backing tile. */
+.cred-cell{display:flex; background:var(--card); box-shadow:-1px 0 0 var(--card-line), 0 -1px 0 var(--card-line), -1px -1px 0 var(--card-line);}
 .cred-open{
   display:flex;
   flex-direction:column;
   gap:10px;
   width:100%;
   padding:26px 24px 28px;
-  color:var(--band-ink);
+  color:var(--heading);
   text-decoration:none;
   transition:background-color 180ms;
 }
-.cred-open:hover{background:var(--band-hover);}
-.cred-open:focus-visible{outline:3px solid var(--band-ink); outline-offset:-3px;}
-/* Issuer disc stacks above the title, matching the 48px school logos on the Education tab. */
+.cred-open:hover{background:var(--card-hover);}
+.cred-open:focus-visible{outline:3px solid var(--heading); outline-offset:-3px;}
+/* Issuer logo stacks above the title in a 48px row, left-aligned like the school logos on the Education tab. */
 .cred-open{--cred-logo:48px;}
-.cred-logo{flex:none; display:grid; place-items:center; width:var(--cred-logo); height:var(--cred-logo); background:#FFFFFF; border-radius:50%;}
+.cred-logo{flex:none; display:flex; align-items:center; height:var(--cred-logo);}
 .cred-logo img{display:block;}
 .cred-title{font-family:var(--font-display); font-weight:600; font-size:18px; line-height:1.3; letter-spacing:-0.01em;}
-.cred-desc{flex:1; font-size:14.5px; line-height:1.6; color:var(--band-muted);}
-.cred-view{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-on-band);}
+.cred-desc{flex:1; font-size:14.5px; line-height:1.6; color:var(--ink-muted);}
+.cred-view{display:inline-flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-text);}
 .cred-view::after{content:"\2192"; font-size:15px; letter-spacing:0; transition:transform 180ms;}
 .cred-open:hover .cred-view::after{transform:translateX(3px);}
 @media (max-width:1024px){ .cred-grid{grid-template-columns:repeat(2, 1fr);} }

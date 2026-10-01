@@ -334,8 +334,8 @@ test('qualifications stack one per row below 640px so long titles are not squeez
 test('band tables are closed frames with small rounded outer corners', () => {
   const css = read('styles.css');
   const stats = cssRule(css, '.stats');
+  assert.match(stats, /border:1px solid var\(--band-line\)/, '.stats has a closed frame');
   for (const grid of ['.stats', '.cred-grid']) {
-    assert.match(cssRule(css, grid), /border:1px solid var\(--band-line\)/, `${grid} has a closed frame`);
     assert.match(cssRule(css, grid), /border-radius:6px/, `${grid} has tight rounded outer corners`);
   }
   assert.ok(!css.includes('.quals::before'), 'no extended top and bottom rules any more');
@@ -343,10 +343,10 @@ test('band tables are closed frames with small rounded outer corners', () => {
   assert.ok(!/background-clip/.test(stats), 'no side padding trick needed any more');
   // Dividers are drawn on each cell's left and top edge and clipped at the table edge, so sub-pixel
   // rounding can never expose a stray line down the right side.
-  for (const [grid, cell] of [['.stats', '.stat'], ['.cred-grid', '.cred-cell']]) {
+  for (const [grid, cell, line] of [['.stats', '.stat', '--band-line'], ['.cred-grid', '.cred-cell', '--card-line']]) {
     assert.ok(!/background:var\(--band-line\)/.test(cssRule(css, grid)), `${grid} has no line-coloured background`);
     assert.match(cssRule(css, grid), /overflow:hidden/, `${grid} clips edge dividers`);
-    assert.match(cssRule(css, cell), /box-shadow:-1px 0 0 var\(--band-line\), 0 -1px 0 var\(--band-line\)/, `${cell} draws left and top dividers`);
+    assert.match(cssRule(css, cell), new RegExp(`box-shadow:-1px 0 0 var\\(${line}\\), 0 -1px 0 var\\(${line}\\)`), `${cell} draws left and top dividers`);
   }
   assert.match(cssRule(css, '.stat .num'), /font-size:18px/);
 });
@@ -398,11 +398,28 @@ test('each certification stacks its issuer logo above the title, like the Educat
   assert.ok(!section.includes('cred-head'), 'no shared title/logo row');
   assert.match(css, /--cred-logo:48px;/);
   assert.match(cssRule(css, '.t-logo'), /width:48px; height:48px/, 'matches the Education logo size');
-  const tile = cssRule(css, '.cred-logo');
-  assert.match(tile, /width:var\(--cred-logo\); height:var\(--cred-logo\)/);
-  assert.match(tile, /background:#FFFFFF/);
-  assert.match(tile, /border-radius:50%/, 'round tile');
-  assert.ok(!/margin/.test(tile), 'tile is not nudged with margins');
+  // On the white cards the symbols sit directly on the card, left-aligned in a 48px row: no disc or tile.
+  const logo = cssRule(css, '.cred-logo');
+  assert.match(logo, /height:var\(--cred-logo\)/);
+  assert.match(logo, /align-items:center/);
+  assert.ok(!/background|border-radius/.test(logo), 'no tile behind the logo');
+  assert.ok(!/margin/.test(logo), 'logo is not nudged with margins');
+});
+
+test('certification cards are white with dark text and a burgundy link', () => {
+  const css = read('styles.css');
+  assert.match(css, /--card:#FFFFFF;/);
+  assert.match(cssRule(css, '.cred-cell'), /background:var\(--card\)/);
+  // Third shadow fills the 1px corner where dividers cross, or the graphite band shows through as a dot.
+  assert.match(cssRule(css, '.cred-cell'), /box-shadow:-1px 0 0 var\(--card-line\), 0 -1px 0 var\(--card-line\), -1px -1px 0 var\(--card-line\)/);
+  assert.match(cssRule(css, '.cred-open'), /color:var\(--heading\)/);
+  assert.match(cssRule(css, '.cred-desc'), /color:var\(--ink-muted\)/);
+  assert.match(cssRule(css, '.cred-view'), /color:var\(--accent-text\)/);
+  const card = hex(token(css, '--card'));
+  for (const t of ['--heading', '--ink-muted', '--accent-text']) {
+    const ratio = contrast(hex(token(css, t)), card);
+    assert.ok(ratio >= 4.5, `${t} on white: ${ratio.toFixed(2)}`);
+  }
 });
 
 test('certificate pop-up is an accessible dialog', () => {
@@ -432,13 +449,6 @@ test('resume holds the diploma and the training and CPD list', () => {
   assert.equal(rows.length, 6);
   assert.ok(html.indexOf('id="training"') < html.indexOf('id="expertise"'), 'training sits before expertise');
   assert.ok(!html.includes('PRC'), 'no PRC licence');
-});
-
-test('view certificate label stays readable on the graphite band', () => {
-  const css = read('styles.css');
-  assert.match(cssRule(css, '.cred-view'), /color:var\(--accent-on-band\)/);
-  const ratio = contrast(hex(token(css, '--accent-on-band')), hex(token(css, '--band')));
-  assert.ok(ratio >= 4.5, `label contrast ${ratio.toFixed(2)}`);
 });
 
 test('hero line art is structured for draw-in and scroll motion', () => {
