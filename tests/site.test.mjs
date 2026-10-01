@@ -198,8 +198,8 @@ test('footer repeats the nav links plus back to top on every page', () => {
       ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Contact', 'contact.html'], ['Back to top', '#top'],
     ], page);
     assert.deepEqual(links.filter((l) => l.current).map((l) => l.label), current ? [current] : [], `${page} current`);
-    // Full-width footer with an inner wrap; the resume page keeps the earlier light footer.
-    const cls = page === 'resume.html' ? 'site-foot site-foot--light' : 'site-foot';
+    // Full-width footer with an inner wrap; the contact page uses the light footer under its graphite band.
+    const cls = page === 'contact.html' ? 'site-foot site-foot--light' : 'site-foot';
     assert.match(foot, new RegExp(`^<footer class="${cls}">\\s*<div class="wrap foot-inner">`), `${page} footer markup`);
   }
 });
@@ -213,7 +213,7 @@ test('footer is graphite with light text and a visible current-page underline', 
   // Short pages on tall screens: the canvas below the footer continues the graphite, not the grey page.
   assert.match(css, /\nhtml\{background:var\(--band\);\}/);
   assert.match(css, /\nbody\{\n  background:var\(--bg\);/);
-  // Resume page: the previous light footer (grey page, muted text, burgundy underline) on a grey canvas.
+  // Contact page: the light footer (grey page, muted text, burgundy underline) on a grey canvas.
   assert.match(cssRule(css, 'footer.site-foot--light'), /background:none;[^}]*border-top:0;[^}]*color:var\(--ink-muted\)/);
   assert.match(cssRule(css, '.site-foot--light .foot-links a'), /color:var\(--ink\)/);
   assert.match(cssRule(css, '.site-foot--light .foot-links a:hover'), /color:var\(--accent-text\)/);

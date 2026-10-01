@@ -801,7 +801,7 @@ html{scroll-padding-top:80px;}
 .foot-links a:hover{color:var(--accent-on-band);}
 .foot-links a:focus-visible{outline-color:var(--band-ink);}
 .foot-links a[aria-current="page"]{box-shadow:inset 0 -2px 0 var(--accent-on-band);}
-/* Resume page keeps the earlier light footer on the grey page. */
+/* Contact page uses the light footer, so it stands apart from the graphite contact band. */
 footer.site-foot--light{background:none; border-top:0; color:var(--ink-muted);}
 .site-foot--light .foot-links a{color:var(--ink);}
 .site-foot--light .foot-links a:hover{color:var(--accent-text);}
