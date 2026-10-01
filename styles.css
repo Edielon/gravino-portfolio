@@ -19,9 +19,9 @@
   --band-hover:#3B3E43;
   --accent-on-band:#E6A3B0;
   --band-muted:#B4B6B8;
-  --card:#FFFFFF;
-  --card-line:#E2E2DF;
-  --card-hover:#F4F4F2;
+  --card:#E9E9E6;
+  --card-line:#C9C9C5;
+  --card-hover:#E1E1DD;
 
   --font-display:'Archivo','Segoe UI',sans-serif;
   --font-body:'Inter','Segoe UI',sans-serif;
@@ -506,12 +506,12 @@ section.work{border-top:none;}
 
 
 .band .section-title{color:var(--band-ink);}
-/* Certifications sit in a white section: graphite headline, light-framed white table. */
+/* Certifications use the hero pill colour (--card = --panel): graphite headline, framed table. */
 .creds-band{display:flow-root; background:var(--card);}
 .creds-wrap{padding-block:72px;}
 .cred-table{margin-top:8px;}
 .cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border:1px solid var(--card-line); border-radius:6px;}
-/* White cards: issuer logos keep their own colours without a backing tile. */
+/* Issuer logos sit directly on the card in their own colours, no backing tile. */
 .cred-cell{display:flex; background:var(--card); box-shadow:-1px 0 0 var(--card-line), 0 -1px 0 var(--card-line), -1px -1px 0 var(--card-line);}
 .cred-open{
   display:flex;

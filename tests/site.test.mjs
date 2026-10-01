@@ -426,7 +426,7 @@ test('each certification stacks its issuer logo above the title, like the Educat
   assert.ok(!section.includes('cred-head'), 'no shared title/logo row');
   assert.match(css, /--cred-logo:48px;/);
   assert.match(cssRule(css, '.t-logo'), /width:48px; height:48px/, 'matches the Education logo size');
-  // On the white cards the symbols sit directly on the card, left-aligned in a 48px row: no disc or tile.
+  // The symbols sit directly on the card, left-aligned in a 48px row: no disc, tile or background colour.
   const logo = cssRule(css, '.cred-logo');
   assert.match(logo, /height:var\(--cred-logo\)/);
   assert.match(logo, /align-items:center/);
@@ -434,11 +434,14 @@ test('each certification stacks its issuer logo above the title, like the Educat
   assert.ok(!/margin/.test(logo), 'logo is not nudged with margins');
 });
 
-test('certification cards are white with dark text and a burgundy link', () => {
+test('certifications use the hero pill colour with dark text and a burgundy link', () => {
   const css = read('styles.css');
-  assert.match(css, /--card:#FFFFFF;/);
+  // Section and cards share the --panel fill of the hero specialties pill.
+  assert.equal(token(css, '--card'), token(css, '--panel'), 'cards match the hero pill');
+  assert.match(cssRule(css, '.specialties'), /background:var\(--panel\)/);
   assert.match(cssRule(css, '.cred-cell'), /background:var\(--card\)/);
-  // Whole section is white: graphite headline colour, and a light frame so the table reads on white.
+  assert.ok(contrast(hex(token(css, '--card-line')), hex(token(css, '--card'))) >= 1.2, 'dividers visible on the panel');
+  // Graphite headline colour, and a frame so the table reads on the panel colour.
   assert.match(cssRule(css, '.creds-band'), /background:var\(--card\)/);
   assert.match(cssRule(css, '.creds-band'), /display:flow-root/, 'no margin collapse gap above the section');
   assert.ok(!/\.creds-band \.section-title\{[^}]*band-ink/.test(css), 'headline is not the light band colour');
@@ -451,7 +454,7 @@ test('certification cards are white with dark text and a burgundy link', () => {
   const card = hex(token(css, '--card'));
   for (const t of ['--heading', '--ink-muted', '--accent-text']) {
     const ratio = contrast(hex(token(css, t)), card);
-    assert.ok(ratio >= 4.5, `${t} on white: ${ratio.toFixed(2)}`);
+    assert.ok(ratio >= 4.5, `${t} on the card: ${ratio.toFixed(2)}`);
   }
 });
 
