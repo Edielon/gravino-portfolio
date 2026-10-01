@@ -516,9 +516,8 @@ section.work{border-top:none;}
 }
 .cred-open:hover{background:var(--band-hover);}
 .cred-open:focus-visible{outline:3px solid var(--band-ink); outline-offset:-3px;}
-/* Title row is exactly one tile tall; the title is centred on the issuer tile, which sits in the content's top-right corner. */
-.cred-open{--cred-logo:40px;}
-.cred-head{display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:var(--cred-logo);}
+/* Issuer tile stacks above the title, matching the 48px school logos on the Education tab. */
+.cred-open{--cred-logo:48px;}
 .cred-logo{flex:none; display:grid; place-items:center; width:var(--cred-logo); height:var(--cred-logo); background:#FFFFFF; border-radius:4px;}
 .cred-logo img{display:block;}
 .cred-title{font-family:var(--font-display); font-weight:600; font-size:18px; line-height:1.3; letter-spacing:-0.01em;}
