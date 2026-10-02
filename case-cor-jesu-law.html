@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Center for Law and Graduate Studies · Gravino Engineering</title>
-<meta name="description" content="Center for Law and Graduate Studies: A 3,000 m&sup2; academic building just 182 m from the Digos Fault Line, with no room for an inflated budget.">
+<meta name="description" content="How a three-storey school 182 m from an active fault met the seismic code and its steel budget, using Vierendeel trusses placed only where the earthquake forces gather.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
 </header>
 
 <main>
-  <article class="case-page">
+  <article class="case-page case-story-page">
     <div class="wrap">
       <a class="case-back" href="index.html#work">All work</a>
       <div class="case-head">
@@ -37,38 +37,195 @@
           <p class="case-meta">Digos City, Philippines &middot; 2020 to 2021</p>
         </div>
       </div>
-      <figure class="case-media">
-        <div class="case-photo"><span>Add project photo or drawing</span></div>
+
+      <p class="story-lede">Cor Jesu College needed a three-storey law and graduate school building on a site 182 metres from an active fault. As junior structural engineer at WMCabardo Engineering &amp; Consulting, I modelled the structure, found where the earthquake forces would gather, and added steel only there. The design met the seismic code and the board&rsquo;s budget.</p>
+
+      <figure class="story-figure story-hero">
+        <a class="file-open" href="assets/cases/cor-jesu-law/architect-perspective.jpg" data-title="Architect's perspective"><img src="assets/cases/cor-jesu-law/architect-perspective.jpg" alt="Architect's rendering of the three-storey Center for Law and Graduate Studies, a long building with vertical louvres and a central entrance block" width="758" height="427"></a>
+        <figcaption>Architect&rsquo;s perspective of the proposed building.</figcaption>
       </figure>
+
       <ul class="case-figures">
-        <li><strong>3,000 m&sup2;</strong><span>floor area</span></li>
-        <li><strong>182 m</strong><span>from an active fault</span></li>
+        <li><strong>4,970 m&sup2;</strong><span>built-up floor area</span></li>
+        <li><strong>182 m</strong><span>from the Central Digos Fault</span></li>
         <li><strong>0.40&ndash;0.50g</strong><span>design ground acceleration</span></li>
+        <li><strong>PHP 16,060</strong><span>per m&sup2; in the structural estimate</span></li>
       </ul>
-      <div class="case-sections">
-        <section class="case-section">
-          <h2>Problem</h2>
-          <p>A 3,000 m&sup2; three-storey academic building had to rise just 182 meters from the Digos Fault Line and survive severe seismic forces without an inflated budget.</p>
+
+      <div class="story-body">
+        <section class="story-chapter">
+          <h2>A school 182 metres from an active fault</h2>
+          <p>The hazard check came back clear on most counts: no ground rupture, liquefaction or tsunami risk. One line stood out. The Central Digos Fault runs 182 metres from the site, and the area is rated prone to ground shaking.</p>
+          <p>A school holds more people than an office, so the code treats it as an essential building. I designed for earthquakes of magnitude 7 and above, with a peak ground acceleration of 0.40 to 0.50g and an importance factor of 1.5.</p>
+          <figure class="story-figure story-figure--wide">
+            <a class="file-open" href="assets/cases/cor-jesu-law/fault-distance-map.jpg" data-title="Distance to the nearest active fault"><img src="assets/cases/cor-jesu-law/fault-distance-map.jpg" alt="HazardHunterPH satellite map of the Cor Jesu College site with a line to the Central Digos Fault, and an assessment panel listing the fault at 182 m and ground shaking as prone" width="1400" height="672" loading="lazy" decoding="async"></a>
+            <figcaption>HazardHunterPH assessment for the site: nearest active fault 182 m away, ground shaking rated prone.</figcaption>
+          </figure>
         </section>
-        <section class="case-section">
-          <h2>Approach</h2>
-          <p>Modeled the structure in ETABS at a peak ground acceleration of 0.40g to 0.50g, then placed Vierendeel trusses at high-stress points to dissipate seismic energy instead of relying on costly composite sections. Designed the foundations in VisualFoundation and produced the construction drawings in AutoCAD.</p>
+
+        <section class="story-chapter">
+          <h2>The first design was too heavy</h2>
+          <p>The first model worked, but it used 63.7 kg of steel for every square metre of floor. The budget allowed about 50.6 kg. Closing that gap meant taking roughly 65 tonnes of steel out of a building that still had to ride out a major earthquake.</p>
+          <p class="story-key"><strong>65 t</strong><span>of steel to remove to meet the budget</span></p>
+          <p>The usual fix is to make every beam and column bigger, or switch to composite steel and concrete sections. Both add cost across the whole building, including the parts that carry little seismic load.</p>
+          <figure class="story-figure">
+            <a class="file-open" href="assets/cases/cor-jesu-law/bill-of-materials.jpg" data-title="Bill of materials, first model"><img src="assets/cases/cor-jesu-law/bill-of-materials.jpg" alt="Bill of materials table: 316,693 kg total steel weight, 63.69 kg per square metre, 65,181 kg difference against a 50.58 kg per square metre target, followed by the member list of the first model" width="537" height="607" loading="lazy" decoding="async"></a>
+            <figcaption>Bill of materials for the first model: 316,693 kg of steel, 63.69 kg per m&sup2; against a 50.58 kg target.</figcaption>
+          </figure>
         </section>
-        <section class="case-section">
-          <h2>Result</h2>
-          <p>A structure compliant with the NSCP and NBCP, delivered with complete cost estimates, BOQ and BOM, and coordinated with architects, contractors and suppliers through construction.</p>
+
+        <section class="story-chapter">
+          <h2>Strength only where the earthquake pushes</h2>
+          <p>I ran the ETABS model again and again, moving Vierendeel trusses to a different position each time. A Vierendeel truss is a rigid steel frame shaped like a ladder. It lets the building flex under seismic load and absorbs energy without collapsing.</p>
+          <p>Placed only where the forces gather, the trusses did the work that bigger members would have done everywhere. The rest of the frame could stay light.</p>
+          <figure class="story-figure story-figure--wide">
+            <a class="file-open" href="assets/cases/cor-jesu-law/vierendeel-truss-elevation.jpg" data-title="Vierendeel truss placement, elevation"><img src="assets/cases/cor-jesu-law/vierendeel-truss-elevation.jpg" alt="ETABS elevation of the three-storey frame. Ladder-shaped Vierendeel trusses stand inside four column lines, with plain beams and columns elsewhere" width="1270" height="620" loading="lazy" decoding="async"></a>
+            <figcaption>ETABS elevation. The ladder-shaped members are the Vierendeel trusses, set only in the high-stress bays.</figcaption>
+          </figure>
+          <p>The trusses had to be imported as prefabricated steel, which added shipping and handling. I weighed that against the steel saved everywhere else. The savings were larger, and the import fitted both the budget and the schedule.</p>
+          <div class="story-pair">
+            <figure class="story-figure">
+              <a class="file-open" href="assets/cases/cor-jesu-law/elevation-truss-c.jpg" data-title="Truss placement, second elevation"><img src="assets/cases/cor-jesu-law/elevation-truss-c.jpg" alt="Colour-coded ETABS elevation showing trusses at the outer bays and a lighter frame in the middle" width="823" height="401" loading="lazy" decoding="async"></a>
+              <figcaption>A second elevation: trusses at the outer bays, lighter frame between.</figcaption>
+            </figure>
+            <figure class="story-figure">
+              <a class="file-open" href="assets/cases/cor-jesu-law/structural-perspective.jpg" data-title="Structural perspective"><img src="assets/cases/cor-jesu-law/structural-perspective.jpg" alt="3D render of the full steel frame in green with the floor slabs in grey" width="1020" height="478" loading="lazy" decoding="async"></a>
+              <figcaption>The complete steel frame in 3D.</figcaption>
+            </figure>
+          </div>
         </section>
-        <section class="case-section">
-          <h2>Tools</h2>
-          <p>ETABS &middot; VisualFoundation &middot; AutoCAD &middot; Quantity surveying</p>
+
+        <section class="story-chapter">
+          <h2>Testing it before it&rsquo;s built</h2>
+          <p>Every building has natural ways it wants to move. If one of them matches the rhythm of the ground, the shaking builds. I ran a modal analysis to find the first three and keep them clear of the expected ground motion.</p>
+          <div class="story-videos">
+            <figure class="story-video">
+              <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/cor-jesu-law/mode-1.jpg" width="800" height="440" aria-label="Top view of the building swaying in its first vibration mode">
+                <source src="assets/cases/cor-jesu-law/mode-1.mp4" type="video/mp4">
+              </video>
+              <figcaption><strong>Mode 1 &middot; 0.521 s</strong>Sways in one direction</figcaption>
+            </figure>
+            <figure class="story-video">
+              <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/cor-jesu-law/mode-2.jpg" width="800" height="440" aria-label="Top view of the building swaying in its second vibration mode">
+                <source src="assets/cases/cor-jesu-law/mode-2.mp4" type="video/mp4">
+              </video>
+              <figcaption><strong>Mode 2 &middot; 0.498 s</strong>Sways in the other direction</figcaption>
+            </figure>
+            <figure class="story-video">
+              <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/cor-jesu-law/mode-3.jpg" width="800" height="440" aria-label="Top view of the building twisting in its third vibration mode">
+                <source src="assets/cases/cor-jesu-law/mode-3.mp4" type="video/mp4">
+              </video>
+              <figcaption><strong>Mode 3 &middot; 0.413 s</strong>Twists about its centre</figcaption>
+            </figure>
+          </div>
+          <p class="story-note">Top view of the first three vibration modes from ETABS. The movement is exaggerated so it can be seen.</p>
+          <p>I also checked storey drift: how far each floor moves sideways against the floor below. The limit was 1.5% of the storey height. The design came in at 0.45%, under a third of the limit. Every steel frame passed the stress check, and I confirmed the results in SAP.</p>
+          <p class="story-key"><strong>0.45%</strong><span>storey drift, against a 1.5% limit</span></p>
+          <figure class="story-figure story-figure--wide">
+            <a class="file-open" href="assets/cases/cor-jesu-law/etabs-3d-model.jpg" data-title="ETABS 3D model"><img src="assets/cases/cor-jesu-law/etabs-3d-model.jpg" alt="ETABS 3D model of the building frame, colour-coded by member group" width="1400" height="661" loading="lazy" decoding="async"></a>
+            <figcaption>The ETABS model, colour-coded by member group.</figcaption>
+          </figure>
+          <div class="story-pair">
+            <figure class="story-figure">
+              <a class="file-open" href="assets/cases/cor-jesu-law/drift-check.jpg" data-title="Drift check"><img src="assets/cases/cor-jesu-law/drift-check.jpg" alt="Joint drift table: calculated 0.004464, X 0.003495, Y 0.003245" width="893" height="492" loading="lazy" decoding="async"></a>
+              <figcaption>Drift check: 0.0045 calculated, within the 0.015 limit.</figcaption>
+            </figure>
+            <figure class="story-figure">
+              <a class="file-open" href="assets/cases/cor-jesu-law/max-story-displacement.jpg" data-title="Maximum storey displacement"><img src="assets/cases/cor-jesu-law/max-story-displacement.jpg" alt="ETABS chart of maximum storey displacement rising from the base to the roof deck" width="1400" height="662" loading="lazy" decoding="async"></a>
+              <figcaption>Maximum storey displacement, base to roof deck.</figcaption>
+            </figure>
+          </div>
+          <figure class="story-figure story-figure--wide">
+            <a class="file-open" href="assets/cases/cor-jesu-law/steel-frame-check.jpg" data-title="Steel frame design check"><img src="assets/cases/cor-jesu-law/steel-frame-check.jpg" alt="ETABS steel frame design check over the 3D model, with a message that all frames passed" width="1400" height="661" loading="lazy" decoding="async"></a>
+            <figcaption>Steel frame design check: every frame passed.</figcaption>
+          </figure>
+        </section>
+
+        <section class="story-chapter">
+          <h2>From model to site</h2>
+          <p>The foundations came next. I designed them in VisualFoundation, checking bearing pressure, uplift, sliding and overturning on the SC soil profile from the soil report, then drew the plans and schedules in AutoCAD.</p>
+          <div class="story-pair">
+            <figure class="story-figure">
+              <a class="file-open" href="assets/cases/cor-jesu-law/foundation-report.jpg" data-title="Foundation report, footing CF-1"><img src="assets/cases/cor-jesu-law/foundation-report.jpg" alt="VisualFoundation report for footing CF-1 with a bearing pressure plot and tables for uplift, sliding and overturning stability" width="787" height="862" loading="lazy" decoding="async"></a>
+              <figcaption>VisualFoundation report for footing CF-1.</figcaption>
+            </figure>
+            <figure class="story-figure">
+              <a class="file-open" href="assets/cases/cor-jesu-law/foundation-plan.jpg" data-title="Foundation plan, sheet S1.0"><img src="assets/cases/cor-jesu-law/foundation-plan.jpg" alt="Foundation plan drawing, sheet S1.0, showing mat and combined footings on the column grid" width="1182" height="813" loading="lazy" decoding="async"></a>
+              <figcaption>Foundation plan, sheet S1.0. Licence numbers are blurred.</figcaption>
+            </figure>
+          </div>
+          <p>On site, I walked the truss locations with the structural engineer and measured where each one would go. With the general contractor, we kept the trusses out of corridors and classrooms and away from the building&rsquo;s main views, so the architecture stayed as designed.</p>
+          <figure class="story-figure story-figure--wide">
+            <a class="file-open" href="assets/cases/cor-jesu-law/site-visit.jpg" data-title="Site inspection"><img src="assets/cases/cor-jesu-law/site-visit.jpg" alt="Two people in face masks inspecting a structure on site" width="1290" height="720" loading="lazy" decoding="async"></a>
+            <figcaption>Site inspection with the structural engineer.</figcaption>
+          </figure>
+        </section>
+
+        <section class="story-chapter">
+          <h2>Getting a yes</h2>
+          <p>Each time the design got cheaper, I wrote it up for the structural engineer with the analysis and a cost comparison. The structural engineer then took the options to the Cor Jesu College board.</p>
+          <p>The board members are not engineers, so the presentations leaned on ETABS animations like the ones above and side-by-side costs. The local government needed its own documentation showing the trusses met the seismic code.</p>
+          <p>The board approved the Vierendeel truss design. It met the NSCP and NBCP, and it came with full cost estimates, a bill of quantities and a bill of materials.</p>
+          <p class="story-tools"><span>Tools</span>ETABS &middot; SAP &middot; VisualFoundation &middot; AutoCAD &middot; Quantity surveying</p>
         </section>
       </div>
+
+      <section class="story-file" aria-labelledby="file-title">
+        <h2 id="file-title">Full engineering file</h2>
+        <p>The rest of the project file. Select any figure to see it full size.</p>
+
+        <h3>Cost and quantities</h3>
+        <ul class="file-grid">
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/concrete-works-estimate.jpg" data-title="Concrete works estimate"><img src="assets/cases/cor-jesu-law/concrete-works-estimate-thumb.jpg" alt="Concrete works quantity estimate spreadsheet" width="560" height="260" loading="lazy" decoding="async"><span>Concrete works estimate</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/boq-general-earthworks.jpg" data-title="BOQ: general requirements and earthworks"><img src="assets/cases/cor-jesu-law/boq-general-earthworks-thumb.jpg" alt="Bill of quantities page for general requirements, earthworks and concrete foundations" width="560" height="368" loading="lazy" decoding="async"><span>BOQ: general and earthworks</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/boq-foundations.jpg" data-title="BOQ: footings and tie beams"><img src="assets/cases/cor-jesu-law/boq-foundations-thumb.jpg" alt="Bill of quantities page for footings and footing tie beams" width="560" height="378" loading="lazy" decoding="async"><span>BOQ: footings and tie beams</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/boq-slabs.jpg" data-title="BOQ: slabs"><img src="assets/cases/cor-jesu-law/boq-slabs-thumb.jpg" alt="Bill of quantities page for stairs and slabs" width="560" height="391" loading="lazy" decoding="async"><span>BOQ: stairs and slabs</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/boq-steel-summary.jpg" data-title="BOQ: pre-engineered steel"><img src="assets/cases/cor-jesu-law/boq-steel-summary-thumb.jpg" alt="Bill of quantities page for pre-engineered steel, freight, erection and indirect costs" width="560" height="385" loading="lazy" decoding="async"><span>BOQ: pre-engineered steel</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/boq-cost-summary.jpg" data-title="BOQ: cost analysis (total blurred)"><img src="assets/cases/cor-jesu-law/boq-cost-summary-thumb.jpg" alt="Cost analysis page with floor areas and cost per square metre; the project total is blurred" width="560" height="337" loading="lazy" decoding="async"><span>BOQ: cost per m&sup2;</span></a></li>
+        </ul>
+
+        <h3>Seismic analysis</h3>
+        <ul class="file-grid">
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/static-seismic-load.jpg" data-title="Static earthquake load inputs"><img src="assets/cases/cor-jesu-law/static-seismic-load-thumb.jpg" alt="ETABS seismic load pattern dialog: soil profile SC, zone factor 0.4, distance to source 0.182 km, importance factor 1.5" width="556" height="400" loading="lazy" decoding="async"><span>Static earthquake load inputs</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/response-spectrum.jpg" data-title="Response spectrum"><img src="assets/cases/cor-jesu-law/response-spectrum-thumb.jpg" alt="ETABS response spectrum definition with Ca 0.52, Cv 0.896 and 5% damping" width="488" height="400" loading="lazy" decoding="async"><span>Response spectrum</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/load-combinations.jpg" data-title="Load combinations"><img src="assets/cases/cor-jesu-law/load-combinations-thumb.jpg" alt="ETABS load combination dialog including seismic load cases" width="560" height="291" loading="lazy" decoding="async"><span>Load combinations</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/modal-direction-factors.jpg" data-title="Modal direction factors"><img src="assets/cases/cor-jesu-law/modal-direction-factors-thumb.jpg" alt="ETABS table of modal periods and direction factors for 12 modes" width="560" height="332" loading="lazy" decoding="async"><span>Modal direction factors</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/modal-participation.jpg" data-title="Modal load participation"><img src="assets/cases/cor-jesu-law/modal-participation-thumb.jpg" alt="ETABS table of modal load participation ratios above 99% in both directions" width="560" height="326" loading="lazy" decoding="async"><span>Modal load participation</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/dynamic-period.jpg" data-title="Dynamic period"><img src="assets/cases/cor-jesu-law/dynamic-period-thumb.jpg" alt="Table of modal periods: 0.521, 0.498 and 0.413 seconds" width="560" height="290" loading="lazy" decoding="async"><span>Dynamic period</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/bending-moment-a.jpg" data-title="Bending moment, elevation"><img src="assets/cases/cor-jesu-law/bending-moment-a-thumb.jpg" alt="ETABS bending moment diagram on a frame elevation" width="560" height="273" loading="lazy" decoding="async"><span>Bending moment, elevation</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/bending-moment-b.jpg" data-title="Bending moment, second elevation"><img src="assets/cases/cor-jesu-law/bending-moment-b-thumb.jpg" alt="ETABS bending moment diagram on a second frame elevation" width="560" height="274" loading="lazy" decoding="async"><span>Bending moment, second elevation</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/shear-moment-a.jpg" data-title="Shear and moment, key member"><img src="assets/cases/cor-jesu-law/shear-moment-a-thumb.jpg" alt="ETABS 3D frame with a shear and moment diagram for a key member" width="560" height="282" loading="lazy" decoding="async"><span>Shear and moment, key member</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/shear-moment-b.jpg" data-title="Shear and moment, second member"><img src="assets/cases/cor-jesu-law/shear-moment-b-thumb.jpg" alt="ETABS 3D frame with a shear and moment diagram for a second member" width="560" height="309" loading="lazy" decoding="async"><span>Shear and moment, second member</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/member-forces-3d.jpg" data-title="Member forces, 3D"><img src="assets/cases/cor-jesu-law/member-forces-3d-thumb.jpg" alt="ETABS 3D frame with a member force diagram" width="560" height="282" loading="lazy" decoding="async"><span>Member forces, 3D</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/base-reactions.jpg" data-title="Base reactions"><img src="assets/cases/cor-jesu-law/base-reactions-thumb.jpg" alt="ETABS base reactions table for each load case" width="560" height="185" loading="lazy" decoding="async"><span>Base reactions</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/column-section.jpg" data-title="Column section check"><img src="assets/cases/cor-jesu-law/column-section-thumb.jpg" alt="Concrete column section with reinforcement layout and design results" width="560" height="283" loading="lazy" decoding="async"><span>Column section check</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/elevation-truss-a.jpg" data-title="Truss placement study A"><img src="assets/cases/cor-jesu-law/elevation-truss-a-thumb.jpg" alt="ETABS elevation, truss placement study A" width="560" height="273" loading="lazy" decoding="async"><span>Truss placement study A</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/elevation-truss-b.jpg" data-title="Truss placement study B"><img src="assets/cases/cor-jesu-law/elevation-truss-b-thumb.jpg" alt="ETABS elevation, truss placement study B" width="560" height="274" loading="lazy" decoding="async"><span>Truss placement study B</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/elevation-truss-d.jpg" data-title="Truss placement study C"><img src="assets/cases/cor-jesu-law/elevation-truss-d-thumb.jpg" alt="ETABS elevation, truss placement study C" width="560" height="273" loading="lazy" decoding="async"><span>Truss placement study C</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/elevation-truss-e.jpg" data-title="Truss placement study D"><img src="assets/cases/cor-jesu-law/elevation-truss-e-thumb.jpg" alt="ETABS elevation, truss placement study D" width="560" height="275" loading="lazy" decoding="async"><span>Truss placement study D</span></a></li>
+        </ul>
+
+        <h3>Drawings</h3>
+        <ul class="file-grid">
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/footing-schedule.jpg" data-title="Footing schedule, sheet S1.1"><img src="assets/cases/cor-jesu-law/footing-schedule-thumb.jpg" alt="Drawing sheet S1.1 with footing, tie beam and pedestal schedules and mat footing details" width="560" height="385" loading="lazy" decoding="async"><span>Footing schedule, S1.1</span></a></li>
+          <li><a class="file-open" href="assets/cases/cor-jesu-law/elevation-grid-i.jpg" data-title="Elevation at grid I'"><img src="assets/cases/cor-jesu-law/elevation-grid-i-thumb.jpg" alt="Structural elevation drawing at grid I prime with the steel member schedule" width="560" height="367" loading="lazy" decoding="async"><span>Elevation at grid I&prime;</span></a></li>
+        </ul>
+      </section>
+
       <a class="case-next" href="case-norbert-retrofit.html">
         <span class="case-next-label">Next case</span>
         <span class="case-next-title">02 &middot; Norbert Building Retrofit</span>
       </a>
     </div>
   </article>
+
+  <dialog class="cert-dialog" aria-labelledby="cert-dialog-title">
+    <div class="cert-dialog-bar">
+      <h3 id="cert-dialog-title"></h3>
+      <button class="cert-close" type="button" aria-label="Close figure">&times;</button>
+    </div>
+    <img class="cert-image" alt="" src="" decoding="async">
+  </dialog>
 </main>
 
 <footer class="site-foot">
@@ -84,5 +241,51 @@
     </nav>
   </div>
 </footer>
+<script>
+(() => {
+  // Figures open full size in the same pop-up the certificates use.
+  const dialog = document.querySelector('.cert-dialog');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  const image = dialog.querySelector('.cert-image');
+  const title = dialog.querySelector('#cert-dialog-title');
+  let opener = null;
+  document.querySelectorAll('.file-open').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      opener = link;
+      image.removeAttribute('width');
+      image.removeAttribute('height');
+      image.src = link.getAttribute('href');
+      image.alt = link.dataset.title;
+      title.textContent = link.dataset.title;
+      dialog.showModal();
+    });
+  });
+  dialog.querySelector('.cert-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', () => { if (opener) opener.focus(); });
+})();
+</script>
+<script>
+(() => {
+  // The mode videos loop like GIFs. With prefers-reduced-motion: reduce they stay on their first frame
+  // and offer controls instead, so motion only starts when the visitor asks for it.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const videos = [...document.querySelectorAll('.story-video video')];
+  const apply = () => videos.forEach((video) => {
+    if (reduce.matches) { video.pause(); video.controls = true; }
+    else { video.controls = false; video.play().catch(() => {}); }
+  });
+  apply();
+  reduce.addEventListener('change', apply);
+  // Some browsers hold back autoplay until the page is on screen or the visitor interacts; retry then.
+  const start = (video) => { if (!reduce.matches && video.paused) video.play().catch(() => {}); };
+  if ('IntersectionObserver' in window) {
+    const seen = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) start(e.target); }));
+    videos.forEach((video) => seen.observe(video));
+  }
+  ['pointerdown', 'keydown'].forEach((type) => window.addEventListener(type, () => videos.forEach(start), { once: true }));
+})();
+</script>
 </body>
 </html>

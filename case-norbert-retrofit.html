@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Norbert Building Retrofit · Gravino Engineering</title>
-<meta name="description" content="Norbert Building Retrofit: A six-storey building left unsafe by a 6.3-magnitude earthquake, hiding construction shortcuts.">
+<meta name="description" content="How a six-storey school building that twisted in an earthquake was stiffened with steel dampers, and how the site surprises were costed, redesigned and reported along the way.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
 </header>
 
 <main>
-  <article class="case-page">
+  <article class="case-page case-story-page">
     <div class="wrap">
       <a class="case-back" href="index.html#work">All work</a>
       <div class="case-head">
@@ -37,37 +37,325 @@
           <p class="case-meta">Digos City, Philippines &middot; 2021 to 2023</p>
         </div>
       </div>
-      <figure class="case-media">
-        <div class="case-photo"><span>Add project photo or drawing</span></div>
+
+      <p class="story-lede">Cor Jesu College&rsquo;s six-storey Norbert Building was left unsafe by a 6.3-magnitude earthquake. As project engineer and project management coordinator, I compared the building before and after the retrofit design, costed every defect the demolition uncovered, redesigned the foundation around a property-line problem, drew the shop drawings the crews built from, and reported cost and progress every week.</p>
+
+      <figure class="story-figure story-hero">
+        <a class="file-open" href="assets/cases/norbert-retrofit/building-exterior.jpg" data-title="The Norbert Building"><img src="assets/cases/norbert-retrofit/building-exterior.jpg" alt="The two wings of the six-storey Norbert Building around its courtyard, seen from an upper floor during the retrofit" width="1200" height="675" decoding="async"></a>
+        <figcaption>The Norbert Building during the retrofit.</figcaption>
       </figure>
+
       <ul class="case-figures">
         <li><strong>6</strong><span>storeys retrofitted</span></li>
-        <li><strong>6.3</strong><span>magnitude earthquake</span></li>
+        <li><strong>1.6 km</strong><span>from the Digos Fault</span></li>
+        <li><strong>0.915 &rarr; 0.675 s</strong><span>first-mode period, before and after</span></li>
+        <li><strong>107 t</strong><span>of steel dampers</span></li>
       </ul>
-      <div class="case-sections">
-        <section class="case-section">
-          <h2>Problem</h2>
-          <p>A six-storey building was unsafe for occupancy after a 6.3-magnitude earthquake. Site investigation found construction shortcuts: undersized rebar, missing wall stiffeners, incorrect reinforcement spacing and a hollow beam.</p>
-        </section>
-        <section class="case-section">
-          <h2>Approach</h2>
-          <p>Led the damage assessment and ETABS analysis, then designed a retrofit built on concrete jacketing, Vierendeel trusses for seismic energy absorption, and lightweight AAC blocks and PU panels to cut building weight. Every defect was documented with photographs.</p>
-        </section>
-        <section class="case-section">
-          <h2>Result</h2>
-          <p>The original contractor agreed to cover remediation costs based on the documented deviations. The retrofit was delivered on a tight budget by reusing scaffolding and shoring across phases, tracked with Gantt charts and S-curves.</p>
-        </section>
-        <section class="case-section">
-          <h2>Tools</h2>
-          <p>ETABS &middot; AutoCAD &middot; SketchUp &middot; Gantt / S-curve scheduling</p>
-        </section>
+
+      <div class="story-body">
+<section class="story-chapter">
+<h2>A building that twisted</h2>
+<p>The Digos Fault runs 1.6 km from the campus. The national hazard map rates the site prone to ground shaking and susceptible to liquefaction.</p>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/norbert-retrofit/fault-distance-map.jpg" data-title="Hazard assessment for the campus: nearest active fault 1.6 km away. Platform logos are blurred"><img src="assets/cases/norbert-retrofit/fault-distance-map.jpg" alt="Hazard map of Digos City with a line from the campus to the Digos Fault and an assessment panel listing the fault 1.6 km away" width="1200" height="585" loading="lazy" decoding="async"></a>
+  <figcaption>Hazard assessment for the campus: nearest active fault 1.6 km away. Platform logos are blurred.</figcaption>
+</figure>
+<p>The ETABS model of the existing building showed why it had failed. A sound building sways back and forth in its first mode. This one swayed and twisted at the same time, and it was too flexible, with a first-mode period of 0.915 seconds.</p>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/existing-model-3d.jpg" data-title="ETABS model of the existing six-storey frame"><img src="assets/cases/norbert-retrofit/existing-model-3d.jpg" alt="ETABS 3D model of the existing six-storey concrete frame" width="1087" height="457" loading="lazy" decoding="async"></a>
+  <figcaption>ETABS model of the existing six-storey frame.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>Steel frames that stop the twist</h2>
+<p>The retrofit added steel dampers, ladder-shaped Vierendeel truss frames fixed to the existing columns from the ground floor to the sixth, and a new steel frame for the stairs. I compared the two models mode by mode.</p>
+<div class="story-videos story-videos--pairs">
+<figure class="story-video">
+  <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/norbert-retrofit/existing-mode-1.jpg" width="800" height="450" aria-label="Top view of the existing building swaying and twisting in its first mode">
+    <source src="assets/cases/norbert-retrofit/existing-mode-1.mp4" type="video/mp4">
+  </video>
+  <figcaption><strong>Before &middot; Mode 1 &middot; 0.915 s</strong>Sways and twists together</figcaption>
+</figure>
+<figure class="story-video">
+  <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/norbert-retrofit/retrofit-mode-1.jpg" width="800" height="450" aria-label="Top view of the retrofitted building swaying cleanly in its first mode">
+    <source src="assets/cases/norbert-retrofit/retrofit-mode-1.mp4" type="video/mp4">
+  </video>
+  <figcaption><strong>After &middot; Mode 1 &middot; 0.675 s</strong>Sways only</figcaption>
+</figure>
+<figure class="story-video">
+  <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/norbert-retrofit/existing-mode-2.jpg" width="800" height="450" aria-label="Top view of the existing building in its second mode">
+    <source src="assets/cases/norbert-retrofit/existing-mode-2.mp4" type="video/mp4">
+  </video>
+  <figcaption><strong>Before &middot; Mode 2 &middot; 0.887 s</strong>Sways on a diagonal</figcaption>
+</figure>
+<figure class="story-video">
+  <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/norbert-retrofit/retrofit-mode-2.jpg" width="800" height="450" aria-label="Top view of the retrofitted building in its second mode">
+    <source src="assets/cases/norbert-retrofit/retrofit-mode-2.mp4" type="video/mp4">
+  </video>
+  <figcaption><strong>After &middot; Mode 2 &middot; 0.580 s</strong>Twists, much stiffer</figcaption>
+</figure>
+<figure class="story-video">
+  <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/norbert-retrofit/existing-mode-3.jpg" width="800" height="450" aria-label="Top view of the existing building in its third mode">
+    <source src="assets/cases/norbert-retrofit/existing-mode-3.mp4" type="video/mp4">
+  </video>
+  <figcaption><strong>Before &middot; Mode 3 &middot; 0.826 s</strong>Twists with some sway</figcaption>
+</figure>
+<figure class="story-video">
+  <video autoplay muted loop playsinline preload="metadata" poster="assets/cases/norbert-retrofit/retrofit-mode-3.jpg" width="800" height="450" aria-label="Top view of the retrofitted building in its third mode">
+    <source src="assets/cases/norbert-retrofit/retrofit-mode-3.mp4" type="video/mp4">
+  </video>
+  <figcaption><strong>After &middot; Mode 3 &middot; 0.569 s</strong>Twists, much stiffer</figcaption>
+</figure>
+</div>
+<p class="story-note">Top view of the first three vibration modes from ETABS. Left: the existing building. Right: with the steel dampers and stair frame. Movement is exaggerated so it can be seen.</p>
+<p>Every period dropped by a quarter to a third, so the building is much stiffer, and the first mode became a clean sway instead of a twist.</p>
+<p class="story-key"><strong>0.915 &rarr; 0.675 s</strong><span>first-mode period, before and after the retrofit</span></p>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/norbert-retrofit/existing-and-new-3d.jpg" data-title="The retrofitted model: the existing frame with the new steel dampers and stair frame"><img src="assets/cases/norbert-retrofit/existing-and-new-3d.jpg" alt="ETABS 3D model of the existing frame with the new steel dampers and stair frame added" width="1200" height="629" loading="lazy" decoding="async"></a>
+  <figcaption>The retrofitted model: the existing frame with the new steel dampers and stair frame.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>What the demolition uncovered</h2>
+<p>Aftershocks kept the planning team from inspecting the whole building beforehand. Opening it up showed why it had performed so badly:</p>
+<ul class="story-list">
+<li>Slab bars 160 mm apart instead of 120 mm, and top and bottom bars 15 mm too close because no spacers were used.</li>
+<li>Bars bent up at a quarter of the span instead of a third.</li>
+<li>Concrete testing under 3,000 psi.</li>
+<li>A hollow beam on the sixth floor, and beams buckled in and out so far that bolts would not line up.</li>
+</ul>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/slab-bar-spacing.jpg" data-title="Slab bars measured at 160 mm instead of 120 mm"><img src="assets/cases/norbert-retrofit/slab-bar-spacing.jpg" alt="Tape measure across exposed slab reinforcement showing wide bar spacing" width="615" height="463" loading="lazy" decoding="async"></a>
+  <figcaption>Slab bars measured at 160 mm instead of 120 mm.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/bar-penetration.jpg" data-title="Weak concrete and exposed bars at the elevator shaft"><img src="assets/cases/norbert-retrofit/bar-penetration.jpg" alt="Corroded bars poking out of broken concrete at a beam" width="503" height="377" loading="lazy" decoding="async"></a>
+  <figcaption>Weak concrete and exposed bars at the elevator shaft.</figcaption>
+</figure>
+</div>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/damaged-beam.jpg" data-title="A damaged beam opened up during demolition"><img src="assets/cases/norbert-retrofit/damaged-beam.jpg" alt="Close view of a cracked beam with exposed, corroded reinforcing bars" width="1200" height="900" loading="lazy" decoding="async"></a>
+  <figcaption>A damaged beam opened up during demolition.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/beam-buckling.jpg" data-title="Beams buckled inward and outward, so connections needed rework"><img src="assets/cases/norbert-retrofit/beam-buckling.jpg" alt="Annotated photo of a steel damper beside beams that buckle inward at the top and outward at the bottom" width="781" height="1041" loading="lazy" decoding="async"></a>
+  <figcaption>Beams buckled inward and outward, so connections needed rework.</figcaption>
+</figure>
+</div>
+<p>I photographed every defect and costed each fix. The structural engineers for the retrofit and for the previous contractor reviewed them together on site, and the previous contractor covered the rectification.</p>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/hollow-beam-review.jpg" data-title="Showing the structural engineers a hollow beam that needed retrofitting"><img src="assets/cases/norbert-retrofit/hollow-beam-review.jpg" alt="Hanny pointing out a hollow beam to two engineers on scaffolding" width="880" height="880" loading="lazy" decoding="async"></a>
+  <figcaption>Showing the structural engineers a hollow beam that needed retrofitting.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>A foundation that fits the site</h2>
+<p>The design added footings on both sides of the building. On site, two of them ran into the property line, where they would have damaged a fence and a septic tank. I sent the structural engineer photos and proposed combining two footings into one.</p>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/norbert-retrofit/foundation-proposal.jpg" data-title="My proposed plan, with the septic tank and fence that the original footings would have hit. Firm logo and licence numbers are blurred"><img src="assets/cases/norbert-retrofit/foundation-proposal.jpg" alt="Foundation retrofitting plan with inset photos of the septic tank and the fence along the property line" width="1200" height="779" loading="lazy" decoding="async"></a>
+  <figcaption>My proposed plan, with the septic tank and fence that the original footings would have hit. Firm logo and licence numbers are blurred.</figcaption>
+</figure>
+<p>The revised plan used three combined footings: CF-1 at 8.0 &times; 4.2 m, CF-2 at 17.0 &times; 6.0 m and CF-3 at 6.775 &times; 4.8 m, each 0.7 m thick in 28 MPa concrete with 20 mm bars.</p>
+<p>Excavation then hit a high water table and the soil began to erode. Engineered fill was costly and unreliable in wet ground, so we protected the soil, shored the pit with cut I-beams and dug down to firm soil. I re-estimated the rebar for the real conditions.</p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/soil-protection.jpg" data-title="Soil protection along grid A"><img src="assets/cases/norbert-retrofit/soil-protection.jpg" alt="Excavated footing pit lined with soil protection behind a steel column" width="607" height="810" loading="lazy" decoding="async"></a>
+  <figcaption>Soil protection along grid A.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/shoring.jpg" data-title="Shoring made from cut I-beams"><img src="assets/cases/norbert-retrofit/shoring.jpg" alt="Tall view of shoring made from cut I-beams holding back the excavation" width="900" height="1200" loading="lazy" decoding="async"></a>
+  <figcaption>Shoring made from cut I-beams.</figcaption>
+</figure>
+</div>
+<p class="story-key"><strong>41.8 t</strong><span>of foundation rebar for the actual conditions, up from 22.7 t</span></p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/rebar-comparison.jpg" data-title="Original estimate against my estimate for actual conditions"><img src="assets/cases/norbert-retrofit/rebar-comparison.jpg" alt="Table comparing the original and project-team rebar estimates for foundations and pedestals" width="577" height="517" loading="lazy" decoding="async"></a>
+  <figcaption>Original estimate against my estimate for actual conditions.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/footing-cf1.jpg" data-title="Footing CF-1 under construction"><img src="assets/cases/norbert-retrofit/footing-cf1.jpg" alt="Reinforced pedestal and footing CF-1 under construction" width="505" height="673" loading="lazy" decoding="async"></a>
+  <figcaption>Footing CF-1 under construction.</figcaption>
+</figure>
+</div>
+</section>
+<section class="story-chapter">
+<h2>Drawn first, built second</h2>
+<p>I drew shop drawings for everything the crews built: the damper frames, their connections, beam jacketing, the elevator shaft and the stairs. Drawing in SketchUp meant the manager, the engineers and the college could see a site problem without being on site, and approve a fix from the drawing.</p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/damper-sketchup.jpg" data-title="Shop drawing of a steel damper frame"><img src="assets/cases/norbert-retrofit/damper-sketchup.jpg" alt="SketchUp drawing of a damper frame beside a concrete column, with the new beam in orange" width="781" height="389" loading="lazy" decoding="async"></a>
+  <figcaption>Shop drawing of a steel damper frame.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/damper-installed.jpg" data-title="The same dampers installed"><img src="assets/cases/norbert-retrofit/damper-installed.jpg" alt="Installed steel damper frames along a floor of the building" width="1200" height="900" loading="lazy" decoding="async"></a>
+  <figcaption>The same dampers installed.</figcaption>
+</figure>
+</div>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/connection-sketchup.jpg" data-title="Where a damper met an existing beam, I drew the connection cut and rewelded around it"><img src="assets/cases/norbert-retrofit/connection-sketchup.jpg" alt="SketchUp detail where the damper meets an existing beam, with the connection to be cut in cyan" width="385" height="535" loading="lazy" decoding="async"></a>
+  <figcaption>Where a damper met an existing beam, I drew the connection cut and rewelded around it.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/connection-installed.jpg" data-title="The connection as built"><img src="assets/cases/norbert-retrofit/connection-installed.jpg" alt="Photo looking up at the rewelded steel connection under the existing beam" width="897" height="1200" loading="lazy" decoding="async"></a>
+  <figcaption>The connection as built.</figcaption>
+</figure>
+</div>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/beam-connector-sketchup.jpg" data-title="The engineer approved 20 mm deformed bars in place of a steel plate, which cost less"><img src="assets/cases/norbert-retrofit/beam-connector-sketchup.jpg" alt="SketchUp detail of 16 mm connector bars drilled into a concrete column and welded to a steel member" width="802" height="521" loading="lazy" decoding="async"></a>
+  <figcaption>The engineer approved 20 mm deformed bars in place of a steel plate, which cost less.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/beam-connector-installed.jpg" data-title="Connector bars on site"><img src="assets/cases/norbert-retrofit/beam-connector-installed.jpg" alt="Connector bars drilled into an existing column, ready for the steel member" width="897" height="1200" loading="lazy" decoding="async"></a>
+  <figcaption>Connector bars on site.</figcaption>
+</figure>
+</div>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/stairs-cad.jpg" data-title="Stair reinforcement detail"><img src="assets/cases/norbert-retrofit/stairs-cad.jpg" alt="CAD section of the stair slab reinforcement" width="966" height="521" loading="lazy" decoding="async"></a>
+  <figcaption>Stair reinforcement detail.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/stairs-installed.jpg" data-title="The new steel stair frame"><img src="assets/cases/norbert-retrofit/stairs-installed.jpg" alt="New grey steel fire-exit stair frame in place" width="897" height="1200" loading="lazy" decoding="async"></a>
+  <figcaption>The new steel stair frame.</figcaption>
+</figure>
+</div>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/norbert-retrofit/dampers-sixth-floor.jpg" data-title="Me with the finished dampers on the sixth floor"><img src="assets/cases/norbert-retrofit/dampers-sixth-floor.jpg" alt="Hanny standing in front of the finished steel damper frames on the sixth floor" width="1041" height="680" loading="lazy" decoding="async"></a>
+  <figcaption>Me with the finished dampers on the sixth floor.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>Cost and schedule, every week</h2>
+<p>Every weekly meeting got the same report from me: the Gantt chart and what was late and why, the material inventory, and actual against allotted cost for labour and materials. It let us see overruns coming and adjust in time.</p>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/norbert-retrofit/gantt.jpg" data-title="The project Gantt chart. Amounts are blurred"><img src="assets/cases/norbert-retrofit/gantt.jpg" alt="Gantt chart of the repair works with task bars from August onwards; amounts are blurred" width="1200" height="497" loading="lazy" decoding="async"></a>
+  <figcaption>The project Gantt chart. Amounts are blurred.</figcaption>
+</figure>
+<p>The steel was prefabricated in Vietnam. I tracked the shipment and inspected it with the structural engineer when it arrived, alongside concrete compression and steel tensile tests.</p>
+<p>Prices rose through the COVID period, so I tracked escalation item by item, and negotiated where I could. A PHP 50 per m&sup3; discount on ready-mix concrete saved PHP 65,300.</p>
+<p class="story-key"><strong>PHP 65,300</strong><span>saved on ready-mix concrete through a negotiated discount</span></p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/readymix-savings.jpg" data-title="Ready-mix schedule and the negotiated saving. Totals are blurred"><img src="assets/cases/norbert-retrofit/readymix-savings.jpg" alt="Ready-mix concrete schedule by location with quoted and actual volumes and the saving at the bottom; totals are blurred" width="1108" height="747" loading="lazy" decoding="async"></a>
+  <figcaption>Ready-mix schedule and the negotiated saving. Totals are blurred.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/price-escalation.jpg" data-title="Price escalation by item. Totals are blurred"><img src="assets/cases/norbert-retrofit/price-escalation.jpg" alt="Table of material unit prices over time and the difference for each item; totals are blurred" width="713" height="666" loading="lazy" decoding="async"></a>
+  <figcaption>Price escalation by item. Totals are blurred.</figcaption>
+</figure>
+</div>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/steel-inspection.jpg" data-title="On site during the steel delivery inspection"><img src="assets/cases/norbert-retrofit/steel-inspection.jpg" alt="Hanny with two colleagues on site in face masks, next to an excavator" width="999" height="562" loading="lazy" decoding="async"></a>
+  <figcaption>On site during the steel delivery inspection.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>Keeping the college in the loop</h2>
+<p>Shop drawings went through the weekly project management meeting, then to the structural engineer, then to the college president for final approval before I requested the materials. When the board of directors visited, the project manager and I presented the finished Vierendeel truss installation.</p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/team-shop-drawings.jpg" data-title="The project team reviewing shop drawings"><img src="assets/cases/norbert-retrofit/team-shop-drawings.jpg" alt="Project team gathered around a table reviewing printed shop drawings" width="650" height="867" loading="lazy" decoding="async"></a>
+  <figcaption>The project team reviewing shop drawings.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/norbert-retrofit/meeting-college-president.jpg" data-title="Meeting with the college president"><img src="assets/cases/norbert-retrofit/meeting-college-president.jpg" alt="Project team in a meeting with the Cor Jesu College president" width="955" height="716" loading="lazy" decoding="async"></a>
+  <figcaption>Meeting with the college president.</figcaption>
+</figure>
+</div>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/norbert-retrofit/board-site-visit.jpg" data-title="Site visit with the Cor Jesu College board. I&#x27;m on the right"><img src="assets/cases/norbert-retrofit/board-site-visit.jpg" alt="Board members and the project team on a floor of the building beside the new steel dampers" width="1200" height="900" loading="lazy" decoding="async"></a>
+  <figcaption>Site visit with the Cor Jesu College board. I'm on the right.</figcaption>
+</figure>
+<p class="story-tools"><span>Tools</span>ETABS &middot; SketchUp &middot; AutoCAD &middot; MS Excel &middot; Gantt scheduling &middot; Quantity surveying</p>
+</section>
       </div>
+
+      <section class="story-file" aria-labelledby="file-title">
+        <h2 id="file-title">Full engineering file</h2>
+        <p>The rest of the project file. Select any figure to see it full size. Names, contact details, logos, licence numbers and cost totals are blurred.</p>
+<h3>Site and defects</h3>
+<ul class="file-grid">
+<li><a class="file-open" href="assets/cases/norbert-retrofit/building-from-above.jpg" data-title="Building from above"><img src="assets/cases/norbert-retrofit/building-from-above-thumb.jpg" alt="The six-storey building and courtyard seen from an upper floor" width="560" height="420" loading="lazy" decoding="async"><span>Building from above</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/site-overview.jpg" data-title="Site overview"><img src="assets/cases/norbert-retrofit/site-overview-thumb.jpg" alt="Front of the building with debris and a worker in the courtyard" width="560" height="420" loading="lazy" decoding="async"><span>Site overview</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/building-scaffold.jpg" data-title="Building in scaffolding"><img src="assets/cases/norbert-retrofit/building-scaffold-thumb.jpg" alt="Corner of the building wrapped in scaffolding" width="315" height="420" loading="lazy" decoding="async"><span>Building in scaffolding</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/slab-demolition.jpg" data-title="Slab demolition"><img src="assets/cases/norbert-retrofit/slab-demolition-thumb.jpg" alt="Edge of a demolished slab with exposed bars" width="558" height="420" loading="lazy" decoding="async"><span>Slab demolition</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/slab-opening.jpg" data-title="Slab opening"><img src="assets/cases/norbert-retrofit/slab-opening-thumb.jpg" alt="Workers measuring reinforcement in a slab opening" width="558" height="420" loading="lazy" decoding="async"><span>Slab opening</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/slab-rebar-check.jpg" data-title="Slab rebar check"><img src="assets/cases/norbert-retrofit/slab-rebar-check-thumb.jpg" alt="Exposed slab reinforcement over a cut opening" width="558" height="420" loading="lazy" decoding="async"><span>Slab rebar check</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/stirrup-spacing.jpg" data-title="Actual stirrup spacing"><img src="assets/cases/norbert-retrofit/stirrup-spacing-thumb.jpg" alt="Beam with marked measurements of actual stirrup spacing" width="560" height="365" loading="lazy" decoding="async"><span>Actual stirrup spacing</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/elevator-beam.jpg" data-title="Elevator shaft beam"><img src="assets/cases/norbert-retrofit/elevator-beam-thumb.jpg" alt="Exposed reinforcement cage at the elevator shaft" width="560" height="372" loading="lazy" decoding="async"><span>Elevator shaft beam</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/beam-jacketing.jpg" data-title="Beam jacketing"><img src="assets/cases/norbert-retrofit/beam-jacketing-thumb.jpg" alt="Reinforcement for beam jacketing around existing beams" width="560" height="420" loading="lazy" decoding="async"><span>Beam jacketing</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/engineer-inspection.jpg" data-title="Engineer inspection"><img src="assets/cases/norbert-retrofit/engineer-inspection-thumb.jpg" alt="Structural engineer inspecting slab reinforcement before pouring" width="315" height="420" loading="lazy" decoding="async"><span>Engineer inspection</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/slab-before-pour.jpg" data-title="Slab before pouring"><img src="assets/cases/norbert-retrofit/slab-before-pour-thumb.jpg" alt="Sixth-floor slab reinforcement laid out before concrete pouring" width="560" height="420" loading="lazy" decoding="async"><span>Slab before pouring</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/column-scaffold.jpg" data-title="Column and scaffold"><img src="assets/cases/norbert-retrofit/column-scaffold-thumb.jpg" alt="Concrete column with scaffolding clamps on an upper floor" width="314" height="420" loading="lazy" decoding="async"><span>Column and scaffold</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/fire-exit-stairs.jpg" data-title="Fire-exit stairs"><img src="assets/cases/norbert-retrofit/fire-exit-stairs-thumb.jpg" alt="New steel fire-exit stair frame" width="314" height="420" loading="lazy" decoding="async"><span>Fire-exit stairs</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/dampers-installed-2.jpg" data-title="Dampers along a floor"><img src="assets/cases/norbert-retrofit/dampers-installed-2-thumb.jpg" alt="Row of installed steel damper frames" width="560" height="420" loading="lazy" decoding="async"><span>Dampers along a floor</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/facade-after.jpg" data-title="Facade after retrofit"><img src="assets/cases/norbert-retrofit/facade-after-thumb.jpg" alt="Building facade with the steel damper frames visible behind the windows" width="315" height="420" loading="lazy" decoding="async"><span>Facade after retrofit</span></a></li>
+</ul>
+<h3>Design and analysis</h3>
+<ul class="file-grid">
+<li><a class="file-open" href="assets/cases/norbert-retrofit/design-requirements.jpg" data-title="Design requirements"><img src="assets/cases/norbert-retrofit/design-requirements-thumb.jpg" alt="Slide comparing design and earthquake requirements for a source 1.6 km away" width="560" height="366" loading="lazy" decoding="async"><span>Design requirements</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/hazard-assessment.jpg" data-title="Hazard assessment"><img src="assets/cases/norbert-retrofit/hazard-assessment-thumb.jpg" alt="Seismic hazard assessment panel listing the Digos Fault 1.6 km away" width="295" height="420" loading="lazy" decoding="async"><span>Hazard assessment</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/static-seismic-load.jpg" data-title="Static earthquake load"><img src="assets/cases/norbert-retrofit/static-seismic-load-thumb.jpg" alt="ETABS seismic load pattern dialog" width="523" height="420" loading="lazy" decoding="async"><span>Static earthquake load</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/response-spectrum.jpg" data-title="Response spectrum"><img src="assets/cases/norbert-retrofit/response-spectrum-thumb.jpg" alt="ETABS response spectrum definition" width="443" height="420" loading="lazy" decoding="async"><span>Response spectrum</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/response-spectrum-comparison.jpg" data-title="Response spectrum comparison"><img src="assets/cases/norbert-retrofit/response-spectrum-comparison-thumb.jpg" alt="Chart comparing the design and earthquake response spectra" width="560" height="417" loading="lazy" decoding="async"><span>Response spectrum comparison</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/modal-period-table.jpg" data-title="Modal periods"><img src="assets/cases/norbert-retrofit/modal-period-table-thumb.jpg" alt="Table of modal periods for the existing and retrofitted models" width="312" height="99" loading="lazy" decoding="async"><span>Modal periods</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/existing-model-blue.jpg" data-title="Existing frame model"><img src="assets/cases/norbert-retrofit/existing-model-blue-thumb.jpg" alt="ETABS 3D model of the existing frame in blue" width="560" height="236" loading="lazy" decoding="async"><span>Existing frame model</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/connection-diagram-a.jpg" data-title="Damper connection, section"><img src="assets/cases/norbert-retrofit/connection-diagram-a-thumb.jpg" alt="Diagram of the damper connection to existing concrete with connectors" width="560" height="282" loading="lazy" decoding="async"><span>Damper connection, section</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/connection-diagram-b.jpg" data-title="Damper connection, plan"><img src="assets/cases/norbert-retrofit/connection-diagram-b-thumb.jpg" alt="Plan diagram of the damper connection with stirrups and connectors" width="560" height="274" loading="lazy" decoding="async"><span>Damper connection, plan</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/beam-schedule-ib1.jpg" data-title="Beam schedule IB-1"><img src="assets/cases/norbert-retrofit/beam-schedule-ib1-thumb.jpg" alt="Beam IB-1 support and midspan sections" width="557" height="345" loading="lazy" decoding="async"><span>Beam schedule IB-1</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/beam-schedule-b2.jpg" data-title="Beam schedule B-2"><img src="assets/cases/norbert-retrofit/beam-schedule-b2-thumb.jpg" alt="Beam B-2 support and midspan sections" width="560" height="361" loading="lazy" decoding="async"><span>Beam schedule B-2</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/slab-reinforcement-plan.jpg" data-title="Slab reinforcement plan"><img src="assets/cases/norbert-retrofit/slab-reinforcement-plan-thumb.jpg" alt="One-way slab reinforcement distribution" width="560" height="406" loading="lazy" decoding="async"><span>Slab reinforcement plan</span></a></li>
+</ul>
+<h3>Drawings</h3>
+<ul class="file-grid">
+<li><a class="file-open" href="assets/cases/norbert-retrofit/foundation-plan-original.jpg" data-title="Original foundation plan"><img src="assets/cases/norbert-retrofit/foundation-plan-original-thumb.jpg" alt="Existing and additional foundation plan, sheet S1.0, with logo and licence numbers blurred" width="560" height="365" loading="lazy" decoding="async"><span>Original foundation plan</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/foundation-revised.jpg" data-title="Revised foundation plan"><img src="assets/cases/norbert-retrofit/foundation-revised-thumb.jpg" alt="Modified additional foundation plan with combined footings" width="560" height="328" loading="lazy" decoding="async"><span>Revised foundation plan</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/pedestal-detail.jpg" data-title="Pedestal detail"><img src="assets/cases/norbert-retrofit/pedestal-detail-thumb.jpg" alt="Pedestal tie and stirrup detail" width="323" height="420" loading="lazy" decoding="async"><span>Pedestal detail</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/footing-detail.jpg" data-title="Footing detail"><img src="assets/cases/norbert-retrofit/footing-detail-thumb.jpg" alt="CF-1 footing temperature bar detail" width="303" height="420" loading="lazy" decoding="async"><span>Footing detail</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/wall-footing-detail.jpg" data-title="Wall footing detail"><img src="assets/cases/norbert-retrofit/wall-footing-detail-thumb.jpg" alt="Wall footing detail WF-01" width="278" height="420" loading="lazy" decoding="async"><span>Wall footing detail</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/damper-elevation-cad.jpg" data-title="Damper elevation"><img src="assets/cases/norbert-retrofit/damper-elevation-cad-thumb.jpg" alt="CAD elevation of the damper frames from ground floor to sixth" width="433" height="420" loading="lazy" decoding="async"><span>Damper elevation</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/shop-elevator-shaft.jpg" data-title="Shop drawing: elevator shaft"><img src="assets/cases/norbert-retrofit/shop-elevator-shaft-thumb.jpg" alt="Elevator shaft shop drawing with sections" width="560" height="368" loading="lazy" decoding="async"><span>Shop drawing: elevator shaft</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/shop-stair-detail.jpg" data-title="Shop drawing: stair detail"><img src="assets/cases/norbert-retrofit/shop-stair-detail-thumb.jpg" alt="Stair detail shop drawing" width="560" height="369" loading="lazy" decoding="async"><span>Shop drawing: stair detail</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/shop-roof-deck.jpg" data-title="Shop drawing: roof deck"><img src="assets/cases/norbert-retrofit/shop-roof-deck-thumb.jpg" alt="Roof deck slab shop drawing" width="560" height="369" loading="lazy" decoding="async"><span>Shop drawing: roof deck</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/shop-sixth-floor-beams.jpg" data-title="Shop drawing: sixth-floor beams"><img src="assets/cases/norbert-retrofit/shop-sixth-floor-beams-thumb.jpg" alt="Schedule of beams for the sixth-floor retrofit" width="560" height="370" loading="lazy" decoding="async"><span>Shop drawing: sixth-floor beams</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/beam-retrofit-sketchup.jpg" data-title="Beam retrofit, SketchUp"><img src="assets/cases/norbert-retrofit/beam-retrofit-sketchup-thumb.jpg" alt="SketchUp drawing of beam retrofitting with steel connectors" width="560" height="232" loading="lazy" decoding="async"><span>Beam retrofit, SketchUp</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/beam-retrofit-installed.jpg" data-title="Beam retrofit, installed"><img src="assets/cases/norbert-retrofit/beam-retrofit-installed-thumb.jpg" alt="Beam retrofit reinforcement installed on site" width="560" height="420" loading="lazy" decoding="async"><span>Beam retrofit, installed</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/elevator-shaft-sketchup.jpg" data-title="Elevator shaft, SketchUp"><img src="assets/cases/norbert-retrofit/elevator-shaft-sketchup-thumb.jpg" alt="SketchUp drawing of the elevator shaft framing" width="411" height="420" loading="lazy" decoding="async"><span>Elevator shaft, SketchUp</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/elevator-shaft-installed.jpg" data-title="Elevator shaft, installed"><img src="assets/cases/norbert-retrofit/elevator-shaft-installed-thumb.jpg" alt="Elevator shaft framing reinforcement on site" width="560" height="420" loading="lazy" decoding="async"><span>Elevator shaft, installed</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/stairs-slab-sketchup.jpg" data-title="Stairs to slab, SketchUp"><img src="assets/cases/norbert-retrofit/stairs-slab-sketchup-thumb.jpg" alt="SketchUp drawing of the stair connection to the slab" width="560" height="400" loading="lazy" decoding="async"><span>Stairs to slab, SketchUp</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/stairs-slab-section.jpg" data-title="Stairs to slab, section"><img src="assets/cases/norbert-retrofit/stairs-slab-section-thumb.jpg" alt="Section of the stair connection to the slab" width="560" height="363" loading="lazy" decoding="async"><span>Stairs to slab, section</span></a></li>
+</ul>
+<h3>Cost, quantities and records</h3>
+<ul class="file-grid">
+<li><a class="file-open" href="assets/cases/norbert-retrofit/pedestal-estimate.jpg" data-title="Pedestal estimate"><img src="assets/cases/norbert-retrofit/pedestal-estimate-thumb.jpg" alt="Pedestal bar estimate with lengths and excess" width="322" height="420" loading="lazy" decoding="async"><span>Pedestal estimate</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/earthworks-quantities.jpg" data-title="Earthworks quantities"><img src="assets/cases/norbert-retrofit/earthworks-quantities-thumb.jpg" alt="Detailed computation of earthworks quantities; contact details blurred" width="260" height="420" loading="lazy" decoding="async"><span>Earthworks quantities</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/demolition-quantities.jpg" data-title="Demolition quantities"><img src="assets/cases/norbert-retrofit/demolition-quantities-thumb.jpg" alt="Detailed computation of demolition areas; contact details blurred" width="560" height="400" loading="lazy" decoding="async"><span>Demolition quantities</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/material-inventory.jpg" data-title="Material inventory"><img src="assets/cases/norbert-retrofit/material-inventory-thumb.jpg" alt="Material inventory list as of January 2022" width="391" height="420" loading="lazy" decoding="async"><span>Material inventory</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/material-issuance.jpg" data-title="Material issuance slip"><img src="assets/cases/norbert-retrofit/material-issuance-thumb.jpg" alt="Material issuance slip; worker names blurred" width="560" height="373" loading="lazy" decoding="async"><span>Material issuance slip</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/equipment-borrowers.jpg" data-title="Equipment borrowers list"><img src="assets/cases/norbert-retrofit/equipment-borrowers-thumb.jpg" alt="Construction equipment borrower&#x27;s list; names blurred" width="560" height="229" loading="lazy" decoding="async"><span>Equipment borrowers list</span></a></li>
+<li><a class="file-open" href="assets/cases/norbert-retrofit/meeting-minutes.jpg" data-title="Meeting minutes"><img src="assets/cases/norbert-retrofit/meeting-minutes-thumb.jpg" alt="Staff meeting minutes with the catch-up plan; names and amounts blurred" width="560" height="334" loading="lazy" decoding="async"><span>Meeting minutes</span></a></li>
+</ul>
+      </section>
+
       <a class="case-next" href="case-project-derisk.html">
         <span class="case-next-label">Next case</span>
         <span class="case-next-title">03 &middot; Project DeRisk</span>
       </a>
     </div>
   </article>
+
+  <dialog class="cert-dialog" aria-labelledby="cert-dialog-title">
+    <div class="cert-dialog-bar">
+      <h3 id="cert-dialog-title"></h3>
+      <button class="cert-close" type="button" aria-label="Close figure">&times;</button>
+    </div>
+    <img class="cert-image" alt="" src="" decoding="async">
+  </dialog>
 </main>
 
 <footer class="site-foot">
@@ -83,5 +371,51 @@
     </nav>
   </div>
 </footer>
+<script>
+(() => {
+  // Figures open full size in the same pop-up the certificates use.
+  const dialog = document.querySelector('.cert-dialog');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  const image = dialog.querySelector('.cert-image');
+  const title = dialog.querySelector('#cert-dialog-title');
+  let opener = null;
+  document.querySelectorAll('.file-open').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      opener = link;
+      image.removeAttribute('width');
+      image.removeAttribute('height');
+      image.src = link.getAttribute('href');
+      image.alt = link.dataset.title;
+      title.textContent = link.dataset.title;
+      dialog.showModal();
+    });
+  });
+  dialog.querySelector('.cert-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', () => { if (opener) opener.focus(); });
+})();
+</script>
+<script>
+(() => {
+  // The mode videos loop like GIFs. With prefers-reduced-motion: reduce they stay on their first frame
+  // and offer controls instead, so motion only starts when the visitor asks for it.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const videos = [...document.querySelectorAll('.story-video video')];
+  const apply = () => videos.forEach((video) => {
+    if (reduce.matches) { video.pause(); video.controls = true; }
+    else { video.controls = false; video.play().catch(() => {}); }
+  });
+  apply();
+  reduce.addEventListener('change', apply);
+  // Some browsers hold back autoplay until the page is on screen or the visitor interacts; retry then.
+  const start = (video) => { if (!reduce.matches && video.paused) video.play().catch(() => {}); };
+  if ('IntersectionObserver' in window) {
+    const seen = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) start(e.target); }));
+    videos.forEach((video) => seen.observe(video));
+  }
+  ['pointerdown', 'keydown'].forEach((type) => window.addEventListener(type, () => videos.forEach(start), { once: true }));
+})();
+</script>
 </body>
 </html>

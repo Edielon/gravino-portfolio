@@ -314,8 +314,15 @@ test('each case has its own page with the full story, figures and a next-case li
     assert.match(nav, /<li><a href="index.html#work" aria-current="true">Work<\/a><\/li>/);
     assert.match(html, /<a class="case-back" href="index.html#work">All work<\/a>/);
     assert.match(html, new RegExp(`<span class="case-num" aria-hidden="true">0${i + 1}</span>\\s*<div class="case-heading">\\s*<h1>${title}</h1>\\s*<p class="case-meta">[^<]+</p>`));
-    assert.match(html, /<div class="case-photo"><span>Add project photo or drawing<\/span><\/div>/);
+    const next = CASES[(i + 1) % CASES.length];
+    assert.match(html, new RegExp(`<a class="case-next" href="${next.file}">\\s*<span class="case-next-label">Next case</span>\\s*<span class="case-next-title">0${((i + 1) % 3) + 1} &middot; ${next.title.split(',')[0]}</span>`));
+    const foot = html.match(/<footer class="site-foot">[\s\S]*?<\/footer>/);
+    assert.ok(foot, `${file} graphite footer`);
+    assert.match(foot[0], /<li><a href="#top">Back to top<\/a><\/li>/);
     assert.match(html, /<ul class="case-figures">\s*<li><strong>/);
+    // Cases 1 and 2 are full story pages (tested separately); case 3 still holds the placeholder copy.
+    if (i < 2) return;
+    assert.match(html, /<div class="case-photo"><span>Add project photo or drawing<\/span><\/div>/);
     // Placeholder copy: the current long text, one section per step.
     const home = read('index.html');
     for (const term of ['Problem', 'Approach', 'Result']) {
@@ -325,16 +332,114 @@ test('each case has its own page with the full story, figures and a next-case li
       // Some short lines are the opening of the long text, so check the full passage is gone from the home page.
       assert.ok(!home.replace(/\s+/g, ' ').includes(sec[1].trim()), `${term} long text no longer sits on the home page`);
     }
-    const next = CASES[(i + 1) % CASES.length];
-    assert.match(html, new RegExp(`<a class="case-next" href="${next.file}">\\s*<span class="case-next-label">Next case</span>\\s*<span class="case-next-title">0${((i + 1) % 3) + 1} &middot; ${next.title.split(',')[0]}</span>`));
-    const foot = html.match(/<footer class="site-foot">[\s\S]*?<\/footer>/);
-    assert.ok(foot, `${file} graphite footer`);
-    assert.match(foot[0], /<li><a href="#top">Back to top<\/a><\/li>/);
   });
   const css = read('styles.css');
   assert.match(css, /\.nav-links a\[aria-current\]\{box-shadow:inset 0 -2px 0 var\(--accent\);\}/, 'current section underlined');
   assert.match(cssRule(css, '.case-section'), /grid-template-columns:/);
   assert.match(css, /@media \(max-width:640px\)\{[^}]*\.case-section\{grid-template-columns:1fr;/);
+});
+
+// Shared checks for an illustrated case story: chapters, sized and described images, GIF-like videos, gallery.
+const checkStoryPage = (file, { minImages, videoCount, minGallery }) => {
+  const html = read(file);
+  const article = html.match(/<article class="case-page case-story-page">([\s\S]*?)<\/article>/);
+  assert.ok(article, `${file} story layout`);
+  const body = article[1];
+  assert.ok(!/—|&mdash;/.test(html), `${file} has no em dashes`);
+  assert.ok(!html.includes('Add project photo'), 'placeholder photo gone');
+  const chapters = [...body.matchAll(/<section class="story-chapter">\s*<h2>([^<]+)<\/h2>/g)];
+  assert.ok(chapters.length >= 5, 'story told in chapters');
+  const imgs = [...html.matchAll(/<img ([^>]+)>/g)].map((m) => m[1]).filter((a) => !a.includes('class="cert-image"'));
+  assert.ok(imgs.length >= minImages, `uses the document figures (${imgs.length})`);
+  for (const attrs of imgs) {
+    const src = attrs.match(/src="([^"]+)"/)[1];
+    assert.ok(existsSync(new URL(`../${src}`, import.meta.url)), `${src} exists`);
+    assert.match(attrs, /alt="[^"]+"/, `${src} has alt text`);
+    assert.match(attrs, /width="\d+" height="\d+"/, `${src} reserves its size`);
+  }
+  for (const [, href] of html.matchAll(/<a class="file-open" href="([^"]+)"/g)) {
+    assert.ok(existsSync(new URL(`../${href}`, import.meta.url)), `${href} exists`);
+  }
+  const videos = [...body.matchAll(/<video ([^>]+)>\s*<source src="([^"]+)" type="video\/mp4">/g)];
+  assert.equal(videos.length, videoCount, 'mode videos');
+  for (const [, attrs, src] of videos) {
+    for (const a of ['autoplay', 'muted', 'loop', 'playsinline']) assert.ok(attrs.split(/\s+/).includes(a), `${src} ${a}`);
+    const poster = attrs.match(/poster="([^"]+\.jpg)"/);
+    assert.ok(poster && existsSync(new URL(`../${poster[1]}`, import.meta.url)), `${src} poster`);
+    assert.ok(!attrs.includes('controls'), 'plays like a GIF');
+    assert.ok(existsSync(new URL(`../${src}`, import.meta.url)), `${src} exists`);
+  }
+  const gallery = body.match(/<section class="story-file"[\s\S]*?<\/section>/);
+  assert.ok(gallery, 'full engineering file gallery');
+  assert.ok([...gallery[0].matchAll(/<a class="file-open" href="([^"]+)"/g)].length >= minGallery, 'gallery figures open full size');
+  assert.match(html, /<dialog class="cert-dialog"/, 'gallery reuses the certificate pop-up');
+  assert.match(html, /prefers-reduced-motion: reduce/, 'videos pause for reduced motion');
+  return { html, body };
+};
+
+test('case 1 reads as an illustrated story with looping mode videos and a full engineering file', () => {
+  const { html, body } = checkStoryPage('case-cor-jesu-law.html', { minImages: 36, videoCount: 3, minGallery: 20 });
+  assert.ok(!html.includes('3,000'), 'old floor area gone');
+  assert.ok(!/79[,.]87|79,870/.test(html), 'total project cost not published');
+  assert.match(body, /<strong>4,970 m&sup2;<\/strong>/);
+  assert.match(body, /<strong>182 m<\/strong>/);
+});
+
+test('case 2 compares the building before and after the retrofit, in pairs of looping mode videos', () => {
+  const { html, body } = checkStoryPage('case-norbert-retrofit.html', { minImages: 70, videoCount: 6, minGallery: 40 });
+  for (const [, t] of body.matchAll(/<strong>([^<]+)<\/strong>/g)) assert.ok(!/RGS/.test(t));
+  for (const hidden of ['RGS', 'Hinlog', 'Filmix', 'Sosme', 'adracec', 'Aspire']) assert.ok(!html.includes(hidden), `${hidden} not named`);
+  assert.match(body, /<strong>1\.6 km<\/strong>/);
+  assert.match(body, /0\.915/);
+  assert.match(body, /0\.675/);
+  const pairs = body.match(/<div class="story-videos story-videos--pairs">([\s\S]*?)<\/div>\s*<p class="story-note">/);
+  assert.ok(pairs, 'videos laid out as before/after pairs');
+  const order = [...pairs[1].matchAll(/<source src="assets\/cases\/norbert-retrofit\/([a-z-]+-\d)\.mp4"/g)].map((m) => m[1]);
+  assert.deepEqual(order, ['existing-mode-1', 'retrofit-mode-1', 'existing-mode-2', 'retrofit-mode-2', 'existing-mode-3', 'retrofit-mode-3']);
+  assert.match(read('styles.css'), /\.story-videos--pairs\{grid-template-columns:repeat\(2, 1fr\);/);
+});
+
+test('home page case 2 card shows the retrofit model photo, linked to its case page', () => {
+  const cards = [...read('index.html').matchAll(/<article class="case">([\s\S]*?)<\/article>/g)];
+  const img = cards[1][1].match(/<a class="case-photo case-photo--img" href="case-norbert-retrofit.html"[^>]*>\s*<img src="([^"]+)" alt="[^"]+" width="\d+" height="\d+"/);
+  assert.ok(img, 'photo with alt text and reserved size');
+  assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)));
+});
+
+test('home page header shows the toned site photo instead of the placeholder', () => {
+  const html = read('index.html');
+  const hero = html.match(/<div class="hero-photo">([\s\S]*?)<\/div>/);
+  assert.ok(hero, 'hero photo block');
+  assert.ok(!hero[1].includes('Placeholder'), 'placeholder removed');
+  const img = hero[1].match(/<img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"[^>]*>/);
+  assert.ok(img, 'photo with alt text and reserved size');
+  assert.equal(img[1], 'assets/hero-site.jpg');
+  assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)));
+  assert.match(cssRule(read('styles.css'), '.hero-photo img'), /object-fit:cover/);
+  assert.ok(!read('styles.css').includes('.hero-photo::after'), 'no burgundy corner block on the photo');
+});
+
+test('hero specialties pill sits above the headline', () => {
+  const hero = read('index.html').match(/<div class="wrap hero">([\s\S]*?)<\/div>\s*<\/div>/)[1];
+  assert.ok(hero.indexOf('class="specialties"') < hero.indexOf('<h1>'), 'pill first');
+  assert.ok(hero.indexOf('<h1>') < hero.indexOf('class="actions"'), 'buttons after the headline');
+});
+
+test('home page case 1 card shows the ETABS model photo, linked to its case page', () => {
+  const html = read('index.html');
+  const first = html.match(/<article class="case">([\s\S]*?)<\/article>/)[1];
+  assert.ok(!first.includes('Add project photo'), 'placeholder replaced');
+  const img = first.match(/<figure class="case-media">\s*<a class="case-photo case-photo--img" href="case-cor-jesu-law.html"[^>]*>\s*<img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"[^>]*>/);
+  assert.ok(img, 'photo with alt text and reserved size');
+  assert.equal(img[1], 'assets/cases/cor-jesu-law/etabs-3d-model.jpg');
+  assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)));
+  assert.match(read('styles.css'), /\.case-photo--img img\{[^}]*object-fit:contain/);
+});
+
+test('home page case 1 card uses the BOQ floor area', () => {
+  const html = read('index.html');
+  assert.ok(!html.includes('3,000 m&sup2;'));
+  assert.match(html, /<li><strong>4,970 m&sup2;<\/strong><span>[^<]+<\/span><\/li>/);
 });
 
 const cssRule = (css, sel) => {
@@ -389,7 +494,7 @@ test('band under the hero photo lists qualifications, not numbers', () => {
   assert.ok(html.indexOf('class="hero-photo"') < html.indexOf('aria-label="Qualifications"'), 'band stays under the large photo');
   const items = [...band[1].matchAll(/<li class="stat"><div class="num">([^<]+)<\/div><div class="cap">([^<]+)<\/div><\/li>/g)]
     .map(([, title, cap]) => [title.replace('&amp;', '&'), cap.replace(/&amp;/g, '&')]);
-  assert.deepEqual(items.map(([t]) => t), ['PMP', 'MIEAust', 'Structural Designer & Engineer', 'Estimator', 'Project Coordinator']);
+  assert.deepEqual(items.map(([t]) => t), ['Project Management Professional', 'Licensed Civil Engineer', 'Structural Designer & Analyst', 'Construction Estimator', 'Project Coordinator']);
   assert.deepEqual(items.map(([, c]) => c), [
     'Project Management Professional, certified by PMI. Plans schedules, procurement and cost control with Gantt charts and S-curves.',
     'Member of Engineers Australia, the professional body for engineers practising in Australia.',
