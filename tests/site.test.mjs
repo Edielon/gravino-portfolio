@@ -1009,3 +1009,48 @@ test('services anchors clear both sticky bars', () => {
   assert.match(scripts, /--hb-nav-h/);
   assert.match(scripts, /--hb-bar-h/);
 });
+
+test('services sections appear in order with their anchors', () => {
+  const html = read('services.html');
+  const ids = [...html.matchAll(/<section class="hb-section[^"]*" id="([a-z]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(ids, ['services', 'process', 'projects', 'why', 'about', 'faq', 'quote']);
+});
+
+test('services: three owner services, three remote team services', () => {
+  const html = read('services.html');
+  const cards = (block) => [...block.matchAll(/<h3>([^<]+?)(?: <span class="hb-remote">Remote<\/span>)?<\/h3>/g)].map((m) => m[1]);
+  const owners = html.match(/<div class="hb-svc" aria-label="For owners">([\s\S]*?)<\/article>\s*<\/div>/)[1];
+  const teams = html.match(/<div class="hb-svc" aria-label="For project teams">([\s\S]*?)<\/article>\s*<\/div>/)[1];
+  assert.deepEqual(cards(owners), ['Design and build', 'Seismic assessment and retrofit', 'Construction management']);
+  assert.deepEqual(cards(teams), ['Project management', 'Structural design and analysis', 'Cost estimating, BOQ and BOM']);
+  assert.ok(!owners.includes('hb-remote'), 'owner services are not remote');
+  assert.equal((teams.match(/<span class="hb-remote">Remote<\/span>/g) || []).length, 3);
+});
+
+test('services: process steps, founder-led projects with honest credit, founder and FAQ', () => {
+  const html = read('services.html');
+  const steps = [...html.matchAll(/<li class="hb-step hb-reveal"[^>]*><span class="hb-step-num">(\d\d)<\/span><div><h3>([^<]+)<\/h3>/g)].map((m) => m[2]);
+  assert.deepEqual(steps, ['Talk it through', 'Assess and design', 'Estimate and plan', 'Build or manage', 'Hand over']);
+  assert.match(html, /<a class="hb-pc hb-reveal" href="case-cor-jesu-law\.html">/);
+  assert.match(html, /<a class="hb-pc hb-reveal" href="case-norbert-retrofit\.html"/);
+  assert.match(html, /<b data-count="4970" data-suffix=" m&sup2;">4,970 m&sup2;<\/b>/);
+  assert.match(html, /<b data-count="6\.3" data-dec="1">6\.3<\/b>/);
+  assert.match(html, /Projects delivered while working with WMCabardo Engineering &amp; Consulting and ADRA Constructions Corporation\./);
+  assert.match(html, /<h2 id="hb-about-title">Hi, I'm Hanny Gravino\.<\/h2>/);
+  assert.match(html, /<a class="hb-pill hb-pill--dark" href="resume\.html">View full resume/);
+  for (const logo of ['pmi', 'engineers-australia', 'iet', 'asce']) assert.match(html, new RegExp(`src="assets/issuers/${logo}\\.png"`));
+  const faq = [...html.matchAll(/<details class="hb-q"><summary>([^<]+)<\/summary>/g)].map((m) => m[1]);
+  assert.equal(faq.length, 6);
+  assert.match(html, /<button class="hb-pill hb-pill--dark hb-ask-link" type="button">Ask a question/);
+  // Honesty: no prices or testimonials in the visible content (scripts use `$` legitimately, so they are skipped).
+  const text = html.replace(/<script>[\s\S]*?<\/script>/g, '');
+  for (const banned of ['testimonial', 'Testimonial', '₱', 'PHP ', '$']) assert.ok(!text.includes(banned), `no ${banned}`);
+});
+
+test('services layouts stack on small screens', () => {
+  const css = read('styles.css');
+  const block = css.slice(css.indexOf('/* ===== HannBuilders services page ===== */'));
+  assert.match(block, /@media \(max-width:900px\)\{[^@]*\.hb \.hb-svc, \.hb \.hb-why, \.hb \.hb-trust\{grid-template-columns:1fr 1fr;\}/);
+  assert.match(block, /@media \(max-width:900px\)\{[^@]*\.hb \.hb-process, \.hb \.hb-founder, \.hb \.hb-faq, \.hb \.hb-quote\{grid-template-columns:1fr;\}/);
+  assert.match(block, /@media \(max-width:640px\)\{[^@]*\.hb \.hb-svc, \.hb \.hb-why, \.hb \.hb-trust, \.hb \.hb-proj\{grid-template-columns:1fr;\}/);
+});
