@@ -490,7 +490,7 @@ test('read the full case is a filled button link with readable burgundy text', (
 
 test('band under the hero photo lists qualifications, not numbers', () => {
   const html = read('index.html');
-  const band = html.match(/<div class="wrap quals"><ul class="stats" aria-label="Qualifications">([\s\S]*?)<\/ul><\/div>/);
+  const band = html.match(/<div class="wrap quals"><ul class="stats" aria-label="Qualifications">([\s\S]*?)<\/ul>/);
   assert.ok(band, 'qualifications table in the graphite band');
   assert.ok(html.indexOf('class="hero-photo"') < html.indexOf('aria-label="Qualifications"'), 'band stays under the large photo');
   const items = [...band[1].matchAll(/<li class="stat"><div class="num">([^<]+)<\/div><div class="cap">([^<]+)<\/div><\/li>/g)]
@@ -1121,4 +1121,22 @@ test('services motion switches off for reduced motion; counted figures keep thei
   for (const [count, shown] of [['4970', '4,970'], ['182', '182'], ['6', '6'], ['6.3', '6.3']]) {
     assert.match(html, new RegExp(`data-count="${count.replace('.', '\\.')}"[^>]*>${shown.replace('.', '\\.')}`), `${count} shown in HTML`);
   }
+});
+
+test('services quote section stacks to one column on small screens (stacking rule comes after its base rule)', () => {
+  const css = read('styles.css');
+  const base = css.indexOf('.hb .hb-quote{background:');
+  assert.ok(base > -1, 'quote base rule');
+  const after = css.slice(base);
+  assert.match(after, /@media \(max-width:900px\)\{[^@]*\.hb \.hb-quote\{grid-template-columns:1fr;/, 'a later 900px rule stacks the quote layout');
+});
+
+test('home qualifications table ends with a button to the Services page', () => {
+  const html = read('index.html');
+  const quals = html.match(/<div class="wrap quals">[\s\S]*?<\/div>\s*<\/div>/)[0];
+  assert.match(quals, /<\/ul>\s*<div class="quals-cta"><a class="btn btn-primary" href="services\.html">Explore Services<\/a><\/div>/);
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.quals-cta'), /display:flex/);
+  assert.match(cssRule(css, '.quals-cta'), /justify-content:center/);
+  assert.match(cssRule(css, '.quals-cta'), /margin-top:28px/);
 });

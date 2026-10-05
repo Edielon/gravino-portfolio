@@ -236,6 +236,8 @@ header.site-nav{
   border-radius:6px;
 }
 .quals{padding-block:48px;}
+/* Button under the qualifications table that leads to the HannBuilders services page. */
+.quals-cta{display:flex; justify-content:center; margin-top:28px;}
 .stat{display:grid; grid-row:span 2; grid-template-rows:subgrid; row-gap:10px; background:var(--band); box-shadow:-1px 0 0 var(--band-line), 0 -1px 0 var(--band-line); padding:26px 24px 28px;}
 .stat .num{
   font-family:var(--font-display);
@@ -1129,6 +1131,9 @@ html:has(.hb){scroll-padding-top:calc(var(--hb-nav-h, 64px) + var(--hb-bar-h, 66
 .hb .hb-qform .hb-label{margin-top:10px;}
 .hb .hb-qform textarea{resize:vertical;}
 .hb .hb-qform .hb-pill{margin-top:16px;}
+@media (max-width:900px){
+  .hb .hb-quote{grid-template-columns:1fr; gap:28px; padding:32px 24px;}
+}
 @media (max-width:640px){
   .hb .hb-quote{padding:26px 18px; border-radius:18px;}
   .hb .hb-qform{grid-template-columns:1fr; padding:18px;}
