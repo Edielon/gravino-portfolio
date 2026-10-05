@@ -385,5 +385,34 @@
   }));
 })();
 </script>
+<script>
+(() => {
+  // Reveal sections once as they enter the viewport; count project figures up once.
+  const reveal = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('is-in');
+    reveal.unobserve(entry.target);
+  }), { threshold: 0.15 });
+  document.querySelectorAll('.hb-reveal').forEach((el) => reveal.observe(el));
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const format = (value, decimals) => decimals ? value.toFixed(decimals) : Math.round(value).toLocaleString('en');
+  const counter = new IntersectionObserver((entries) => entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    counter.unobserve(entry.target);
+    const el = entry.target;
+    const to = parseFloat(el.dataset.count);
+    const decimals = Number(el.dataset.dec || 0);
+    const suffix = el.dataset.suffix || '';
+    const start = performance.now();
+    const tick = (now) => {
+      const k = Math.min(1, (now - start) / 1100);
+      el.textContent = format(to * (1 - Math.pow(1 - k, 3)), decimals) + suffix;
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }), { threshold: 0.6 });
+  document.querySelectorAll('.hb [data-count]').forEach((el) => counter.observe(el));
+})();
+</script>
 </body>
 </html>

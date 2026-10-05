@@ -1098,3 +1098,27 @@ test('services chips set the service and answer; continue carries values to the 
   assert.match(js, /ArrowRight/, 'tabs support arrow keys');
   assert.match(js, /\.hb-ask-link/, 'FAQ ask buttons open the Ask tab');
 });
+
+test('services reveal only hides content once JavaScript is running, and hovers survive the reveal', () => {
+  const css = read('styles.css');
+  assert.match(read('services.html'), /<head>[\s\S]*<script>document\.documentElement\.classList\.add\('hb-js'\);<\/script>[\s\S]*<\/head>/);
+  assert.match(css, /\.hb-js \.hb \.hb-reveal\{opacity:0;\}/, 'hidden start only with JS');
+  // A one-off animation (not a transition) so card hover transforms still apply after the reveal.
+  assert.match(css, /\.hb-js \.hb \.hb-reveal\.is-in\{opacity:1; animation:hb-rise \.6s var\(--hb-ease\) var\(--hb-d, 0s\) backwards;\}/);
+  assert.match(css, /@keyframes hb-rise\{from\{opacity:0; transform:translateY\(18px\);\}\}/);
+  for (const sel of ['.hb .hb-t:hover', '.hb .hb-s:hover', '.hb .hb-pc:hover']) assert.match(css, new RegExp(sel.replace(/\./g, '\\.') + '\\{[^}]*transform:translateY\\(-[34]px\\)'), sel);
+  assert.match(css, /\.hb \.hb-t::after\{[^}]*transform:scaleX\(0\)/, 'trust tile underline');
+});
+
+test('services motion switches off for reduced motion; counted figures keep their real values', () => {
+  const css = read('styles.css');
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\)\{\s*\.hb-js \.hb \.hb-reveal\{opacity:1;\}\s*\.hb \*, \.hb \*::before, \.hb \*::after\{animation:none !important; transition:none !important;\}/);
+  const js = servicesScripts();
+  assert.match(js, /IntersectionObserver/);
+  assert.match(js, /data-count|dataset\.count/);
+  assert.match(js, /prefers-reduced-motion: reduce/);
+  const html = read('services.html');
+  for (const [count, shown] of [['4970', '4,970'], ['182', '182'], ['6', '6'], ['6.3', '6.3']]) {
+    assert.match(html, new RegExp(`data-count="${count.replace('.', '\\.')}"[^>]*>${shown.replace('.', '\\.')}`), `${count} shown in HTML`);
+  }
+});

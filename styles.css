@@ -1133,3 +1133,28 @@ html:has(.hb){scroll-padding-top:calc(var(--hb-nav-h, 64px) + var(--hb-bar-h, 66
   .hb .hb-quote{padding:26px 18px; border-radius:18px;}
   .hb .hb-qform{grid-template-columns:1fr; padding:18px;}
 }
+
+/* Motion: reveal on scroll, hover lifts. Off under reduced motion; content visible without JS. */
+.hb-js .hb .hb-reveal{opacity:0;}
+.hb-js .hb .hb-reveal.is-in{opacity:1; animation:hb-rise .6s var(--hb-ease) var(--hb-d, 0s) backwards;}
+@keyframes hb-rise{from{opacity:0; transform:translateY(18px);}}
+.hb .hb-t, .hb .hb-s, .hb .hb-pc{transition:transform .25s var(--hb-ease), box-shadow .25s;}
+.hb .hb-t::after{content:""; position:absolute; left:0; right:0; bottom:0; height:3px; background:var(--hb-orange); transform:scaleX(0); transform-origin:left; transition:transform .3s var(--hb-ease);}
+.hb .hb-t svg{transition:transform .25s cubic-bezier(0.34, 1.56, 0.64, 1), stroke .25s;}
+.hb .hb-t:hover{transform:translateY(-3px); box-shadow:0 14px 30px rgba(30,33,36,.10);}
+.hb .hb-t:hover::after{transform:scaleX(1);}
+.hb .hb-t:hover svg{transform:translateY(-2px) scale(1.12); stroke:var(--hb-orange);}
+.hb .hb-s:hover{transform:translateY(-4px); box-shadow:0 16px 34px rgba(30,33,36,.10);}
+.hb .hb-s:hover .hb-ic{background:var(--hb-orange);}
+.hb .hb-s:hover .hb-ic svg{stroke:var(--hb-ink);}
+.hb .hb-pc:hover{transform:translateY(-4px); box-shadow:0 18px 38px rgba(30,33,36,.12);}
+.hb .hb-pc-photo img{transition:transform .6s var(--hb-ease);}
+.hb .hb-pc:hover .hb-pc-photo img{transform:scale(1.04);}
+.hb .hb-more i{transition:transform .2s;}
+.hb .hb-pc:hover .hb-more i{transform:translateX(4px);}
+.hb .hb-pane:not([hidden]){animation:hb-fade .3s ease;}
+@keyframes hb-fade{from{opacity:0; transform:translateY(4px);}}
+@media (prefers-reduced-motion: reduce){
+  .hb-js .hb .hb-reveal{opacity:1;}
+  .hb *, .hb *::before, .hb *::after{animation:none !important; transition:none !important;}
+}
