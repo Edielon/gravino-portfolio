@@ -955,3 +955,57 @@ test('case pages list Services in the nav and footer, between Resume and Contact
     assert.deepEqual(footLinks, [['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Services', 'services.html'], ['Contact', 'contact.html'], ['Back to top', '#top']], `${file} footer`);
   }
 });
+
+test('services page is a full document with the shared nav, graphite footer and Services current', () => {
+  assert.ok(existsSync(new URL('../services.html', import.meta.url)), 'services.html exists');
+  const html = read('services.html');
+  assert.match(html, /^<!doctype html>/i);
+  assert.match(html, /<title>Services · HannBuilders by Hanny Gravino<\/title>/);
+  assert.match(html, /<link href="https:\/\/fonts\.googleapis\.com\/css2\?family=Archivo:wdth,wght@62\.\.125,500\.\.800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">/);
+  assert.match(html, /<link rel="stylesheet" href="styles.css">/);
+  assertNav(html, 'Services');
+  const foot = html.match(/<footer class="site-foot">[\s\S]*?<\/footer>/);
+  assert.ok(foot, 'graphite footer');
+  assert.match(foot[0], /<li><a href="services.html" aria-current="page">Services<\/a><\/li>/);
+  assert.equal((html.match(/<h1[\s>]/g) || []).length, 1, 'one h1');
+  assert.match(html, /<main class="hb" id="hb">/);
+});
+
+test('services hero: headline, contact links, enquiry tabs, paths and recent work', () => {
+  const html = read('services.html');
+  const hero = html.match(/<section class="hb-hero-wrap"[\s\S]*?<\/section>/)[0];
+  assert.match(hero, /<h1 id="hb-title">Build, retrofit or plan it <em>with an engineer<\/em> beside you\.<\/h1>/);
+  assert.match(hero, /href="mailto:hannygravino\.ph@gmail\.com"/);
+  assert.match(hero, /href="tel:\+639473245278"/);
+  assert.match(hero, /<div class="hb-tabs" role="tablist" aria-label="Enquiry type">/);
+  assert.match(hero, /<button class="hb-tab" type="button" role="tab" id="hb-tab-quote" aria-controls="hb-pane-quote" aria-selected="true">Request a quote<\/button>/);
+  assert.match(hero, /<button class="hb-tab" type="button" role="tab" id="hb-tab-ask" aria-controls="hb-pane-ask" aria-selected="false" tabindex="-1">Ask a question<\/button>/);
+  const chips = [...hero.matchAll(/<button class="hb-chip" type="button" aria-pressed="false" data-path="([a-z]+)">/g)].map((m) => m[1]);
+  assert.deepEqual(chips, ['build', 'damage', 'pm', 'boq']);
+  assert.match(hero, /<p class="hb-answer" id="hb-answer" aria-live="polite" hidden><\/p>/);
+  assert.match(hero, /<a class="hb-mini" href="case-cor-jesu-law\.html">/);
+  assert.match(hero, /<a class="hb-mini" href="case-norbert-retrofit\.html">/);
+  assert.match(hero, /src="assets\/cases\/norbert-retrofit\/building-scaffold\.jpg"/);
+});
+
+test('services brand tokens are scoped to .hb and meet contrast', () => {
+  const css = read('styles.css');
+  const block = css.slice(css.indexOf('/* ===== HannBuilders services page ===== */'));
+  assert.ok(css.includes('/* ===== HannBuilders services page ===== */'), 'HannBuilders block exists');
+  const tokens = { '--hb-ink': '#1E2124', '--hb-ink-2': '#4A4E53', '--hb-muted': '#6B6F74', '--hb-bg': '#F4F2EE', '--hb-panel': '#FFFFFF', '--hb-stone': '#E7E4DE', '--hb-line': '#DCD8D0', '--hb-orange': '#E2621B', '--hb-orange-deep': '#B44912', '--hb-orange-soft': '#FBE9DE', '--hb-orange-light': '#F0884F' };
+  for (const [name, value] of Object.entries(tokens)) assert.match(block, new RegExp(`${name}:${value};`), name);
+  // Every selector in the block is scoped to the page.
+  const selectors = [...block.matchAll(/(?:^|\})\s*([^@{}][^{}]*)\{/g)].map((m) => m[1].trim()).filter((s) => s && !s.startsWith('/*') && !s.startsWith('@') && !/^(from|to|\d+%)$/.test(s));
+  for (const sel of selectors) for (const part of sel.split(',')) assert.match(part.trim(), /\.hb|html:has\(\.hb\)/, `unscoped selector: ${part.trim()}`);
+  const pairs = [['#1E2124', '#E2621B'], ['#F0884F', '#1E2124'], ['#B44912', '#F4F2EE'], ['#B44912', '#FFFFFF'], ['#4A4E53', '#FFFFFF'], ['#6B6F74', '#F4F2EE'], ['#CFCDC8', '#1E2124']];
+  for (const [fg, bg] of pairs) assert.ok(contrast(hex(fg), hex(bg)) >= 4.5, `${fg} on ${bg}`);
+});
+
+test('services anchors clear both sticky bars', () => {
+  const css = read('styles.css');
+  assert.match(css, /html:has\(\.hb\)\{scroll-padding-top:calc\(var\(--hb-nav-h, 64px\) \+ var\(--hb-bar-h, 66px\) \+ 16px\);\}/);
+  assert.match(css, /\.hb-bar\{[^}]*position:sticky;[^}]*top:var\(--hb-nav-h, 64px\)/);
+  const scripts = [...read('services.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n');
+  assert.match(scripts, /--hb-nav-h/);
+  assert.match(scripts, /--hb-bar-h/);
+});
