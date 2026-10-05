@@ -401,9 +401,10 @@ test('case 2 compares the building before and after the retrofit, in pairs of lo
 
 test('home page case 2 card shows the retrofit model photo, linked to its case page', () => {
   const cards = [...read('index.html').matchAll(/<article class="case">([\s\S]*?)<\/article>/g)];
-  const img = cards[1][1].match(/<a class="case-photo case-photo--img" href="case-norbert-retrofit.html"[^>]*>\s*<img src="([^"]+)" alt="[^"]+" width="\d+" height="\d+"/);
+  const img = cards[1][1].match(/<a class="case-photo case-photo--img case-photo--roomy" href="case-norbert-retrofit.html"[^>]*>\s*<img src="([^"]+)" alt="[^"]+" width="\d+" height="\d+"/);
   assert.ok(img, 'photo with alt text and reserved size');
   assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)));
+  assert.match(cssRule(read('styles.css'), '.case-photo--roomy img'), /padding:7%/, 'model sits inside a margin so it is not cramped');
 });
 
 test('home page header shows the toned site photo instead of the placeholder', () => {
