@@ -1115,3 +1115,21 @@ html:has(.hb){scroll-padding-top:calc(var(--hb-nav-h, 64px) + var(--hb-bar-h, 66
   .hb .hb-section{padding-top:64px;}
   .hb .hb-founder{padding:22px;}
 }
+
+/* Quote */
+.hb .hb-quote{background:var(--hb-ink); color:#CFCDC8; border-radius:24px; padding:48px; display:grid; grid-template-columns:.85fr 1.15fr; gap:44px;}
+.hb .hb-quote h2{color:var(--hb-bg); font-size:clamp(28px, 3.2vw, 40px); line-height:1.08; margin:14px 0 14px;}
+.hb .hb-quote > div > p{margin:0;}
+.hb .hb-tag--dark{background:rgba(244,242,238,.12); color:var(--hb-bg);}
+.hb .hb-qsteps{list-style:none; margin:22px 0 0; padding:0; font-size:15px;}
+.hb .hb-qsteps li{display:flex; gap:12px; margin-bottom:12px;}
+.hb .hb-qsteps b{flex:none; width:26px; height:26px; border-radius:50%; background:rgba(240,136,79,.16); color:var(--hb-orange-light); display:grid; place-items:center; font-size:13px;}
+.hb .hb-qform{background:var(--hb-panel); border-radius:18px; padding:26px; color:var(--hb-ink); display:grid; grid-template-columns:1fr 1fr; gap:4px 14px; align-content:start;}
+.hb .hb-qform .hb-full{grid-column:1 / -1;}
+.hb .hb-qform .hb-label{margin-top:10px;}
+.hb .hb-qform textarea{resize:vertical;}
+.hb .hb-qform .hb-pill{margin-top:16px;}
+@media (max-width:640px){
+  .hb .hb-quote{padding:26px 18px; border-radius:18px;}
+  .hb .hb-qform{grid-template-columns:1fr; padding:18px;}
+}

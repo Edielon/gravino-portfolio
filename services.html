@@ -199,7 +199,46 @@
       </div>
     </div>
   </div></section>
-  <!-- Task 4 inserts: request a quote -->
+  <section class="hb-section" id="quote" aria-labelledby="hb-quote-title"><div class="wrap">
+    <div class="hb-quote hb-reveal">
+      <div>
+        <span class="hb-tag hb-tag--dark">Request a quote</span>
+        <h2 id="hb-quote-title">Tell us about your project</h2>
+        <p>No obligation, and no question too small.</p>
+        <ol class="hb-qsteps"><li><b>1</b>Send the form with whatever you know so far.</li><li><b>2</b>We reply with questions or a time to talk.</li><li><b>3</b>You get a written scope and quote.</li></ol>
+        <p class="hb-contact"><a href="mailto:hannygravino.ph@gmail.com"><span aria-hidden="true">&#9993;&nbsp;</span>hannygravino.ph@gmail.com</a><a href="tel:+639473245278"><span aria-hidden="true">&#9742;&nbsp;</span>+63 947 324 5278</a></p>
+      </div>
+      <form class="hb-qform" id="hb-quote-form" action="https://api.web3forms.com/submit" method="POST" novalidate>
+        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+        <input type="hidden" name="subject" value="HannBuilders quote">
+        <input type="checkbox" name="botcheck" class="hb-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="hb-full"><label class="hb-label" for="hb-q-service">Service</label>
+          <select class="hb-input" id="hb-q-service" name="service" required aria-describedby="hb-q-service-err">
+            <option value="">Choose a service&hellip;</option>
+            <option>Design and build</option><option>Seismic assessment and retrofit</option><option>Construction management</option>
+            <option>Project management</option><option>Structural design and analysis</option><option>Cost estimating, BOQ and BOM</option><option>Not sure yet</option>
+          </select><p class="hb-err" id="hb-q-service-err" hidden>Please choose a service, or &ldquo;Not sure yet&rdquo;.</p></div>
+        <div><label class="hb-label" for="hb-q-type">Project type</label>
+          <select class="hb-input" id="hb-q-type" name="project_type"><option value="">Choose&hellip;</option><option>Residential</option><option>Commercial</option><option>School or institutional</option><option>Other</option></select></div>
+        <div><label class="hb-label" for="hb-q-location">Location</label>
+          <input class="hb-input" id="hb-q-location" name="location" type="text" required aria-describedby="hb-q-location-err" autocomplete="address-level2" placeholder="City or province, or remote"><p class="hb-err" id="hb-q-location-err" hidden>Please add a location, or &ldquo;remote&rdquo;.</p></div>
+        <div><label class="hb-label" for="hb-q-size">Size or budget (optional)</label>
+          <input class="hb-input" id="hb-q-size" name="size_or_budget" type="text" placeholder="e.g. 2 storeys, 300 m&sup2;"></div>
+        <div><label class="hb-label" for="hb-q-timeline">Timeline (optional)</label>
+          <select class="hb-input" id="hb-q-timeline" name="timeline"><option value="">Choose&hellip;</option><option>As soon as possible</option><option>Within 3 months</option><option>3 to 12 months</option><option>Just exploring</option></select></div>
+        <div><label class="hb-label" for="hb-q-name">Your name</label>
+          <input class="hb-input" id="hb-q-name" name="name" type="text" required aria-describedby="hb-q-name-err" autocomplete="name"><p class="hb-err" id="hb-q-name-err" hidden>Please enter your name.</p></div>
+        <div><label class="hb-label" for="hb-q-email">Email</label>
+          <input class="hb-input" id="hb-q-email" name="email" type="email" required aria-describedby="hb-q-email-err" autocomplete="email"><p class="hb-err" id="hb-q-email-err" hidden>Please enter a valid email address.</p></div>
+        <div class="hb-full"><label class="hb-label" for="hb-q-phone">Phone (optional)</label>
+          <input class="hb-input" id="hb-q-phone" name="phone" type="tel" autocomplete="tel"></div>
+        <div class="hb-full"><label class="hb-label" for="hb-q-message">Tell us more</label>
+          <textarea class="hb-input" id="hb-q-message" name="message" rows="4" required aria-describedby="hb-q-message-err" placeholder="What are you planning, and what would help you most?"></textarea><p class="hb-err" id="hb-q-message-err" hidden>Please tell us a little about the project.</p></div>
+        <div class="hb-full"><button class="hb-pill hb-pill--orange" type="submit">Send request <span class="hb-ar" aria-hidden="true">&rarr;</span></button>
+          <p class="hb-status" id="hb-q-status" role="status" aria-live="polite"></p></div>
+      </form>
+    </div>
+  </div></section>
 </main>
 
 <footer class="site-foot">
@@ -229,6 +268,121 @@
   measure();
   window.addEventListener('resize', measure);
   if (document.fonts) document.fonts.ready.then(measure);
+})();
+</script>
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+
+  // Shared submit: validate trimmed values, show inline errors, then post to Web3Forms.
+  function hbSubmit(form, checks, status, subject) {
+    if (!form) return;
+    const button = form.querySelector('button[type="submit"]');
+    const say = (text, kind) => { status.textContent = text; status.dataset.kind = kind; };
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      let firstBad = null;
+      for (const [id, ok] of checks) {
+        const input = $(id);
+        const valid = ok(input.value.trim());
+        input.setAttribute('aria-invalid', String(!valid));
+        $(id + '-err').hidden = valid;
+        if (!valid && !firstBad) firstBad = input;
+      }
+      if (firstBad) { firstBad.focus(); return; }
+      if (form.access_key.value === 'YOUR_WEB3FORMS_ACCESS_KEY') {
+        say('This form is not connected yet. Please email hannygravino.ph@gmail.com for now.', 'error');
+        return;
+      }
+      if (subject) form.subject.value = subject();
+      button.disabled = true;
+      say('Sending…', 'info');
+      try {
+        const res = await fetch(form.action, { method: 'POST', headers: { Accept: 'application/json' }, body: new FormData(form) });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === false) throw new Error(data.message || res.status);
+        form.reset();
+        checks.forEach(([id]) => $(id).removeAttribute('aria-invalid'));
+        say('Thank you. We will reply soon.', 'success');
+      } catch {
+        say('Sorry, that did not send. Please try again or email hannygravino.ph@gmail.com.', 'error');
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+  const filled = (v) => v !== '';
+  const isEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  hbSubmit(document.getElementById('hb-quote-form'),
+    [['hb-q-service', filled], ['hb-q-location', filled], ['hb-q-name', filled], ['hb-q-email', isEmail], ['hb-q-message', filled]],
+    $('hb-q-status'), () => 'HannBuilders quote: ' + ($('hb-q-service').value || 'Not sure yet'));
+  hbSubmit(document.getElementById('hb-pane-ask'),
+    [['hb-a-question', filled], ['hb-a-contact', filled]], $('hb-a-status'), null);
+
+  // Enquiry tabs: click or arrow keys switch between "Request a quote" and "Ask a question".
+  const tabs = [$('hb-tab-quote'), $('hb-tab-ask')];
+  const tablist = tabs[0].parentElement;
+  const select = (i, focus) => {
+    tabs.forEach((tab, j) => {
+      const on = i === j;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+      $(tab.getAttribute('aria-controls')).hidden = !on;
+    });
+    tablist.dataset.tab = i === 1 ? 'ask' : 'quote';
+    if (focus) tabs[i].focus();
+  };
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(i, false));
+    tab.addEventListener('keydown', (event) => {
+      const next = { ArrowRight: 1 - i, ArrowLeft: 1 - i, Home: 0, End: 1 }[event.key];
+      if (next === undefined) return;
+      event.preventDefault();
+      select(next, true);
+    });
+  });
+
+  // FAQ "Ask a question" buttons open the Ask tab in the hero card.
+  document.querySelectorAll('.hb-ask-link').forEach((button) => button.addEventListener('click', () => {
+    select(1, false);
+    $('hb-pane-ask').closest('.hb-card').scrollIntoView({ block: 'center' });
+    $('hb-a-question').focus({ preventScroll: true });
+  }));
+
+  // "Continue to full request" carries the hero choices into the full form.
+  $('hb-continue').addEventListener('click', () => {
+    if ($('hb-hero-service').value) $('hb-q-service').value = $('hb-hero-service').value;
+    if ($('hb-hero-location').value.trim()) $('hb-q-location').value = $('hb-hero-location').value.trim();
+    $('quote').scrollIntoView();
+    const next = ['hb-q-service', 'hb-q-location', 'hb-q-name', 'hb-q-email', 'hb-q-message'].map($).find((el) => !el.value.trim());
+    (next || $('hb-q-name')).focus({ preventScroll: true });
+  });
+
+  // "What brings you here?" picks the service in the hero card and answers in one line.
+  const PATHS = {
+    build: { service: 'Design and build', text: '<b>We take it from structural design to handover</b>, with a cost estimate and schedule before anything is built.' },
+    damage: { service: 'Seismic assessment and retrofit', text: '<b>Start with a damage assessment.</b> Send photos; we check what failed, then design the retrofit if it is needed.' },
+    pm: { service: 'Project management', text: '<b>PMP-standard scheduling, procurement and cost control</b>, on site or remotely, reported every week.' },
+    boq: { service: 'Cost estimating, BOQ and BOM', text: '<b>Send your drawings.</b> We prepare quantities, BOQ and BOM you can tender and build from, remotely.' },
+  };
+  const answer = $('hb-answer');
+  const heroService = $('hb-hero-service');
+  const chips = [...document.querySelectorAll('.hb-chip')];
+  const motion = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  chips.forEach((chip) => chip.addEventListener('click', () => {
+    const on = chip.getAttribute('aria-pressed') !== 'true';
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip && on)));
+    if (!on) { answer.hidden = true; answer.textContent = ''; return; }
+    const path = PATHS[chip.dataset.path];
+    heroService.value = path.service;
+    select(0, false);
+    answer.innerHTML = `${path.text} <a href="#services">See how &rarr;</a>`;
+    answer.hidden = false;
+    if (motion && answer.animate) {
+      answer.animate([{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 250, easing: 'cubic-bezier(.2,0,0,1)' });
+      heroService.animate([{ boxShadow: '0 0 0 3px rgba(226,98,27,.35)' }, { boxShadow: '0 0 0 0 rgba(226,98,27,0)' }], { duration: 900 });
+    }
+  }));
 })();
 </script>
 </body>

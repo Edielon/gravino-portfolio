@@ -1054,3 +1054,47 @@ test('services layouts stack on small screens', () => {
   assert.match(block, /@media \(max-width:900px\)\{[^@]*\.hb \.hb-process, \.hb \.hb-founder, \.hb \.hb-faq, \.hb \.hb-quote\{grid-template-columns:1fr;\}/);
   assert.match(block, /@media \(max-width:640px\)\{[^@]*\.hb \.hb-svc, \.hb \.hb-why, \.hb \.hb-trust, \.hb \.hb-proj\{grid-template-columns:1fr;\}/);
 });
+
+const servicesScripts = () => [...read('services.html').matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n');
+
+test('services quote form posts to Web3Forms with the right required fields', () => {
+  const html = read('services.html');
+  const form = html.match(/<form class="hb-qform" id="hb-quote-form"[^>]*>[\s\S]*?<\/form>/)[0];
+  assert.match(form, /action="https:\/\/api\.web3forms\.com\/submit" method="POST" novalidate/);
+  assert.match(form, /name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY"/);
+  assert.match(form, /name="botcheck"/);
+  const required = { 'hb-q-service': true, 'hb-q-type': false, 'hb-q-location': true, 'hb-q-size': false, 'hb-q-timeline': false, 'hb-q-name': true, 'hb-q-email': true, 'hb-q-phone': false, 'hb-q-message': true };
+  for (const [id, req] of Object.entries(required)) {
+    assert.match(form, new RegExp(`<label class="hb-label" for="${id}">`), `label for ${id}`);
+    const field = form.match(new RegExp(`<(input|select|textarea)[^>]*id="${id}"[^>]*>`));
+    assert.ok(field, id);
+    assert.equal(/\brequired\b/.test(field[0]), req, `${id} required=${req}`);
+    if (req) assert.match(form, new RegExp(`id="${id}-err"`), `${id} has an inline error`);
+  }
+  assert.match(form, /<option>Not sure yet<\/option>/);
+  assert.match(form, /id="hb-q-status" role="status" aria-live="polite"/);
+});
+
+test('services forms validate trimmed input and never send with the placeholder key', () => {
+  const js = servicesScripts();
+  assert.match(js, /\.trim\(\)/, 'checks trim whitespace');
+  const placeholder = js.indexOf("'YOUR_WEB3FORMS_ACCESS_KEY'");
+  assert.ok(placeholder > -1 && placeholder < js.indexOf('fetch('), 'placeholder check before fetch');
+  assert.match(js, /'HannBuilders quote: ' \+/);
+  assert.match(js, /hbSubmit\(document\.getElementById\('hb-quote-form'\)/);
+  assert.match(js, /hbSubmit\(document\.getElementById\('hb-pane-ask'\)/);
+});
+
+test('services chips set the service and answer; continue carries values to the full form', () => {
+  const js = servicesScripts();
+  for (const service of ['Design and build', 'Seismic assessment and retrofit', 'Project management', 'Cost estimating, BOQ and BOM']) {
+    assert.ok(js.includes(`service: '${service}'`), `chip maps to ${service}`);
+  }
+  assert.match(js, /aria-pressed/);
+  assert.match(js, /getElementById\('hb-continue'\)|\$\('hb-continue'\)/);
+  assert.match(js, /hb-q-service/);
+  assert.match(js, /hb-q-location/);
+  assert.match(js, /scrollIntoView/);
+  assert.match(js, /ArrowRight/, 'tabs support arrow keys');
+  assert.match(js, /\.hb-ask-link/, 'FAQ ask buttons open the Ask tab');
+});
