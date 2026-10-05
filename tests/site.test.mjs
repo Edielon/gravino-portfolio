@@ -33,7 +33,7 @@ export function assertNav(html, current) {
   const links = [...nav.matchAll(/<li><a href="([^"]+)"([^>]*)>([^<]+)<\/a><\/li>/g)]
     .map(([, href, attrs, label]) => ({ href, label, current: attrs.includes('aria-current="page"') }));
   assert.deepEqual(links.map((l) => [l.label, l.href]), [
-    ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Contact', 'contact.html'],
+    ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Services', 'services.html'], ['Contact', 'contact.html'],
   ]);
   assert.deepEqual(links.filter((l) => l.current).map((l) => l.label), current ? [current] : []);
 }
@@ -196,7 +196,7 @@ test('footer repeats the nav links plus back to top on every page', () => {
     const links = [...foot.matchAll(/<li><a href="([^"]+)"([^>]*)>([^<]+)<\/a><\/li>/g)]
       .map(([, href, attrs, label]) => ({ href, label, current: attrs.includes('aria-current="page"') }));
     assert.deepEqual(links.map((l) => [l.label, l.href]), [
-      ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Contact', 'contact.html'], ['Back to top', '#top'],
+      ['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Services', 'services.html'], ['Contact', 'contact.html'], ['Back to top', '#top'],
     ], page);
     assert.deepEqual(links.filter((l) => l.current).map((l) => l.label), current ? [current] : [], `${page} current`);
     // Full-width footer with an inner wrap; the contact page uses the light footer under its graphite band.
@@ -942,4 +942,16 @@ test('headings use gentle tracking so the narrower Archivo letters are not crowd
   const track = (sel) => Number(cssRule(css, sel).match(/letter-spacing:(-?[\d.]+)em/)[1]);
   assert.ok(track('.hero h1') >= -0.01, `hero headline tracking ${track('.hero h1')}em`);
   assert.ok(track('h1,h2,h3') >= -0.01, `heading tracking ${track('h1,h2,h3')}em`);
+});
+
+test('case pages list Services in the nav and footer, between Resume and Contact', () => {
+  for (const { file } of CASES) {
+    const html = read(file);
+    const nav = navOf(html);
+    const navLinks = [...nav.matchAll(/<li><a href="([^"]+)"[^>]*>([^<]+)<\/a><\/li>/g)].map((m) => m[2]);
+    assert.deepEqual(navLinks, ['Work', 'Resume', 'Services', 'Contact'], `${file} nav`);
+    const foot = html.match(/<footer class="site-foot">[\s\S]*?<\/footer>/)[0];
+    const footLinks = [...foot.matchAll(/<li><a href="([^"]+)"[^>]*>([^<]+)<\/a><\/li>/g)].map((m) => [m[2], m[1]]);
+    assert.deepEqual(footLinks, [['Work', 'index.html#work'], ['Resume', 'resume.html'], ['Services', 'services.html'], ['Contact', 'contact.html'], ['Back to top', '#top']], `${file} footer`);
+  }
 });
