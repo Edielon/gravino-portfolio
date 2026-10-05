@@ -100,8 +100,8 @@ test('contact details have icons, copy buttons and a LinkedIn link', () => {
   assert.match(html, /id="c-copy-status"[^>]*role="status"/);
 
   const copies = [...lines[1].matchAll(/<button class="c-row c-action" type="button" data-copy="([^"]+)"[^>]*>/g)].map((m) => m[1]);
-  assert.deepEqual(copies, ['hcbgravino@gmail.com', '+639620723288']);
-  assert.match(lines[1], /\+63 962 072 3288/, 'phone shown in readable groups');
+  assert.deepEqual(copies, ['hannygravino.ph@gmail.com', '+639473245278']);
+  assert.match(lines[1], /\+63 947 324 5278/, 'phone shown in readable groups');
 
   const li = lines[1].match(/<a class="c-row c-action"[^>]*>/);
   assert.ok(li, 'LinkedIn row is a link');
