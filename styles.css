@@ -632,7 +632,7 @@ section.work{border-top:none;}
 .creds-band{display:flow-root; background:var(--card);}
 .creds-wrap{padding-block:72px;}
 .cred-table{margin-top:8px;}
-.cred-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border:1px solid var(--card-line); border-radius:6px;}
+.cred-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:1px; margin:0; padding:0; list-style:none; overflow:hidden; border:1px solid var(--card-line); border-radius:6px;}
 /* Issuer logos sit directly on the card in their own colours, no backing tile. */
 .cred-cell{display:flex; background:var(--card); box-shadow:-1px 0 0 var(--card-line), 0 -1px 0 var(--card-line), -1px -1px 0 var(--card-line);}
 .cred-open{
@@ -647,6 +647,9 @@ section.work{border-top:none;}
 }
 .cred-open:hover{background:var(--card-hover);}
 .cred-open:focus-visible{outline:3px solid var(--heading); outline-offset:-3px;}
+/* A credential without a document yet (the PRC licence): same layout as the linked tiles, not clickable. */
+.cred-static{display:flex; flex-direction:column; gap:10px; width:100%; padding:26px 24px 28px; color:var(--heading); --cred-logo:48px;}
+.cred-note{font-size:12.5px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-muted);}
 /* Issuer logo stacks above the title in a 48px row, left-aligned like the school logos on the Education tab. */
 .cred-open{--cred-logo:48px;}
 .cred-logo{flex:none; display:flex; align-items:center; height:var(--cred-logo);}

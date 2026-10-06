@@ -554,8 +554,8 @@ test('home certifications sit in a white section and each opens its certificate'
   assert.match(section[0], /<h2 class="section-title">Certifications and Memberships<\/h2>/);
   const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-logo"><img src="assets\/issuers\/[a-z-]+\.png" alt="" width="\d+" height="\d+"><\/span><span class="cred-title">([^<]+)<\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
     .map(([, href, dataTitle, title, desc]) => ({ href, dataTitle, title, desc: desc.replace(/&middot;/g, '·') }));
-  // PMI credentials share the top row; engineering memberships sit below.
-  assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'PMI Member', 'MIEAust', 'MIET', 'M.ASCE']);
+  // The PRC licence leads (Task: PRC first), then the PMI credentials, then memberships and the White Card.
+  assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'PMI Member', 'MIEAust', 'MIET', 'M.ASCE', 'White Card']);
   assert.deepEqual(cells.map((c) => c.desc), [
     'Project Management Professional, Project Management Institute · 2026',
     'Certified Associate in Project Management, Project Management Institute · 2025',
@@ -563,11 +563,30 @@ test('home certifications sit in a white section and each opens its certificate'
     'Member, Engineers Australia · 2025',
     'Member, Institution of Engineering and Technology · 2025',
     'Member, American Society of Civil Engineers · 2025',
+    'Prepare to Work Safely in the Construction Industry (CPCWHS1001), Blue Dog Training · 2023',
   ]);
   for (const c of cells) assert.ok(existsSync(new URL(`../${c.href}`, import.meta.url)), `${c.href} exists`);
-  for (const notHere of ['placeholder', 'PRC', 'Diploma', 'White Card', 'MIDAS', 'PICE']) {
+  for (const notHere of ['Diploma', 'MIDAS', 'PICE']) {
     assert.ok(!section[0].includes(notHere), `home certifications should not include ${notHere}`);
   }
+});
+
+test('the PRC licence is the first certification, with its number masked and no document yet', () => {
+  const html = read('index.html');
+  const grid = html.match(/<ul class="cred-grid"[^>]*>\s*([\s\S]*?)<\/ul>/)[1];
+  const first = grid.match(/^<li class="cred-cell[^"]*">[\s\S]*?<\/li>/)[0];
+  assert.match(first, /^<li class="cred-cell cred-cell--pending"><div class="cred-static">/, 'not a link: there is no document to open yet');
+  assert.match(first, /<span class="cred-logo"><img src="assets\/issuers\/prc\.png" alt="" width="\d+" height="\d+"><\/span>/);
+  assert.match(first, /<span class="cred-title">Licensed Civil Engineer<\/span>/);
+  // Non-breaking spaces keep "Reg. No. ****" on one line.
+  assert.match(first, /<span class="cred-desc">Professional Regulation Commission, Philippines &middot; Reg\.&nbsp;No\.&nbsp;\*\*\*\*<\/span>/);
+  assert.match(first, /<span class="cred-note">Certificate to follow<\/span>/);
+  assert.ok(!/\d{5,}/.test(first), 'no licence number digits anywhere in the tile');
+  // The Blue Dog White Card opens its redacted statement of attainment.
+  assert.match(grid, /<a class="cred-open" href="assets\/certificates\/white-card\.jpg" data-title="White Card, CPCWHS1001 Statement of Attainment" aria-haspopup="dialog">/);
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.cred-static'), /display:flex/);
+  assert.match(cssRule(css, '.cred-note'), /color:var\(--ink-muted\)/);
 });
 
 test('each certification stacks its issuer logo above the title, like the Education tab', () => {
@@ -575,8 +594,8 @@ test('each certification stacks its issuer logo above the title, like the Educat
   const section = html.match(/<section class="creds-band" id="certifications">[\s\S]*?<\/section>/)[0];
   const logos = [...section.matchAll(/<span class="cred-logo"><img src="(assets\/issuers\/[a-z-]+\.png)" alt=""/g)].map((m) => m[1]);
   assert.deepEqual(logos, [
-    'assets/issuers/pmi.png', 'assets/issuers/pmi.png', 'assets/issuers/pmi.png',
-    'assets/issuers/engineers-australia.png', 'assets/issuers/iet.png', 'assets/issuers/asce.png',
+    'assets/issuers/prc.png', 'assets/issuers/pmi.png', 'assets/issuers/pmi.png', 'assets/issuers/pmi.png',
+    'assets/issuers/engineers-australia.png', 'assets/issuers/iet.png', 'assets/issuers/asce.png', 'assets/issuers/blue-dog.png',
   ]);
   for (const src of new Set(logos)) assert.ok(existsSync(new URL(`../${src}`, import.meta.url)), `${src} exists`);
   const css = read('styles.css');
@@ -627,7 +646,7 @@ test('certificate pop-up is an accessible dialog', () => {
     assert.ok(scripts.includes(needle), `dialog script handles ${needle}`);
   }
   const css = read('styles.css');
-  assert.match(cssRule(css, '.cred-grid'), /grid-template-columns:repeat\(3, 1fr\)/);
+  assert.match(cssRule(css, '.cred-grid'), /grid-template-columns:repeat\(4, 1fr\)/, 'eight tiles in two even rows of four');
   assert.match(cssRule(css, '.cert-dialog::backdrop'), /background:/);
   assert.match(cssRule(css, '.cert-image'), /object-fit:contain/);
 });
