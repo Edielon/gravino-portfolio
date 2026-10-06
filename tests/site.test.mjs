@@ -1131,12 +1131,19 @@ test('services quote section stacks to one column on small screens (stacking rul
   assert.match(after, /@media \(max-width:900px\)\{[^@]*\.hb \.hb-quote\{grid-template-columns:1fr;/, 'a later 900px rule stacks the quote layout');
 });
 
-test('home qualifications table ends with a button to the Services page', () => {
+test('home qualifications table ends with a HannBuilders teaser strip leading to Services', () => {
   const html = read('index.html');
-  const quals = html.match(/<div class="wrap quals">[\s\S]*?<\/div>\s*<\/div>/)[0];
-  assert.match(quals, /<\/ul>\s*<div class="quals-cta"><a class="btn btn-primary" href="services\.html">Explore Services<\/a><\/div>/);
+  const strip = html.match(/<\/ul>\s*<div class="quals-cta">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>\s*<\/div>\s*<\/section>/);
+  assert.ok(strip, 'strip sits right under the qualifications list, inside the band');
+  assert.match(strip[1], /<svg class="quals-cta-mark"[^>]*aria-hidden="true"/, 'decorative HannBuilders mark');
+  assert.match(strip[1], /<p>Now taking projects through <strong>HannBuilders<\/strong>: design-and-build, seismic retrofit and project management, in the Philippines and remotely\.<\/p>/);
+  assert.match(strip[1], /<div class="quals-cta-actions"><a class="btn btn-primary" href="services\.html">Explore Services<\/a><a class="quals-cta-link" href="services\.html#quote">Request a quote<\/a>/);
   const css = read('styles.css');
-  assert.match(cssRule(css, '.quals-cta'), /display:flex/);
-  assert.match(cssRule(css, '.quals-cta'), /justify-content:center/);
-  assert.match(cssRule(css, '.quals-cta'), /margin-top:28px/);
+  const box = cssRule(css, '.quals-cta');
+  assert.match(box, /display:flex/);
+  assert.match(box, /justify-content:space-between/, 'text left, actions right');
+  assert.match(box, /border:1px solid var\(--band-line\)/, 'framed like the table above');
+  assert.match(box, /border-radius:6px/, 'same corners as the table');
+  assert.match(cssRule(css, '.quals-cta-link'), /color:var\(--band-ink\)/);
+  assert.match(css, /@media \(max-width:760px\)\{\s*\.quals-cta\{flex-direction:column; align-items:flex-start;\}/, 'stacks on phones');
 });

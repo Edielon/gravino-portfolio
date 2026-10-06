@@ -236,8 +236,19 @@ header.site-nav{
   border-radius:6px;
 }
 .quals{padding-block:48px;}
-/* Button under the qualifications table that leads to the HannBuilders services page. */
-.quals-cta{display:flex; justify-content:center; margin-top:28px;}
+/* HannBuilders teaser strip under the qualifications table: framed like the table, text left, actions right. */
+.quals-cta{display:flex; align-items:center; justify-content:space-between; gap:20px 32px; margin-top:20px; padding:18px 24px; border:1px solid var(--band-line); border-radius:6px;}
+.quals-cta-text{display:flex; align-items:center; gap:16px; min-width:0;}
+.quals-cta-mark{flex:none; color:var(--band-ink);}
+.quals-cta-text p{margin:0; max-width:62ch; font-size:15px; line-height:1.55; color:var(--band-muted);}
+.quals-cta-text strong{color:var(--band-ink); font-weight:600;}
+.quals-cta-actions{flex:none; display:flex; align-items:center; gap:22px;}
+.quals-cta-link{color:var(--band-ink); font-size:14px; font-weight:500; text-decoration:underline; text-underline-offset:4px; text-decoration-color:rgba(236,236,234,.4);}
+.quals-cta-link:hover{color:var(--accent-on-band); text-decoration-color:currentColor;}
+@media (max-width:760px){
+  .quals-cta{flex-direction:column; align-items:flex-start;}
+  .quals-cta-actions{flex-wrap:wrap;}
+}
 .stat{display:grid; grid-row:span 2; grid-template-rows:subgrid; row-gap:10px; background:var(--band); box-shadow:-1px 0 0 var(--band-line), 0 -1px 0 var(--band-line); padding:26px 24px 28px;}
 .stat .num{
   font-family:var(--font-display);
