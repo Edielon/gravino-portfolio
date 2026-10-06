@@ -241,6 +241,17 @@ header.site-nav{
 .quals-cta .btn{flex:none;}
 .quals-cta-text{display:flex; align-items:center; gap:16px; min-width:0;}
 .quals-cta-mark{flex:none; color:var(--band-ink);}
+/* The orange H draws itself stroke by stroke, holds, fades and redraws: a calm 4s loop to catch a scrolling eye. */
+.quals-cta-h{stroke-dasharray:1; stroke-dashoffset:0;}
+@keyframes quals-mark-draw{
+  0%{stroke-dashoffset:1; opacity:1;}
+  30%{stroke-dashoffset:0;}
+  80%{stroke-dashoffset:0; opacity:1;}
+  100%{stroke-dashoffset:0; opacity:0;}
+}
+@media (prefers-reduced-motion: no-preference){
+  .quals-cta-h{animation:quals-mark-draw 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;}
+}
 .quals-cta-text p{margin:0; max-width:62ch; font-size:15px; line-height:1.55; color:var(--band-muted);}
 .quals-cta-text strong{color:var(--band-ink); font-weight:600;}
 @media (max-width:760px){

@@ -1149,3 +1149,12 @@ test('home qualifications table ends with a HannBuilders teaser strip leading to
   assert.ok(!css.includes('.quals-cta-link') && !css.includes('.quals-cta-actions'), 'no leftover link styles');
   assert.match(css, /@media \(max-width:760px\)\{\s*\.quals-cta\{flex-direction:column; align-items:flex-start;\}/, 'stacks on phones');
 });
+
+test('HannBuilders mark in the home strip loops a gentle draw-in of its orange H', () => {
+  const html = read('index.html');
+  assert.match(html, /<svg class="quals-cta-mark"[^>]*>[\s\S]*?<path class="quals-cta-h" pathLength="1" d="M8 3v20M18 3v20M8 13h10" stroke="#E2621B"\/><\/svg>/);
+  const css = read('styles.css');
+  assert.match(cssRule(css, '.quals-cta-h'), /stroke-dasharray:1/);
+  assert.match(css, /@keyframes quals-mark-draw\{/);
+  assert.match(css, /@media \(prefers-reduced-motion: no-preference\)\{\s*\.quals-cta-h\{animation:quals-mark-draw 4s [^;]*infinite;\}/, 'loops only when motion is allowed');
+});
