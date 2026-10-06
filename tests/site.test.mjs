@@ -410,7 +410,7 @@ test('case 3 tells the Project DeRisk story with personal details kept out', () 
 
 test('home page case 3 card shows a project screen, linked to its case page', () => {
   const cards = [...read('index.html').matchAll(/<article class="case">([\s\S]*?)<\/article>/g)];
-  const img = cards[2][1].match(/<a class="case-photo case-photo--img" href="case-project-derisk.html"[^>]*>\s*<img src="([^"]+)" alt="[^"]+" width="\d+" height="\d+"/);
+  const img = cards[2][1].match(/<a class="case-photo case-photo--img case-photo--roomy" href="case-project-derisk.html"[^>]*>\s*<img src="([^"]+)" alt="[^"]+" width="\d+" height="\d+"/);
   assert.ok(img, 'photo with alt text and reserved size');
   assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)));
 });
@@ -1192,4 +1192,9 @@ test('HannBuilders mark in the home strip loops a gentle draw-in of its orange H
   assert.match(cssRule(css, '.quals-cta-h'), /stroke-dasharray:1/);
   assert.match(css, /@keyframes quals-mark-draw\{/);
   assert.match(css, /@media \(prefers-reduced-motion: no-preference\)\{\s*\.quals-cta-h\{animation:quals-mark-draw 4s [^;]*infinite;\}/, 'loops only when motion is allowed');
+});
+
+test('home page case 3 card photo has the same breathing room as case 2', () => {
+  const html = read('index.html');
+  assert.match(html, /<a class="case-photo case-photo--img case-photo--roomy" href="case-project-derisk\.html" tabindex="-1">/);
 });
