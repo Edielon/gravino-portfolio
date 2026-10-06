@@ -105,7 +105,7 @@ test('contact details have icons, copy buttons and a LinkedIn link', () => {
 
   const li = lines[1].match(/<a class="c-row c-action"[^>]*>/);
   assert.ok(li, 'LinkedIn row is a link');
-  assert.match(li[0], /href="https:\/\/www\.linkedin\.com\/"/);
+  assert.match(li[0], /href="https:\/\/www\.linkedin\.com\/in\/engrhannycresellegravino"/);
   assert.match(li[0], /target="_blank"/);
   assert.match(li[0], /rel="noopener noreferrer"/);
 
@@ -320,8 +320,8 @@ test('each case has its own page with the full story, figures and a next-case li
     assert.ok(foot, `${file} graphite footer`);
     assert.match(foot[0], /<li><a href="#top">Back to top<\/a><\/li>/);
     assert.match(html, /<ul class="case-figures">\s*<li><strong>/);
-    // Cases 1 and 2 are full story pages (tested separately); case 3 still holds the placeholder copy.
-    if (i < 2) return;
+    // All three cases are now full story pages, tested separately below.
+    if (i < 3) return;
     assert.match(html, /<div class="case-photo"><span>Add project photo or drawing<\/span><\/div>/);
     // Placeholder copy: the current long text, one section per step.
     const home = read('index.html');
@@ -397,6 +397,22 @@ test('case 2 compares the building before and after the retrofit, in pairs of lo
   const order = [...pairs[1].matchAll(/<source src="assets\/cases\/norbert-retrofit\/([a-z-]+-\d)\.mp4"/g)].map((m) => m[1]);
   assert.deepEqual(order, ['existing-mode-1', 'retrofit-mode-1', 'existing-mode-2', 'retrofit-mode-2', 'existing-mode-3', 'retrofit-mode-3']);
   assert.match(read('styles.css'), /\.story-videos--pairs\{grid-template-columns:repeat\(2, 1fr\);/);
+});
+
+test('case 3 tells the Project DeRisk story with personal details kept out', () => {
+  const { html, body } = checkStoryPage('case-project-derisk.html', { minImages: 17, videoCount: 0, minGallery: 2 });
+  for (const hidden of ['Heidi', 'Doran', 'Fennell', 'Bartholomaeus', 'GIOVANNI', 'Giovanni', 'dixonhomes.com', 'senterprisys.com.au', 'Wooley']) {
+    assert.ok(!html.includes(hidden), `${hidden} not published`);
+  }
+  assert.match(body, /<strong>2 &rarr; 1<\/strong>/);
+  assert.match(body, /Takeoff/);
+});
+
+test('home page case 3 card shows a project screen, linked to its case page', () => {
+  const cards = [...read('index.html').matchAll(/<article class="case">([\s\S]*?)<\/article>/g)];
+  const img = cards[2][1].match(/<a class="case-photo case-photo--img" href="case-project-derisk.html"[^>]*>\s*<img src="([^"]+)" alt="[^"]+" width="\d+" height="\d+"/);
+  assert.ok(img, 'photo with alt text and reserved size');
+  assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)));
 });
 
 test('home page case 2 card shows the retrofit model photo, linked to its case page', () => {

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Project DeRisk · Gravino Engineering</title>
-<meta name="description" content="Project DeRisk: Two disconnected planning templates were slowing estimates and letting errors through.">
+<meta name="description" content="How two job templates became one, how the estimating screens were redesigned with the estimators who use them, and how every release was tested and documented.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -28,7 +28,7 @@
 </header>
 
 <main>
-  <article class="case-page">
+  <article class="case-page case-story-page">
     <div class="wrap">
       <a class="case-back" href="index.html#work">All work</a>
       <div class="case-head">
@@ -38,36 +38,148 @@
           <p class="case-meta">Queensland, Australia &middot; 2023 to present</p>
         </div>
       </div>
-      <figure class="case-media">
-        <div class="case-photo"><span>Add project photo or drawing</span></div>
+
+      <p class="story-lede">Dixon Homes runs its house builds through Project DeRisk, construction estimating and job management software made by Senterprisys in Queensland. As housing estimator and software testing support, I merged its two job templates into one, redesigned the estimating screens with the people who use them, tested every release, and wrote the help that comes with it.</p>
+
+      <figure class="story-figure story-hero">
+        <a class="file-open" href="assets/cases/project-derisk/takeoff-on-plans.jpg" data-title="On-screen takeoff"><img src="assets/cases/project-derisk/takeoff-on-plans.jpg" alt="Project DeRisk takeoff screen with a house floor plan, the measured floor area shaded in cyan" width="1378" height="738" decoding="async"></a>
+        <figcaption>On-screen takeoff: measuring a house straight off its floor plan.</figcaption>
       </figure>
+
       <ul class="case-figures">
         <li><strong>2 &rarr; 1</strong><span>templates merged into one system</span></li>
+        <li><strong>5 years</strong><span>of jobs reviewed to build it</span></li>
+        <li><strong>Rev 8.0</strong><span>of the combined template</span></li>
+        <li><strong>2</strong><span>versions of every checklist</span></li>
       </ul>
-      <div class="case-sections">
-        <section class="case-section">
-          <h2>Problem</h2>
-          <p>Housing contractor Dixon Homes ran administrative and construction planning through two disconnected templates, which slowed estimating and let errors through.</p>
-        </section>
-        <section class="case-section">
-          <h2>Approach</h2>
-          <p>Merged both templates into one system, automated task linking and removed duplicate work. Worked with estimators on cost methodology and pricing models, then built and tested interface mock-ups with the development team over several review cycles.</p>
-        </section>
-        <section class="case-section">
-          <h2>Result</h2>
-          <p>A faster, more accurate estimating workflow now used across the team, with user manuals and checklists built in so new estimators get up to speed quickly.</p>
-        </section>
-        <section class="case-section">
-          <h2>Tools</h2>
-          <p>MS Project &middot; Jira &middot; Azure DevOps &middot; Canva</p>
-        </section>
+
+      <div class="story-body">
+<section class="story-chapter">
+<h2>What the software does</h2>
+<p>Every house starts as a job in Project DeRisk: the client, the lot, the salesperson, the supervisor and the council. Estimators then measure quantities straight off the drawing plans, and the software builds the schedule and costs from there.</p>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/project-derisk/client-details-screen.jpg" data-title="A job record. Client and staff details are blurred"><img src="assets/cases/project-derisk/client-details-screen.jpg" alt="Project DeRisk job record screen with customer, lot and appointment panels; personal details are blurred" width="1361" height="488" loading="lazy" decoding="async"></a>
+  <figcaption>A job record. Client and staff details are blurred.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/job-features-menu.jpg" data-title="Job settings set up per region: suburbs, councils, supervisors and more"><img src="assets/cases/project-derisk/job-features-menu.jpg" alt="Jobs menu listing settings such as suburbs, post codes, councils, salespersons and supervisors" width="531" height="498" loading="lazy" decoding="async"></a>
+  <figcaption>Job settings set up per region: suburbs, councils, supervisors and more.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>Two templates for one house</h2>
+<p>Each job ran on two templates, one for admin and one for construction. Staff jumped between them, entered the same tasks twice and lost track of where a job was up to.</p>
+<p>With the project manager, I went through the critical tasks from the last five years of jobs, removed the duplicates and merged what was left into one template that follows a job from contract to handover.</p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/templates-before.jpg" data-title="Before: separate admin and construction templates"><img src="assets/cases/project-derisk/templates-before.jpg" alt="Project templates list with separate admin and construction templates" width="564" height="448" loading="lazy" decoding="async"></a>
+  <figcaption>Before: separate admin and construction templates.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/templates-after.jpg" data-title="After: one combined template"><img src="assets/cases/project-derisk/templates-after.jpg" alt="Project templates list with a single combined template" width="558" height="446" loading="lazy" decoding="async"></a>
+  <figcaption>After: one combined template.</figcaption>
+</figure>
+</div>
+<p class="story-key"><strong>2 &rarr; 1</strong><span>templates merged into one, from five years of jobs</span></p>
+<p>I split the tasks into main ones, which every job has, and optional ones that only some jobs need, so each team sees only the tasks that apply to the job in front of them.</p>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/project-derisk/main-and-optional-tasks.jpg" data-title="Tasks prioritised against the template timeline and the current job"><img src="assets/cases/project-derisk/main-and-optional-tasks.jpg" alt="Task list for a job showing task names, resources and priority" width="789" height="224" loading="lazy" decoding="async"></a>
+  <figcaption>Tasks prioritised against the template timeline and the current job.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>A schedule that runs itself</h2>
+<p>I rebuilt the template in MS Project so every task links to the tasks that depend on it, together with its resources and payment stage. When a stage is finished, the next one is scheduled and the progress payment can be billed automatically, instead of someone chasing it by hand.</p>
+<p>The finished template sits inside the software, where supervisors and consultants track each job's daily progress against it.</p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/full-project-template.jpg" data-title="The full combined template, uploaded into the software"><img src="assets/cases/project-derisk/full-project-template.jpg" alt="Long list of linked tasks in the combined project template" width="1163" height="1179" loading="lazy" decoding="async"></a>
+  <figcaption>The full combined template, uploaded into the software.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/template-revision-email.jpg" data-title="Revision 8.0, sent for review with every change listed. Names and email addresses are blurred"><img src="assets/cases/project-derisk/template-revision-email.jpg" alt="Email describing the changes in Revision 8.0 of the combined template; names and addresses are blurred" width="1291" height="816" loading="lazy" decoding="async"></a>
+  <figcaption>Revision 8.0, sent for review with every change listed. Names and email addresses are blurred.</figcaption>
+</figure>
+</div>
+</section>
+<section class="story-chapter">
+<h2>Putting Takeoff where estimators look</h2>
+<p>Estimators measure from drawings all day, yet the Takeoff button was buried in a row of small text buttons. I mocked up a new layout in Canva from an estimator's point of view: a side menu, supplier pricing by region, and Takeoff where you would look for it.</p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/estimating-screen-before.jpg" data-title="Before: Takeoff hidden among small text buttons"><img src="assets/cases/project-derisk/estimating-screen-before.jpg" alt="Estimating screen with a row of small text buttons along the top, Takeoff among them" width="1047" height="853" loading="lazy" decoding="async"></a>
+  <figcaption>Before: Takeoff hidden among small text buttons.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/estimating-screen-mockup.jpg" data-title="My mock-up: a side menu and every estimating panel on one screen. Supplier contacts are blurred"><img src="assets/cases/project-derisk/estimating-screen-mockup.jpg" alt="Mock-up of the estimating screen with a side menu and materials, assemblies, suppliers and estimates on one screen; supplier contacts blurred" width="1377" height="774" loading="lazy" decoding="async"></a>
+  <figcaption>My mock-up: a side menu and every estimating panel on one screen. Supplier contacts are blurred.</figcaption>
+</figure>
+</div>
+<p>Each mock-up went to the development manager, came back with comments and went round again until it was approved, and then a developer built it. When the new layout clashed with the existing software, I proposed showing all the estimating data on a single screen instead.</p>
+<p>The Project and Job screens got the same treatment: consistent icons, no duplicate or dead buttons, new screens for cost estimates, materials and suppliers, and an Edit button that goes straight to the job.</p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/project-screen-mockup.jpg" data-title="Project screen, new layout"><img src="assets/cases/project-derisk/project-screen-mockup.jpg" alt="Mock-up of the Project screen with templates, network diagram, tasks and order codes" width="1049" height="588" loading="lazy" decoding="async"></a>
+  <figcaption>Project screen, new layout.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/job-screen-mockup.jpg" data-title="Job screen, new layout"><img src="assets/cases/project-derisk/job-screen-mockup.jpg" alt="Mock-up of the Job screen with customer, site, payments and documents panels" width="1034" height="581" loading="lazy" decoding="async"></a>
+  <figcaption>Job screen, new layout.</figcaption>
+</figure>
+</div>
+</section>
+<section class="story-chapter">
+<h2>Testing before it ships</h2>
+<p>Before each release I tested the core features for calculation errors, data that did not match, and slow or broken screens. Measurements and estimates on large jobs tended to crash, so I reproduced each case and wrote it up for the developers to fix.</p>
+<p>Users report problems in Jira. I triage each one, assign it to the right developer and give it a priority, so the issues that stop work are fixed first.</p>
+<figure class="story-figure story-figure--wide">
+  <a class="file-open" href="assets/cases/project-derisk/priority-board-email.jpg" data-title="Consolidating the priority board at the client&#x27;s request. Names and email addresses are blurred"><img src="assets/cases/project-derisk/priority-board-email.jpg" alt="Email confirming the Jira priority board was updated and related items consolidated; names and addresses are blurred" width="1290" height="811" loading="lazy" decoding="async"></a>
+  <figcaption>Consolidating the priority board at the client's request. Names and email addresses are blurred.</figcaption>
+</figure>
+</section>
+<section class="story-chapter">
+<h2>Help that lives in the software</h2>
+<p>Every change needs instructions. I wrote the user manual and a checklist for each task, in two versions, one with screenshots and one without, because people learn differently. They sit in the software's Help, one click from the screen they describe.</p>
+<p class="story-key"><strong>2</strong><span>versions of every checklist, with and without screenshots</span></p>
+<div class="story-pair">
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/user-manual.jpg" data-title="The checklist manual"><img src="assets/cases/project-derisk/user-manual.jpg" alt="Cover and table of contents of the Project DeRisk checklist manual" width="1015" height="525" loading="lazy" decoding="async"></a>
+  <figcaption>The checklist manual.</figcaption>
+</figure>
+<figure class="story-figure">
+  <a class="file-open" href="assets/cases/project-derisk/checklist-in-help.jpg" data-title="Checklists open from the software&#x27;s Help"><img src="assets/cases/project-derisk/checklist-in-help.jpg" alt="View Checklists window inside the software with a list of checklists and an open how-to page" width="1400" height="755" loading="lazy" decoding="async"></a>
+  <figcaption>Checklists open from the software's Help.</figcaption>
+</figure>
+</div>
+<p>The combined template is what the client's teams now work from every day, and it keeps improving with each round of user feedback.</p>
+<p class="story-tools"><span>Tools</span>MS Project &middot; Jira &middot; Azure DevOps &middot; Canva &middot; Project DeRisk</p>
+</section>
       </div>
+
+      <section class="story-file" aria-labelledby="file-title">
+        <h2 id="file-title">More from the project file</h2>
+        <p>Select any figure to see it full size. Personal details and logos are blurred throughout.</p>
+<h3>Where I work</h3>
+<ul class="file-grid">
+<li><a class="file-open" href="assets/cases/project-derisk/office-map-region.jpg" data-title="Office location, Brisbane"><img src="assets/cases/project-derisk/office-map-region-thumb.jpg" alt="Map of greater Brisbane with the Senterprisys office in Rocklea marked; logos blurred" width="560" height="270" loading="lazy" decoding="async"><span>Office location, Brisbane</span></a></li>
+<li><a class="file-open" href="assets/cases/project-derisk/office-map-street.jpg" data-title="Office location, Rocklea"><img src="assets/cases/project-derisk/office-map-street-thumb.jpg" alt="Street map of Rocklea showing the office beside the Ipswich Motorway" width="560" height="279" loading="lazy" decoding="async"><span>Office location, Rocklea</span></a></li>
+</ul>
+      </section>
+
       <a class="case-next" href="case-cor-jesu-law.html">
         <span class="case-next-label">Next case</span>
         <span class="case-next-title">01 &middot; Center for Law and Graduate Studies</span>
       </a>
     </div>
   </article>
+
+  <dialog class="cert-dialog" aria-labelledby="cert-dialog-title">
+    <div class="cert-dialog-bar">
+      <h3 id="cert-dialog-title"></h3>
+      <button class="cert-close" type="button" aria-label="Close figure">&times;</button>
+    </div>
+    <img class="cert-image" alt="" src="" decoding="async">
+  </dialog>
 </main>
 
 <footer class="site-foot">
@@ -84,5 +196,51 @@
     </nav>
   </div>
 </footer>
+<script>
+(() => {
+  // Figures open full size in the same pop-up the certificates use.
+  const dialog = document.querySelector('.cert-dialog');
+  if (!dialog || typeof dialog.showModal !== 'function') return;
+  const image = dialog.querySelector('.cert-image');
+  const title = dialog.querySelector('#cert-dialog-title');
+  let opener = null;
+  document.querySelectorAll('.file-open').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      opener = link;
+      image.removeAttribute('width');
+      image.removeAttribute('height');
+      image.src = link.getAttribute('href');
+      image.alt = link.dataset.title;
+      title.textContent = link.dataset.title;
+      dialog.showModal();
+    });
+  });
+  dialog.querySelector('.cert-close').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener('close', () => { if (opener) opener.focus(); });
+})();
+</script>
+<script>
+(() => {
+  // The mode videos loop like GIFs. With prefers-reduced-motion: reduce they stay on their first frame
+  // and offer controls instead, so motion only starts when the visitor asks for it.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const videos = [...document.querySelectorAll('.story-video video')];
+  const apply = () => videos.forEach((video) => {
+    if (reduce.matches) { video.pause(); video.controls = true; }
+    else { video.controls = false; video.play().catch(() => {}); }
+  });
+  apply();
+  reduce.addEventListener('change', apply);
+  // Some browsers hold back autoplay until the page is on screen or the visitor interacts; retry then.
+  const start = (video) => { if (!reduce.matches && video.paused) video.play().catch(() => {}); };
+  if ('IntersectionObserver' in window) {
+    const seen = new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) start(e.target); }));
+    videos.forEach((video) => seen.observe(video));
+  }
+  ['pointerdown', 'keydown'].forEach((type) => window.addEventListener(type, () => videos.forEach(start), { once: true }));
+})();
+</script>
 </body>
 </html>

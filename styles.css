@@ -727,7 +727,7 @@ section.work{border-top:none;}
   text-transform:uppercase;
   color:var(--band-muted);
 }
-.c-row .v{font-family:var(--font-body); font-size:14px; color:var(--band-ink);}
+.c-row .v{min-width:0; overflow-wrap:break-word; font-family:var(--font-body); font-size:14px; color:var(--band-ink);}
 
 /* Contact rows as actions: email/phone copy, LinkedIn opens.
    Hover grows a burgundy tile behind the icon from the left (same move as the case-number divider);
@@ -825,6 +825,8 @@ section.work{border-top:none;}
   .c-action:hover .c-arrow, .c-action:focus-visible .c-arrow{transform:none;}
 }
 @media (max-width:760px){.contact-grid{grid-template-columns:1fr; gap:36px;}}
+/* On phones the hover-only hint has nothing to show, so the value gets its column. */
+@media (max-width:520px){ .c-row, .c-action{grid-template-columns:96px 1fr;} .c-hint{display:none;} }
 
 /* Full-bleed graphite footer; the top rule keeps it distinct from the graphite contact band. */
 footer.site-foot{
