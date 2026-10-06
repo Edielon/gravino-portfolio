@@ -1133,17 +1133,19 @@ test('services quote section stacks to one column on small screens (stacking rul
 
 test('home qualifications table ends with a HannBuilders teaser strip leading to Services', () => {
   const html = read('index.html');
-  const strip = html.match(/<\/ul>\s*<div class="quals-cta">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>\s*<\/div>\s*<\/section>/);
+  const strip = html.match(/<\/ul>\s*<div class="quals-cta">([\s\S]*?)<\/div>\s*<\/div>\s*<\/div>\s*<\/section>/);
   assert.ok(strip, 'strip sits right under the qualifications list, inside the band');
   assert.match(strip[1], /<svg class="quals-cta-mark"[^>]*aria-hidden="true"/, 'decorative HannBuilders mark');
   assert.match(strip[1], /<p>Now taking projects through <strong>HannBuilders<\/strong>: design-and-build, seismic retrofit and project management, in the Philippines and remotely\.<\/p>/);
-  assert.match(strip[1], /<div class="quals-cta-actions"><a class="btn btn-primary" href="services\.html">Explore Services<\/a><a class="quals-cta-link" href="services\.html#quote">Request a quote<\/a>/);
+  // Just the one button: no separate quote link.
+  assert.match(strip[1], /<a class="btn btn-primary" href="services\.html">Explore Services<\/a>\s*$/);
+  assert.ok(!strip[1].includes('Request a quote'), 'no quote link in the strip');
   const css = read('styles.css');
   const box = cssRule(css, '.quals-cta');
   assert.match(box, /display:flex/);
   assert.match(box, /justify-content:space-between/, 'text left, actions right');
   assert.match(box, /border:1px solid var\(--band-line\)/, 'framed like the table above');
   assert.match(box, /border-radius:6px/, 'same corners as the table');
-  assert.match(cssRule(css, '.quals-cta-link'), /color:var\(--band-ink\)/);
+  assert.ok(!css.includes('.quals-cta-link') && !css.includes('.quals-cta-actions'), 'no leftover link styles');
   assert.match(css, /@media \(max-width:760px\)\{\s*\.quals-cta\{flex-direction:column; align-items:flex-start;\}/, 'stacks on phones');
 });
