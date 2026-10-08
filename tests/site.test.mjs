@@ -1198,3 +1198,14 @@ test('home page case 3 card photo has the same breathing room as case 2', () => 
   const html = read('index.html');
   assert.match(html, /<a class="case-photo case-photo--img case-photo--roomy" href="case-project-derisk\.html" tabindex="-1">/);
 });
+
+test('services founder block shows the HannBuilders uniform portrait as the headshot', () => {
+  const html = read('services.html');
+  const img = html.match(/<div class="hb-fphoto-b"><img src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"/);
+  assert.ok(img, 'headshot with alt text and reserved size');
+  assert.equal(img[1], 'assets/hannbuilders-headshot.jpg');
+  assert.match(img[2], /HannBuilders/);
+  assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)), 'file exists');
+  // The resume page keeps its own portrait.
+  assert.match(read('resume.html'), /<img class="headshot" src="assets\/headshot\.jpg"/);
+});
