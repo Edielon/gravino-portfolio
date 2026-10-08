@@ -158,6 +158,209 @@
     <p class="hb-fine hb-reveal">Projects delivered while working with WMCabardo Engineering &amp; Consulting and ADRA Constructions Corporation.</p>
   </div></section>
 
+  <section class="hb-section" id="business" aria-labelledby="hb-biz-title"><div class="wrap">
+    <div class="hb-head hb-reveal"><div><span class="hb-tag">Our business projects</span><h2 id="hb-biz-title">Selected work by Hann Builders</h2></div><p>Engineering studies and project work by Hann Builders Engineering &amp; Consulting, combining structural modelling with clear preliminary cost planning.</p></div>
+    <!-- Each business project is one .hb-bz card plus one .hb-study dialog; the grid, viewer and dialog script are shared. -->
+    <div class="hb-biz">
+      <article class="hb-bz hb-bz--featured hb-reveal" aria-labelledby="bz-two-storey-title">
+        <figure class="hb-model" data-model="assets/hb-projects/two-storey/model.json">
+          <div class="hb-model-stage">
+            <img class="hb-model-poster" src="assets/hb-projects/two-storey/model-poster.jpg" alt="ETABS model of the two-storey steel frame: wide-flange columns and beams on concrete pedestals and tie beams, with two floor levels" width="1200" height="800" loading="lazy" decoding="async">
+            <canvas class="hb-model-canvas" aria-hidden="true" hidden></canvas>
+          </div>
+          <figcaption><span>ETABS structural model, steel frame alternative</span><button class="hb-model-toggle" type="button" hidden>Pause rotation</button></figcaption>
+        </figure>
+        <div class="hb-bz-body">
+          <p class="hb-bz-credit">Hann Builders Engineering &amp; Consulting</p>
+          <h3 id="bz-two-storey-title">Two-Storey Residential Building: Structural Modelling and Preliminary Cost Study</h3>
+          <p class="hb-bz-summary">A two-storey building study combining ETABS structural modelling with a preliminary comparison of steel and reinforced concrete framing costs.</p>
+          <ul class="hb-bz-tags" aria-label="Project tags"><li>Two-storey building</li><li>Structural modelling</li><li>ETABS</li><li>Preliminary cost study</li><li>Steel versus reinforced concrete</li></ul>
+          <div class="hb-bz-findings" role="group" aria-label="Preliminary cost findings">
+            <div class="hb-bz-f"><p class="hb-bz-f-label"><b>Comparison A</b>Labour at 40% of material cost</p><p class="hb-bz-f-value">₱424,185.00</p><p class="hb-bz-f-note">estimated lower for the steel frame</p></div>
+            <div class="hb-bz-f"><p class="hb-bz-f-label"><b>Comparison B</b>Steel-work labour at ₱25/kg</p><p class="hb-bz-f-value">₱512,767.15</p><p class="hb-bz-f-note">estimated lower for the steel frame</p></div>
+          </div>
+          <p class="hb-bz-fine">Two alternative labour assumptions for the same preliminary study, not separate or combined savings.</p>
+          <button class="hb-pill hb-pill--dark hb-bz-open" type="button" data-study="study-two-storey" aria-haspopup="dialog">View project study <span class="hb-ar" aria-hidden="true">&rarr;</span></button>
+        </div>
+      </article>
+      <article class="hb-bz hb-bz--preschool hb-reveal" aria-labelledby="bz-preschool-title">
+        <figure class="hb-model" data-model="assets/hb-projects/preschool/model.json">
+          <div class="hb-model-stage">
+            <img class="hb-model-poster" src="assets/hb-projects/preschool/model-poster.jpg" alt="3D view of the one-storey preschool drawn from its CAD plan and elevations: classroom with a flat roof slab, glazed windows and a covered terrace at the entrance" width="1200" height="800" loading="lazy" decoding="async">
+            <canvas class="hb-model-canvas" aria-hidden="true" hidden></canvas>
+          </div>
+          <figcaption><span>3D view drawn from the CAD floor plan and elevations</span><button class="hb-model-toggle" type="button" hidden>Pause rotation</button></figcaption>
+        </figure>
+        <div class="hb-bz-body">
+          <p class="hb-bz-credit">Hann Builders Engineering &amp; Consulting</p>
+          <h3 id="bz-preschool-title">One-Storey Preschool Building: CAD Design and Visualisation</h3>
+          <p class="hb-pre-place">Digos City, Davao del Sur</p>
+          <p class="hb-bz-summary">A preschool project presented through CAD drawings and spatial visualisation, showing the planned layout and building form.</p>
+          <ul class="hb-bz-tags" aria-label="Project tags"><li>Preschool</li><li>AutoCAD</li><li>Floor plans</li><li>Building elevations</li><li>3D visualisation</li></ul>
+          <dl class="hb-pre-facts">
+            <div><dt>Classroom grid</dt><dd>7.0 &times; 9.0 m</dd></div>
+            <div><dt>Floor level</dt><dd>+400 mm</dd></div>
+            <div><dt>Floor to ceiling</dt><dd>2.4 m</dd></div>
+          </dl>
+          <button class="hb-pill hb-pill--dark hb-bz-open" type="button" data-study="study-preschool" aria-haspopup="dialog">View project study <span class="hb-ar" aria-hidden="true">&rarr;</span></button>
+        </div>
+      </article>
+    </div>
+
+    <dialog class="hb-study" id="study-two-storey" aria-labelledby="study-two-storey-title">
+      <div class="hb-study-head">
+        <div><p class="hb-bz-credit">Hann Builders Engineering &amp; Consulting</p><h2 id="study-two-storey-title">Two-Storey Residential Building: Structural Modelling and Preliminary Cost Study</h2></div>
+        <button class="hb-study-close" type="button" aria-label="Close project study">&times;</button>
+      </div>
+      <div class="hb-study-body">
+        <section class="hb-study-sec" aria-labelledby="st-overview">
+          <h3 class="hb-study-h" id="st-overview"><span class="hb-study-n">01</span>Project overview</h3>
+          <p>A preliminary study for a two-storey residential building, prepared by Engr. Hanny Creselle Gravino. The steel frame alternative was modelled in ETABS, and the civil works for a steel frame and a reinforced concrete frame were estimated side by side to compare the two framing options early.</p>
+          <dl class="hb-study-facts">
+            <div><dt>Building</dt><dd>Two-storey residential building</dd></div>
+            <div><dt>Scope</dt><dd>Structural modelling (steel frame) and preliminary cost study</dd></div>
+            <div><dt>Estimates</dt><dd>Reinforced concrete frame, and steel frame under two labour assumptions</dd></div>
+            <div><dt>Status</dt><dd>Preliminary study</dd></div>
+          </dl>
+        </section>
+
+        <section class="hb-study-sec" aria-labelledby="st-model">
+          <h3 class="hb-study-h" id="st-model"><span class="hb-study-n">02</span>Structural model</h3>
+          <figure class="hb-model" data-model="assets/hb-projects/two-storey/model.json">
+            <div class="hb-model-stage">
+              <img class="hb-model-poster" src="assets/hb-projects/two-storey/model-poster.jpg" alt="ETABS model of the two-storey steel frame, seen from above at an angle" width="1200" height="800" loading="lazy" decoding="async">
+              <canvas class="hb-model-canvas" aria-hidden="true" hidden></canvas>
+            </div>
+            <figcaption><span>ETABS structural model, steel frame alternative. Drag to turn it.</span><button class="hb-model-toggle" type="button" hidden>Pause rotation</button></figcaption>
+          </figure>
+          <ul class="hb-model-key" aria-label="Model key"><li><i class="hb-key-steel"></i>Steel frame</li><li><i class="hb-key-conc"></i>Concrete pedestals and tie beams</li><li><i class="hb-key-floor"></i>Floor areas</li></ul>
+          <dl class="hb-study-facts">
+            <div><dt>Levels</dt><dd>Pedestal level 1.2 m above the base; second floor 3.4 m above it; roof deck a further 3.4 m</dd></div>
+            <div><dt>Grid</dt><dd>Lines A to G by 1 to 5 (with 3&prime;), 20.0 m by 10.0 m</dd></div>
+            <div><dt>Steel frame</dt><dd>Wide-flange (H) columns and beams</dd></div>
+            <div><dt>Substructure</dt><dd>500 &times; 500 mm concrete pedestals and 300 &times; 400 mm footing tie beams</dd></div>
+            <div><dt>Floors</dt><dd>125 mm composite deck at the second floor; 125 mm slab at the roof deck</dd></div>
+          </dl>
+          <p class="hb-study-note">The model shown is the steel frame alternative. No ETABS model of the reinforced concrete frame is part of this study, and analysis and design results are not summarised here.</p>
+        </section>
+
+        <section class="hb-study-sec" aria-labelledby="st-compare">
+          <h3 class="hb-study-h" id="st-compare"><span class="hb-study-n">03</span>Preliminary cost comparison</h3>
+          <p>The same building, priced two ways. Each comparison uses a different labour assumption for the steel frame; they are alternatives, not separate projects or savings to be added together.</p>
+          <div class="hb-cmp">
+            <div class="hb-cmp-col">
+              <p class="hb-cmp-label">Comparison A &middot; Labour based on 40% of material cost</p>
+              <p class="hb-cmp-basis">Labour cost estimated at 40% of material cost.</p>
+              <dl class="hb-cmp-figs">
+                <div><dt>Steel frame, total direct cost</dt><dd>₱2,853,969.62</dd></div>
+                <div><dt>Reinforced concrete frame, total direct cost</dt><dd>₱3,278,154.11</dd></div>
+              </dl>
+              <p class="hb-cmp-finding">The steel frame alternative is estimated to cost ₱424,185.00 less than the reinforced concrete frame alternative under this labour assumption.</p>
+            </div>
+            <div class="hb-cmp-col">
+              <p class="hb-cmp-label">Comparison B &middot; Steel-work labour based on ₱25/kg</p>
+              <p class="hb-cmp-basis">Steel-work labour estimated at ₱25 per kilogram of steel.</p>
+              <dl class="hb-cmp-figs">
+                <div><dt>Steel frame, total direct cost</dt><dd>₱2,765,386.96</dd></div>
+                <div><dt>Reinforced concrete frame, total direct cost</dt><dd>₱3,278,154.11</dd></div>
+              </dl>
+              <p class="hb-cmp-finding">The steel frame alternative is estimated to cost ₱512,767.15 less than the reinforced concrete frame alternative under this labour assumption.</p>
+              <p class="hb-cmp-detail">In this estimate, ₱25/kg applies to the 17,716.53 kg of steel works (steel and its bolts and connections); concrete and formwork labour for the steel frame stays at 40% of their material cost. The reinforced concrete frame is the same estimate as in Comparison A, with labour at 40% of material cost.</p>
+            </div>
+          </div>
+          <p class="hb-study-note">Preliminary estimates to compare framing options, not quotations. The differences are estimates, not achieved savings.</p>
+        </section>
+
+        <section class="hb-study-sec" aria-labelledby="st-summary">
+          <h3 class="hb-study-h" id="st-summary"><span class="hb-study-n">04</span>Civil works direct cost summary</h3>
+          <div class="hb-sum">
+            <div class="hb-sum-col"><p class="hb-sum-title">Reinforced concrete frame</p><dl>
+              <div><dt>Material cost</dt><dd>₱2,341,538.65</dd></div>
+              <div><dt>Labour cost (40% of material)</dt><dd>₱936,615.46</dd></div>
+              <div class="hb-sum-total"><dt>Total direct cost</dt><dd>₱3,278,154.11</dd></div></dl></div>
+            <div class="hb-sum-col"><p class="hb-sum-title">Steel frame &middot; Comparison A</p><dl>
+              <div><dt>Material cost</dt><dd>₱2,038,549.73</dd></div>
+              <div><dt>Labour cost (40% of material)</dt><dd>₱815,419.89</dd></div>
+              <div class="hb-sum-total"><dt>Total direct cost</dt><dd>₱2,853,969.62</dd></div></dl></div>
+            <div class="hb-sum-col"><p class="hb-sum-title">Steel frame &middot; Comparison B</p><dl>
+              <div><dt>Material cost</dt><dd>₱2,038,549.73</dd></div>
+              <div><dt>Labour cost (₱25/kg steel works, 40% other)</dt><dd>₱726,837.24</dd></div>
+              <div class="hb-sum-total"><dt>Total direct cost</dt><dd>₱2,765,386.96</dd></div></dl></div>
+          </div>
+          <div class="hb-sum-breakdown">
+            <div><p class="hb-sum-title">Reinforced concrete frame materials</p><dl>
+              <div><dt>Columns</dt><dd>₱902,366.91</dd></div>
+              <div><dt>Footing tie beams</dt><dd>₱382,890.98</dd></div>
+              <div><dt>Beams</dt><dd>₱607,285.54</dd></div>
+              <div><dt>Formworks</dt><dd>₱448,995.23</dd></div></dl></div>
+            <div><p class="hb-sum-title">Steel frame materials</p><dl>
+              <div><dt>Pedestals</dt><dd>₱208,820.65</dd></div>
+              <div><dt>Footing tie beams</dt><dd>₱382,890.98</dd></div>
+              <div><dt>Steel works (17,284.42 kg steel, 432.11 kg bolts and connections)</dt><dd>₱1,328,739.79</dd></div>
+              <div><dt>Formworks</dt><dd>₱118,098.32</dd></div></dl></div>
+          </div>
+          <p class="hb-study-note">Unit rates used in the estimates: concrete (4,000 psi) ₱5,100/m&sup3;, Grade 60 reinforcing bars ₱55/kg, structural steel and connections ₱75/kg. The estimates cover civil works: concrete, reinforcement, structural steel and formworks.</p>
+        </section>
+      </div>
+    </dialog>
+
+    <dialog class="hb-study" id="study-preschool" aria-labelledby="study-preschool-title">
+      <div class="hb-study-head">
+        <div><p class="hb-bz-credit">Hann Builders Engineering &amp; Consulting</p><h2 id="study-preschool-title">One-Storey Preschool Building: CAD Design and Visualisation</h2></div>
+        <button class="hb-study-close" type="button" aria-label="Close project study">&times;</button>
+      </div>
+      <div class="hb-study-body">
+        <section class="hb-study-sec" aria-labelledby="sp-overview">
+          <h3 class="hb-study-h" id="sp-overview"><span class="hb-study-n">01</span>Project overview</h3>
+          <p>A one-storey preschool in Digos City, Davao del Sur, drawn in AutoCAD. The set covers the floor plan, four elevations, two sections and the foundation and framing details: one classroom opening onto a covered terrace, under a flat roof slab.</p>
+          <dl class="hb-study-facts">
+            <div><dt>Building</dt><dd>One-storey preschool</dd></div>
+            <div><dt>Location</dt><dd>Digos City, Davao del Sur</dd></div>
+            <div><dt>Spaces</dt><dd>Classroom and covered terrace, both at +400 mm finished floor level</dd></div>
+            <div><dt>Drawings</dt><dd>Floor plan, elevations, sections, foundation plan and structural details</dd></div>
+          </dl>
+        </section>
+
+        <section class="hb-study-sec" aria-labelledby="sp-model">
+          <h3 class="hb-study-h" id="sp-model"><span class="hb-study-n">02</span>3D visualisation</h3>
+          <figure class="hb-model" data-model="assets/hb-projects/preschool/model.json">
+            <div class="hb-model-stage">
+              <img class="hb-model-poster" src="assets/hb-projects/preschool/model-poster.jpg" alt="3D view of the preschool from the terrace side, drawn from the CAD drawings" width="1200" height="800" loading="lazy" decoding="async">
+              <canvas class="hb-model-canvas" aria-hidden="true" hidden></canvas>
+            </div>
+            <figcaption><span>3D view drawn from the CAD floor plan and elevations. Drag to turn it.</span><button class="hb-model-toggle" type="button" hidden>Pause rotation</button></figcaption>
+          </figure>
+          <dl class="hb-study-facts">
+            <div><dt>Grid</dt><dd>Lines 1 to 3 by B to D: two 3.5 m bays by two 4.5 m bays, 7.0 m by 9.0 m</dd></div>
+            <div><dt>Levels</dt><dd>Floor 0.4 m above natural grade, 2.4 m floor to ceiling, roof slab 0.4 m above the ceiling line</dd></div>
+            <div><dt>Entrance</dt><dd>Double door from the covered terrace, with a stone-clad pier at the corner</dd></div>
+            <div><dt>Windows</dt><dd>Glazed windows on three sides; triangle, circle and square windows on the rear wall</dd></div>
+          </dl>
+          <p class="hb-study-note">The 3D view is built from the 2D CAD drawings to show the layout, openings and building form. Furniture and finishes are not modelled.</p>
+        </section>
+
+        <section class="hb-study-sec" aria-labelledby="sp-drawings">
+          <h3 class="hb-study-h" id="sp-drawings"><span class="hb-study-n">03</span>CAD drawings</h3>
+          <div class="hb-pre-sheets">
+            <figure><a href="assets/hb-projects/preschool/floor-plan.jpg" target="_blank" rel="noopener"><img src="assets/hb-projects/preschool/floor-plan.jpg" alt="CAD floor plan of the preschool: classroom on grid lines 1 to 3 by B to D, with the terrace and roof eaves line" width="1426" height="1777" loading="lazy" decoding="async"></a><figcaption>Floor plan</figcaption></figure>
+            <figure><a href="assets/hb-projects/preschool/sections.jpg" target="_blank" rel="noopener"><img src="assets/hb-projects/preschool/sections.jpg" alt="Transverse and longitudinal sections through the classroom" width="1238" height="1777" loading="lazy" decoding="async"></a><figcaption>Sections</figcaption></figure>
+            <figure><a href="assets/hb-projects/preschool/elevations.jpg" target="_blank" rel="noopener"><img src="assets/hb-projects/preschool/elevations.jpg" alt="Front, left, right and rear elevations of the preschool" width="1800" height="1223" loading="lazy" decoding="async"></a><figcaption>Elevations</figcaption></figure>
+          </div>
+          <p class="hb-study-note">Drawing views only; the title block is left out. Select a drawing to open it at full size.</p>
+        </section>
+
+        <section class="hb-study-sec" aria-labelledby="sp-structure">
+          <h3 class="hb-study-h" id="sp-structure"><span class="hb-study-n">04</span>Structure and finishes</h3>
+          <dl class="hb-study-facts">
+            <div><dt>Footings</dt><dd>1,000 &times; 1,000 &times; 200 mm isolated footings, 1.0 m below natural grade</dd></div>
+            <div><dt>Frame</dt><dd>Reinforced concrete columns, beams and slab, with 200 &times; 300 mm footing tie beams</dd></div>
+            <div><dt>Wall finishes</dt><dd>Paint in Choco Cherry and White Senses, with Dry Stackledge Ebony stone cladding</dd></div>
+          </dl>
+        </section>
+      </div>
+    </dialog>
+  </div></section>
+
   <section class="hb-section" id="why" aria-labelledby="hb-why-title"><div class="wrap">
     <div class="hb-head hb-reveal"><div><span class="hb-tag">Why HannBuilders</span><h2 id="hb-why-title">What you can count on</h2></div></div>
     <div class="hb-why">
@@ -412,6 +615,156 @@
     requestAnimationFrame(tick);
   }), { threshold: 0.6 });
   document.querySelectorAll('.hb [data-count]').forEach((el) => counter.observe(el));
+})();
+</script>
+<script>
+(() => {
+  // Business project studies: each [data-study] button opens its native dialog; focus returns to the button.
+  document.querySelectorAll('[data-study]').forEach((button) => {
+    const dialog = document.getElementById(button.dataset.study);
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+    button.addEventListener('click', () => dialog.showModal());
+    dialog.querySelector('.hb-study-close').addEventListener('click', () => dialog.close());
+    // A click on the dimmed backdrop lands on the dialog element itself.
+    dialog.addEventListener('click', (event) => { if (event.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => button.focus());
+  });
+})();
+</script>
+<script>
+(() => {
+  // Model viewer: draws a project's model.json as a slowly turning view. Frame models (members) draw as a wireframe;
+  // building models (faces, the preschool) draw as shaded faces, back to front, with an optional start view.
+  // The still image stays as the fallback; reduced motion shows a still view until the visitor presses play.
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const PITCH = 28 * Math.PI / 180;
+  const START = -35 * Math.PI / 180;
+  const SPEED = (2 * Math.PI) / 48000;   // one turn every 48 seconds
+  const cache = {};
+  const load = (url) => (cache[url] = cache[url] || fetch(url).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }));
+
+  document.querySelectorAll('.hb-model[data-model]').forEach((fig) => {
+    const stage = fig.querySelector('.hb-model-stage');
+    const canvas = fig.querySelector('.hb-model-canvas');
+    const poster = fig.querySelector('.hb-model-poster');
+    const toggle = fig.querySelector('.hb-model-toggle');
+    const ctx = canvas.getContext('2d');
+    let model = null, pitch = PITCH, yaw = START, playing = !reduce.matches, visible = false, last = 0, frame = 0, drag = null;
+
+    const draw = () => {
+      const w = stage.clientWidth, h = stage.clientHeight, dpr = window.devicePixelRatio || 1;
+      if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      const { cx, cy, zc, scale } = model.fit(w, h);
+      const c = Math.cos(yaw), s = Math.sin(yaw);
+      const P = (x, y, z) => {
+        const dx = x - cx, dy = y - cy;
+        const rx = dx * c - dy * s, ry = dx * s + dy * c;
+        return [w / 2 + rx * scale, h / 2 - (z - zc) * Math.cos(pitch) * scale + ry * Math.sin(pitch) * scale];
+      };
+      ctx.lineJoin = 'round';
+      if (model.data.faces) { drawFaces(P, c, s); return; }
+      ctx.fillStyle = 'rgba(226, 98, 27, 0.07)';
+      ctx.strokeStyle = 'rgba(226, 98, 27, 0.28)';
+      ctx.lineWidth = 1;
+      model.data.floors.forEach((f) => {
+        ctx.beginPath();
+        f.p.forEach(([x, y], i) => { const [px, py] = P(x, y, f.z); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      });
+      [[1, '#A79F94', 2.2], [0, '#1E2124', 1.4]].forEach(([conc, colour, width]) => {
+        ctx.strokeStyle = colour; ctx.lineWidth = width; ctx.beginPath();
+        model.data.members.forEach((m) => {
+          if (m[0] !== conc) return;
+          const a = P(m[1], m[2], m[3]), b = P(m[4], m[5], m[6]);
+          ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+        });
+        ctx.stroke();
+      });
+    };
+
+    // Building faces: skip those turned away, sort the rest by depth within their layer (ground, building, roof
+    // edges, roof top) and paint back to front. Openings ride on their wall so they always land on top of it.
+    const FILL = { plinth: '#D9D3C8', floor: '#E7E4DE', wall: '#FFFFFF', glass: '#9DB4C0', door: '#7F98A6', col: '#F1EEE8',
+      stone: '#5E554C', post: '#8A8178', fascia: '#3A3D40', canopy: '#E2DDD5', roof: '#ECE8E1' };
+    const LAYER = { plinth: 0, floor: 0, fascia: 2, canopy: 2, roof: 3 };
+    const drawFaces = (P, c, s) => {
+      const toView = (x, y, z) => ((x - model.cx) * s + (y - model.cy) * c) * Math.cos(pitch) + z * Math.sin(pitch);
+      const shown = model.data.faces
+        .filter((f) => f.n[2] > 0 || f.n[0] * s + f.n[1] * c > 1e-6)
+        .map((f) => ({ f, layer: LAYER[f.k] ?? 1, depth: f.mid ? toView(...f.mid) : 0 }))
+        .sort((a, b) => a.layer - b.layer || a.depth - b.depth);
+      ctx.strokeStyle = '#1E2124';
+      ctx.lineWidth = 1;
+      shown.forEach(({ f }) => [f, ...(f.o || [])].forEach((g) => {
+        ctx.beginPath();
+        g.p.forEach(([x, y, z], i) => { const [px, py] = P(x, y, z); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+        ctx.closePath();
+        ctx.fillStyle = FILL[g.k];
+        ctx.fill(); ctx.stroke();
+      }));
+    };
+
+    const loop = (now) => {
+      frame = 0;
+      if (!playing || !visible || drag) return;
+      if (last) yaw += (now - last) * SPEED;
+      last = now;
+      draw();
+      frame = requestAnimationFrame(loop);
+    };
+    // Restart cleanly: drop any frame still pending (a background tab can leave one stalled).
+    const run = () => {
+      cancelAnimationFrame(frame);
+      frame = 0;
+      if (playing && visible && model && !drag) { last = 0; frame = requestAnimationFrame(loop); }
+    };
+    const setPlaying = (on) => {
+      playing = on;
+      toggle.textContent = on ? 'Pause rotation' : 'Play rotation';
+      toggle.setAttribute('aria-pressed', String(!on));
+      run();
+    };
+
+    const start = () => load(fig.dataset.model).then((data) => {
+      const xs = [], ys = [], zs = [];
+      if (data.faces) {
+        data.faces.forEach((f) => {
+          f.p.forEach(([x, y, z]) => { xs.push(x); ys.push(y); zs.push(z); });
+          f.mid = [0, 1, 2].map((i) => f.p.reduce((sum, q) => sum + q[i], 0) / f.p.length);
+        });
+      } else {
+        data.members.forEach((m) => { xs.push(m[1], m[4]); ys.push(m[2], m[5]); zs.push(m[3], m[6]); });
+      }
+      if (data.view) { pitch = data.view.pitch * Math.PI / 180; yaw = data.view.yaw * Math.PI / 180; }
+      const cx = (Math.min(...xs) + Math.max(...xs)) / 2, cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+      const zmin = Math.min(...zs), zmax = Math.max(...zs);
+      // Fit by the plan's half-diagonal so the frame keeps one size as it turns.
+      const r = Math.max(...xs.map((x, i) => Math.hypot(x - cx, ys[i] - cy)));
+      const spanH = 2 * r * Math.sin(pitch) + (zmax - zmin) * Math.cos(pitch);
+      model = { data, cx, cy, fit: (w, h) => ({ cx, cy, zc: (zmin + zmax) / 2, scale: Math.min((w * 0.86) / (2 * r), (h * 0.86) / spanH) }) };
+      canvas.hidden = false;
+      poster.hidden = true;
+      toggle.hidden = false;
+      setPlaying(playing);
+      draw();
+    }).catch(() => { /* keep the still image */ });
+
+    toggle.addEventListener('click', () => setPlaying(!playing));
+    canvas.addEventListener('pointerdown', (event) => { drag = { x: event.clientX, yaw }; canvas.setPointerCapture(event.pointerId); });
+    canvas.addEventListener('pointermove', (event) => { if (!drag) return; yaw = drag.yaw + (event.clientX - drag.x) * 0.01; draw(); });
+    const endDrag = () => { if (drag) { drag = null; run(); } };
+    canvas.addEventListener('pointerup', endDrag);
+    canvas.addEventListener('pointercancel', endDrag);
+    new ResizeObserver(() => { if (model) draw(); }).observe(stage);
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !model) start();
+      run();
+    }, { rootMargin: '200px' }).observe(stage);
+    reduce.addEventListener('change', () => setPlaying(!reduce.matches));
+  });
 })();
 </script>
 </body>

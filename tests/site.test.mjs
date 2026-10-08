@@ -1048,7 +1048,7 @@ test('services anchors clear both sticky bars', () => {
 test('services sections appear in order with their anchors', () => {
   const html = read('services.html');
   const ids = [...html.matchAll(/<section class="hb-section[^"]*" id="([a-z]+)"/g)].map((m) => m[1]);
-  assert.deepEqual(ids, ['services', 'process', 'projects', 'why', 'about', 'faq', 'quote']);
+  assert.deepEqual(ids, ['services', 'process', 'projects', 'business', 'why', 'about', 'faq', 'quote']);
 });
 
 test('services: three owner services, three remote team services', () => {
@@ -1078,7 +1078,8 @@ test('services: process steps, founder-led projects with honest credit, founder 
   assert.equal(faq.length, 6);
   assert.match(html, /<button class="hb-pill hb-pill--dark hb-ask-link" type="button">Ask a question/);
   // Honesty: no prices or testimonials in the visible content (scripts use `$` legitimately, so they are skipped).
-  const text = html.replace(/<script>[\s\S]*?<\/script>/g, '');
+  // The business project study is the one exception: its preliminary cost figures are the point of that section.
+  const text = html.replace(/<script>[\s\S]*?<\/script>/g, '').replace(/<section class="hb-section" id="business"[\s\S]*?<\/section>\s*(?=<section class="hb-section" id="why")/, '');
   for (const banned of ['testimonial', 'Testimonial', '₱', 'PHP ', '$']) assert.ok(!text.includes(banned), `no ${banned}`);
 });
 
@@ -1208,4 +1209,146 @@ test('services founder block shows the HannBuilders uniform portrait as the head
   assert.ok(existsSync(new URL(`../${img[1]}`, import.meta.url)), 'file exists');
   // The resume page keeps its own portrait.
   assert.match(read('resume.html'), /<img class="headshot" src="assets\/headshot\.jpg"/);
+});
+
+const business = () => {
+  const html = read('services.html');
+  const m = html.match(/<section class="hb-section" id="business"[\s\S]*?<\/section>\s*(?=<section class="hb-section" id="why")/);
+  assert.ok(m, 'business section sits right before "What you can count on"');
+  return m[0];
+};
+
+test('Hann Builders business projects follow the founder projects, with the agreed introduction', () => {
+  const html = read('services.html');
+  const founder = html.indexOf('id="projects"'), biz = html.indexOf('id="business"'), why = html.indexOf('id="why"');
+  assert.ok(founder < biz && biz < why, 'founder projects, then business projects, then why');
+  // The founder section keeps its cards and attribution note, before the new section.
+  const founderBlock = html.slice(founder, biz);
+  assert.match(founderBlock, /Projects led by our founder/);
+  assert.match(founderBlock, /Projects delivered while working with WMCabardo Engineering &amp; Consulting and ADRA Constructions Corporation\./);
+  const sec = business();
+  assert.match(sec, /<span class="hb-tag">Our business projects<\/span><h2 id="hb-biz-title">Selected work by Hann Builders<\/h2>/);
+  assert.match(sec, /<p>Engineering studies and project work by Hann Builders Engineering &amp; Consulting, combining structural modelling with clear preliminary cost planning\.<\/p>/);
+  assert.ok(!sec.includes('WMCabardo') && !sec.includes('ADRA'), 'no founder-era attribution in the business section');
+});
+
+test('featured business project: verified title, credit, tags, findings and an accessible study dialog', () => {
+  const sec = business();
+  const cards = [...sec.matchAll(/<article class="hb-bz[^"]*"/g)];
+  assert.equal(cards.length, 2, 'two real projects, no empty cards');
+  assert.match(sec, /<h3 id="bz-two-storey-title">Two-Storey Residential Building: Structural Modelling and Preliminary Cost Study<\/h3>/);
+  assert.match(sec, /<p class="hb-bz-credit">Hann Builders Engineering &amp; Consulting<\/p>/);
+  const tags = [...sec.match(/<ul class="hb-bz-tags"[^>]*>([\s\S]*?)<\/ul>/)[1].matchAll(/<li>([^<]+)<\/li>/g)].map((m) => m[1]);
+  assert.deepEqual(tags, ['Two-storey building', 'Structural modelling', 'ETABS', 'Preliminary cost study', 'Steel versus reinforced concrete']);
+  // Two separately labelled findings, exact figures, never added together.
+  assert.match(sec, /Comparison A[\s\S]*?Labour at 40% of material cost[\s\S]*?₱424,185\.00/);
+  assert.match(sec, /Comparison B[\s\S]*?Steel-work labour at ₱25\/kg[\s\S]*?₱512,767\.15/);
+  assert.ok(!sec.includes('936,952'), 'the two figures are never summed');
+  assert.ok(!/\d+(\.\d+)?%\s*(saving|cheaper|less)/i.test(sec), 'no savings percentages');
+  for (const claim of ['were achieved', 'was approved', 'was constructed', 'guaranteed']) assert.ok(!sec.includes(claim), `no claim: ${claim}`);
+  // The button opens a native dialog with the four sections in order.
+  assert.match(sec, /<button class="hb-pill hb-pill--dark hb-bz-open" type="button" data-study="study-two-storey" aria-haspopup="dialog">View project study/);
+  const dlg = sec.match(/<dialog class="hb-study" id="study-two-storey" aria-labelledby="study-two-storey-title">[\s\S]*?<\/dialog>/);
+  assert.ok(dlg, 'study dialog');
+  const heads = [...dlg[0].matchAll(/<h3 class="hb-study-h"[^>]*>(?:<span[^>]*>\d\d<\/span>)?([^<]+)<\/h3>/g)].map((m) => m[1].trim());
+  assert.deepEqual(heads, ['Project overview', 'Structural model', 'Preliminary cost comparison', 'Civil works direct cost summary']);
+  assert.match(dlg[0], /<button class="hb-study-close" type="button" aria-label="Close project study">/);
+  for (const fig of ['₱3,278,154.11', '₱2,853,969.62', '₱2,765,386.96', '₱2,341,538.65', '₱2,038,549.73', '₱936,615.46', '₱815,419.89', '₱726,837.24']) {
+    assert.ok(dlg[0].includes(fig), `PDF figure ${fig}`);
+  }
+  assert.match(dlg[0], /Labour cost estimated at 40% of material cost\./);
+  assert.match(dlg[0], /Steel-work labour estimated at ₱25 per kilogram of steel\./);
+  assert.match(dlg[0], /The steel frame alternative is estimated to cost ₱424,185\.00 less than the reinforced concrete frame alternative under this labour assumption\./);
+  assert.match(dlg[0], /The steel frame alternative is estimated to cost ₱512,767\.15 less than the reinforced concrete frame alternative under this labour assumption\./);
+  assert.match(dlg[0], /No ETABS model of the reinforced concrete frame/);
+  const js = servicesScripts();
+  assert.match(js, /showModal\(\)/);
+  assert.match(js, /\[data-study\]/);
+});
+
+test('business project model is drawn from the ETABS geometry, with a still fallback and motion controls', () => {
+  const sec = business();
+  const figs = [...sec.matchAll(/<figure class="hb-model" data-model="([^"]+)">([\s\S]*?)<\/figure>/g)];
+  assert.ok(figs.length >= 1, 'model viewer');
+  for (const [, src, inner] of figs) {
+    assert.ok(existsSync(new URL(`../${src}`, import.meta.url)), `${src} exists`);
+    if (src.includes('/preschool/')) continue;   // covered by the preschool test
+    const poster = inner.match(/<img class="hb-model-poster" src="([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)" loading="lazy"/);
+    assert.ok(poster, 'still image with alt text, reserved size and lazy loading');
+    assert.ok(existsSync(new URL(`../${poster[1]}`, import.meta.url)), 'poster exists');
+    assert.match(inner, /<canvas[^>]*aria-hidden="true"/);
+    assert.match(inner, /<button class="hb-model-toggle" type="button"[^>]*>/);
+    assert.match(inner, /ETABS structural model/);
+  }
+  const data = read(figs[0][1]);
+  const model = JSON.parse(data);
+  assert.ok(model.members.length > 100 && model.floors.length > 10, 'real member and floor geometry');
+  for (const leak of ['denver', 'Hewlett', 'Desktop', '.EDB']) assert.ok(!data.includes(leak), `no ${leak} in the published data`);
+  const html = read('services.html');
+  assert.ok(!/\.(EDB|edb)\b|\.\$et\b/.test(html), 'no ETABS source files linked');
+  const js = servicesScripts();
+  assert.match(js, /prefers-reduced-motion: reduce/);
+  assert.match(js, /Pause rotation/);
+  assert.match(js, /IntersectionObserver/);
+  const css = read('styles.css');
+  assert.match(css, /\.hb \.hb-model-stage\{[^}]*aspect-ratio:3 \/ 2/, 'reserved size');
+  assert.match(css, /@media \(max-width:900px\)\{[^@]*\.hb \.hb-bz--featured\{grid-template-columns:1fr;\}/, 'featured card stacks');
+  assert.match(css, /@media \(max-width:640px\)\{[^@]*\.hb \.hb-bz-findings, \.hb \.hb-cmp, \.hb \.hb-sum\{grid-template-columns:1fr;\}/, 'comparisons stack');
+});
+
+test('preschool is the second business project, with verified facts only and no title-block details', () => {
+  const sec = business();
+  const order = [...sec.matchAll(/<article class="hb-bz[^"]*" aria-labelledby="([^"]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(order, ['bz-two-storey-title', 'bz-preschool-title'], 'preschool right after the two-storey project');
+  const card = sec.match(/<article class="hb-bz hb-bz--preschool[\s\S]*?<\/article>/)[0];
+  assert.match(card, /<h3 id="bz-preschool-title">One-Storey Preschool Building: CAD Design and Visualisation<\/h3>/);
+  assert.match(card, /<p class="hb-bz-credit">Hann Builders Engineering &amp; Consulting<\/p>/);
+  assert.match(card, /Digos City, Davao del Sur/);
+  assert.match(card, /A preschool project presented through CAD drawings and spatial visualisation, showing the planned layout and building form\./);
+  const tags = [...card.match(/<ul class="hb-bz-tags"[^>]*>([\s\S]*?)<\/ul>/)[1].matchAll(/<li>([^<]+)<\/li>/g)].map((m) => m[1]);
+  assert.deepEqual(tags, ['Preschool', 'AutoCAD', 'Floor plans', 'Building elevations', '3D visualisation']);
+  assert.match(card, /data-study="study-preschool" aria-haspopup="dialog"/);
+  const dlg = sec.match(/<dialog class="hb-study" id="study-preschool" aria-labelledby="study-preschool-title">[\s\S]*?<\/dialog>/);
+  assert.ok(dlg, 'preschool study dialog');
+  const heads = [...dlg[0].matchAll(/<h3 class="hb-study-h"[^>]*>(?:<span[^>]*>\d\d<\/span>)?([^<]+)<\/h3>/g)].map((m) => m[1].trim());
+  assert.deepEqual(heads, ['Project overview', '3D visualisation', 'CAD drawings', 'Structure and finishes']);
+  const block = card + dlg[0];
+  // Private title-block details and anything the drawings do not state stay out.
+  for (const banned of ['ADRA', 'Alegado', 'Dela Cerna', 'Regidor', 'PRC', 'PTR', 'TIN', 'Owner', 'TBC', 'to be confirmed', 'completed', 'constructed', '3D model', '—']) {
+    assert.ok(!block.includes(banned), `no ${banned}`);
+  }
+  assert.ok(!/20(1|2)\d/.test(block), 'no dates');
+  // Drawing crops exist and open full size.
+  const sheets = [...dlg[0].matchAll(/<a href="(assets\/hb-projects\/preschool\/[^"]+\.jpg)"[^>]*><img src="\1" alt="[^"]+" width="\d+" height="\d+" loading="lazy"/g)].map((m) => m[1]);
+  assert.equal(sheets.length, 3, 'floor plan, sections and elevations');
+  for (const src of sheets) assert.ok(existsSync(new URL(`../${src}`, import.meta.url)), `${src} exists`);
+});
+
+test('preschool 3D view is drawn from the plan geometry, with a still fallback and scoped styles', () => {
+  const sec = business();
+  const figs = [...sec.matchAll(/<figure class="hb-model" data-model="assets\/hb-projects\/preschool\/model\.json">([\s\S]*?)<\/figure>/g)];
+  assert.equal(figs.length, 2, 'on the card and in the study');
+  for (const [, inner] of figs) {
+    const poster = inner.match(/<img class="hb-model-poster" src="([^"]+)" alt="([^"]+)" width="1200" height="800" loading="lazy"/);
+    assert.ok(poster && existsSync(new URL(`../${poster[1]}`, import.meta.url)), 'poster with alt text');
+    assert.match(inner, /3D view drawn from the CAD floor plan and elevations/);
+    assert.match(inner, /<button class="hb-model-toggle" type="button"[^>]*>/);
+  }
+  const model = JSON.parse(read('assets/hb-projects/preschool/model.json'));
+  const kinds = new Set(model.faces.map((f) => f.k));
+  for (const k of ['plinth', 'wall', 'col', 'roof', 'canopy', 'post', 'stone']) assert.ok(kinds.has(k), `has ${k}`);
+  const pts = model.faces.flatMap((f) => f.p);
+  const zmax = Math.max(...pts.map((p) => p[2]));
+  assert.ok(Math.abs(zmax - 3.2) < 1e-6, 'roof at the apex line: 0.4 + 2.4 + 0.4 m');
+  const openings = model.faces.flatMap((f) => f.o || []);
+  assert.equal(openings.filter((o) => o.k === 'door').length, 2, 'D01 and D02');
+  assert.equal(openings.filter((o) => o.k === 'glass').length, 7, 'W01 x3, W02, and the three rear windows');
+  const js = servicesScripts();
+  assert.match(js, /data\.faces/);
+  const css = read('styles.css');
+  const block = css.slice(css.indexOf('/* Business project 2: preschool')).replace(/\/\*[\s\S]*?\*\//g, '');
+  for (const rule of block.matchAll(/(^|\})\s*([^{}@]+)\{/g)) {
+    for (const sel of rule[2].split(',')) assert.match(sel, /\.hb /, `scoped: ${sel.trim()}`);
+  }
+  assert.match(css, /@media \(max-width:900px\)\{[^@]*\.hb \.hb-bz--preschool\{grid-template-columns:1fr;\}/, 'preschool card stacks');
 });
