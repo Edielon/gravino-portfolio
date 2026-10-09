@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, statSync, readdirSync } from 'node:fs';
 
 // Normalise line endings so checks don't depend on how git checked the files out (core.autocrlf).
 export const read = (f) => readFileSync(new URL(`../${f}`, import.meta.url), 'utf8').replace(/\r\n/g, '\n');
@@ -570,9 +570,10 @@ test('home certifications sit in a white section and each opens its certificate'
   assert.match(section[0], /<h2 class="section-title">Certifications and Memberships<\/h2>/);
   const cells = [...section[0].matchAll(/<li class="cred-cell"><a class="cred-open" href="(assets\/certificates\/[a-z-]+\.jpg)" data-title="([^"]+)" aria-haspopup="dialog"><span class="cred-logo"><img src="assets\/issuers\/[a-z-]+\.png" alt="" width="\d+" height="\d+"><\/span><span class="cred-title">([^<]+)<\/span><span class="cred-desc">([^<]+)<\/span><span class="cred-view">View certificate<\/span><\/a><\/li>/g)]
     .map(([, href, dataTitle, title, desc]) => ({ href, dataTitle, title, desc: desc.replace(/&middot;/g, '·') }));
-  // The PRC licence leads (Task: PRC first), then the PMI credentials, then memberships and the White Card.
-  assert.deepEqual(cells.map((c) => c.title), ['PMP', 'CAPM', 'PMI Member', 'MIEAust', 'MIET', 'M.ASCE', 'White Card']);
+  // The PRC licence leads, then the PMI credentials, then memberships and the White Card.
+  assert.deepEqual(cells.map((c) => c.title), ['Licensed Civil Engineer', 'PMP', 'CAPM', 'PMI Member', 'MIEAust', 'MIET', 'M.ASCE', 'White Card']);
   assert.deepEqual(cells.map((c) => c.desc), [
+    'Professional Regulation Commission, Philippines · 2019',
     'Project Management Professional, Project Management Institute · 2026',
     'Certified Associate in Project Management, Project Management Institute · 2025',
     'Project Management Institute, Queensland Australia Chapter · 2025',
@@ -587,22 +588,28 @@ test('home certifications sit in a white section and each opens its certificate'
   }
 });
 
-test('the PRC licence is the first certification, with its number masked and no document yet', () => {
+test('the PRC licence is the first certification and opens a redacted card sheet', () => {
   const html = read('index.html');
   const grid = html.match(/<ul class="cred-grid"[^>]*>\s*([\s\S]*?)<\/ul>/)[1];
   const first = grid.match(/^<li class="cred-cell[^"]*">[\s\S]*?<\/li>/)[0];
-  assert.match(first, /^<li class="cred-cell cred-cell--pending"><div class="cred-static">/, 'not a link: there is no document to open yet');
+  assert.match(first, /^<li class="cred-cell"><a class="cred-open" href="assets\/certificates\/prc\.jpg" data-title="Professional Identification Card, Licensed Civil Engineer \(PRC\)" aria-haspopup="dialog">/, 'opens the card sheet like every other certificate');
   assert.match(first, /<span class="cred-logo"><img src="assets\/issuers\/prc\.png" alt="" width="\d+" height="\d+"><\/span>/);
   assert.match(first, /<span class="cred-title">Licensed Civil Engineer<\/span>/);
-  // Non-breaking spaces keep "Reg. No. ****" on one line.
-  assert.match(first, /<span class="cred-desc">Professional Regulation Commission, Philippines &middot; Reg\.&nbsp;No\.&nbsp;\*\*\*\*<\/span>/);
-  assert.match(first, /<span class="cred-note">Certificate to follow<\/span>/);
+  assert.match(first, /<span class="cred-view">View certificate<\/span>/);
   assert.ok(!/\d{5,}/.test(first), 'no licence number digits anywhere in the tile');
+  for (const gone of ['cred-cell--pending', 'cred-static', 'cred-note', 'Certificate to follow', 'Reg.&nbsp;No.']) {
+    assert.ok(!html.includes(gone), `${gone} is gone now that the card is provided`);
+  }
+  const css = read('styles.css');
+  assert.ok(!css.includes('.cred-static') && !css.includes('.cred-note'), 'no styles left for the old pending tile');
+  // The card sheet exists, is a sensible size and is the only form of the card in the repo (never a raw scan).
+  const sheet = new URL('../assets/certificates/prc.jpg', import.meta.url);
+  assert.ok(existsSync(sheet), 'prc.jpg exists');
+  assert.ok(statSync(sheet).size < 500 * 1024, 'prc.jpg is compressed');
+  const cards = readdirSync(new URL('../assets/certificates/', import.meta.url)).filter((n) => /prc|licen[cs]e|pic|identification/i.test(n));
+  assert.deepEqual(cards, ['prc.jpg'], 'only the redacted sheet is stored');
   // The Blue Dog White Card opens its redacted statement of attainment.
   assert.match(grid, /<a class="cred-open" href="assets\/certificates\/white-card\.jpg" data-title="White Card, CPCWHS1001 Statement of Attainment" aria-haspopup="dialog">/);
-  const css = read('styles.css');
-  assert.match(cssRule(css, '.cred-static'), /display:flex/);
-  assert.match(cssRule(css, '.cred-note'), /color:var\(--ink-muted\)/);
 });
 
 test('each certification stacks its issuer logo above the title, like the Education tab', () => {
