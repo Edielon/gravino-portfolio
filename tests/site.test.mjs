@@ -1240,6 +1240,24 @@ test('Hann Builders business projects follow the founder projects, with the agre
   assert.ok(!sec.includes('WMCabardo') && !sec.includes('ADRA'), 'no founder-era attribution in the business section');
 });
 
+test('business cards keep their tags under the 3D model, before the title, not in the text column', () => {
+  const sec = business();
+  const cards = [...sec.matchAll(/<article class="hb-bz[^"]*"[\s\S]*?<\/article>/g)].map((m) => m[0]);
+  assert.equal(cards.length, 2);
+  for (const card of cards) {
+    const media = card.match(/<div class="hb-bz-media">([\s\S]*?)<\/div>\s*<div class="hb-bz-body">/);
+    assert.ok(media, 'model and tags share a media column that comes before the text body');
+    assert.match(media[1], /<figure class="hb-model"[\s\S]*?<\/figure>\s*<ul class="hb-bz-tags" aria-label="Project tags">/, 'tags follow the model and its caption');
+    const body = card.slice(card.indexOf('<div class="hb-bz-body">'));
+    assert.ok(!body.includes('hb-bz-tags'), 'no tag list left in the text column');
+  }
+  const css = read('styles.css');
+  assert.match(css, /\.hb \.hb-bz-media\{[^}]*flex-direction:column/, 'media column stacks model then tags');
+  assert.match(css, /\.hb \.hb-bz-media \.hb-bz-tags\{[^}]*padding:2px 16px 18px/, 'tags line up with the caption padding');
+  assert.match(css, /\.hb \.hb-bz--featured \.hb-bz-media\{[^}]*border-right/);
+  assert.match(css, /\.hb \.hb-bz--preschool \.hb-bz-media\{[^}]*order:2/);
+});
+
 test('featured business project: verified title, credit, tags, findings and an accessible study dialog', () => {
   const sec = business();
   const cards = [...sec.matchAll(/<article class="hb-bz[^"]*"/g)];
