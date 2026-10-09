@@ -8,7 +8,7 @@ The CV download on `resume.html` serves `assets/Hanny-Gravino-CV.pdf` (currently
 
 Certificate images for the home page pop-up live in `assets/certificates/` as compressed JPGs. Certification numbers, member IDs, QR codes and citizenship are pixelated before publishing; never add an unredacted scan. The PRC licence number is intentionally not shown: its tile (first in Certifications and Memberships) reads "Reg. No. ****" and says "Certificate to follow" until a redacted scan is provided. The Blue Dog White Card (`assets/certificates/white-card.jpg`) has its document number pixelated. Issuer symbols for the certification tiles live in `assets/issuers/`: PMI, Engineers Australia, IET, ASCE and Blue Dog are cut out from the certificates themselves; `prc.png` is the official seal from prc.gov.ph.
 
-The contact form needs a real Web3Forms access key in place of `YOUR_WEB3FORMS_ACCESS_KEY` in `contact.html`. The services page's quote and question forms use the same placeholder key.
+The contact form (`contact.html`) and the services page's quote and question forms submit through Web3Forms with the live access key `1b00ec18-ef52-4df3-8756-5f3715409618` (public by design; Web3Forms keys only route mail to the registered inbox). The scripts keep a guard for the old `YOUR_WEB3FORMS_ACCESS_KEY` placeholder.
 
 ## Workflow for changes
 

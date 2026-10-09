@@ -68,7 +68,7 @@ test('contact page', () => {
   const rows = [...html.matchAll(/<span class="k">[\s\S]*?<span class="k-label">([^<]+)<\/span><\/span>/g)].map((m) => m[1]);
   assert.deepEqual(rows, ['Email', 'Phone', 'LinkedIn']);
   assert.match(html, /<form id="contact-form" action="https:\/\/api.web3forms.com\/submit" method="POST"/);
-  assert.match(html, /name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY"/);
+  assert.match(html, /name="access_key" value="1b00ec18-ef52-4df3-8756-5f3715409618"/);
   for (const [id, required] of [['cf-name', true], ['cf-email', true], ['cf-subject', true], ['cf-message', true]]) {
     assert.match(html, new RegExp(`<label for="${id}"`), `label for ${id}`);
     const field = html.match(new RegExp(`<(input|select|textarea)[^>]*id="${id}"[^>]*>`));
@@ -1097,7 +1097,7 @@ test('services quote form posts to Web3Forms with the right required fields', ()
   const html = read('services.html');
   const form = html.match(/<form class="hb-qform" id="hb-quote-form"[^>]*>[\s\S]*?<\/form>/)[0];
   assert.match(form, /action="https:\/\/api\.web3forms\.com\/submit" method="POST" novalidate/);
-  assert.match(form, /name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY"/);
+  assert.match(form, /name="access_key" value="1b00ec18-ef52-4df3-8756-5f3715409618"/);
   assert.match(form, /name="botcheck"/);
   const required = { 'hb-q-service': true, 'hb-q-type': false, 'hb-q-location': true, 'hb-q-size': false, 'hb-q-timeline': false, 'hb-q-name': true, 'hb-q-email': true, 'hb-q-phone': false, 'hb-q-message': true };
   for (const [id, req] of Object.entries(required)) {
@@ -1109,6 +1109,14 @@ test('services quote form posts to Web3Forms with the right required fields', ()
   }
   assert.match(form, /<option>Not sure yet<\/option>/);
   assert.match(form, /id="hb-q-status" role="status" aria-live="polite"/);
+});
+
+test('every form uses the live Web3Forms key, never the placeholder', () => {
+  for (const page of ['contact.html', 'services.html']) {
+    const keys = [...read(page).matchAll(/name="access_key" value="([^"]+)"/g)].map((m) => m[1]);
+    assert.equal(keys.length, page === 'services.html' ? 2 : 1, `${page} form count`);
+    for (const k of keys) assert.equal(k, '1b00ec18-ef52-4df3-8756-5f3715409618', page);
+  }
 });
 
 test('services forms validate trimmed input and never send with the placeholder key', () => {
