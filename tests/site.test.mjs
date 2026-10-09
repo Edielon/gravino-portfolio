@@ -516,7 +516,7 @@ test('band under the hero photo lists qualifications, not numbers', () => {
     'Project Management Professional, certified by PMI. Plans schedules, procurement and cost control with Gantt charts and S-curves.',
     'Member of Engineers Australia, the professional body for engineers practising in Australia.',
     'Seismic-resistant design and retrofit in ETABS, VisualFoundation and AutoCAD, Digos City, Philippines, 2020 to 2023.',
-    'Housing estimator and estimating software support at Senterprisys Limited, Queensland, since 2023. Cost estimates, BOQ and BOM.',
+    'Housing estimator and estimating software support at Senterprisys Limited, Queensland, from 2023 to 2026. Cost estimates, BOQ and BOM.',
     'Coordinated architects, contractors and suppliers through construction at WMCabardo Engineering and ADRA Constructions.',
   ]);
   for (const gone of ['3,000 m&sup2;</div>', '6 storeys', '2 countries']) assert.ok(!band[1].includes(gone), `no old stat ${gone}`);
@@ -826,13 +826,14 @@ test('education timeline lists schooling with school logos', () => {
   const rows = [...panel.matchAll(/<div class="t-row">\s*<div class="t-date">([^<]+)<\/div>\s*<div>([\s\S]*?)<\/div>\s*<\/div>/g)]
     .map(([, date, body]) => ({ date, logo: (body.match(/<img class="t-logo" src="([^"]+)"/) || [])[1], role: body.match(/<div class="t-role">([^<]+)<\/div>/)[1], org: body.match(/<div class="t-org">([^<]+)/)[1] }));
   assert.deepEqual(rows.map((r) => [r.date, r.role]), [
+    ['Mar 2026 to Present', "Master's degree in Civil Engineering (in progress)"],
     ['2024', 'Diploma of Project Management (BSB50820)'],
     ['2014 to 2019', 'BS Civil Engineering'],
     ['2010 to 2014', 'Kapatagan National High School'],
     ['2003 to 2010', 'Rizal Central Elementary School'],
   ]);
-  assert.deepEqual(rows.map((r) => r.org.split(' &middot; ')[0]), ['Canterbury Technical Institute, Brisbane', 'Cor Jesu College', 'High school', 'Elementary']);
-  assert.deepEqual(rows.map((r) => r.logo), ['assets/schools/cti.png', 'assets/schools/cor-jesu-college.png', 'assets/schools/kapatagan-nhs.png', 'assets/schools/rizal-central-es.png']);
+  assert.deepEqual(rows.map((r) => r.org.split(' &middot; ')[0]), ['University of Southeastern Philippines (USeP)', 'Canterbury Technical Institute, Brisbane', 'Cor Jesu College', 'High school', 'Elementary']);
+  assert.deepEqual(rows.map((r) => r.logo), ['assets/schools/usep.png', 'assets/schools/cti.png', 'assets/schools/cor-jesu-college.png', 'assets/schools/kapatagan-nhs.png', 'assets/schools/rizal-central-es.png']);
   for (const r of rows.filter((x) => x.logo)) assert.ok(existsSync(new URL(`../${r.logo}`, import.meta.url)), `${r.logo} exists`);
   for (const img of panel.match(/<img class="t-logo"[^>]*>/g)) {
     assert.match(img, /alt=""/, 'logo is decorative: the school name is already in the text');
@@ -840,6 +841,29 @@ test('education timeline lists schooling with school logos', () => {
     assert.match(img, /loading="lazy"/);
   }
   assert.match(cssRule(read('styles.css'), '.t-logo'), /margin-bottom/, 'logo sits above the text');
+});
+
+test('career timeline shows founding HannBuilders and the master\'s degree as one entry, and Senterprisys ends in March 2026', () => {
+  const panel = read('resume.html').match(/<section class="tab-panel" id="career"[\s\S]*?<\/section>/)[0];
+  const rows = [...panel.matchAll(/<div class="t-date">([^<]+)<\/div>\s*<div>\s*<div class="t-role">([^<]+)<\/div>\s*<div class="t-org">([^<]+)<\/div>/g)].map((m) => m.slice(1));
+  // One current entry holds both: she is building the company while studying.
+  const current = panel.match(/<div class="t-date">Mar 2026 to Present<\/div>([\s\S]*?)<div class="t-row">/)[1];
+  assert.deepEqual([...current.matchAll(/<div class="t-org">([^<]+)<\/div>/g)].map((m) => m[1]), [
+    'HannBuilders, Mindanao, Philippines',
+    "Master's degree in Civil Engineering (in progress), University of Southeastern Philippines (USeP), Davao City, Philippines",
+  ]);
+  assert.equal((panel.match(/Mar 2026 to Present/g) || []).length, 1, 'a single current entry, not two');
+  assert.deepEqual(rows, [
+    ['Mar 2026 to Present', "Founder and Master's Student", 'HannBuilders, Mindanao, Philippines'],
+    ['Oct 2023 to Mar 2026', 'Housing Estimator and Construction Estimating Software Support', 'Senterprisys Limited, Queensland, Australia'],
+    ['Aug 2021 to Feb 2023', 'Project Engineer, Project Management Coordinator and Structural Designer', 'ADRA Constructions Corporation, Digos City, Philippines'],
+    ['Mar 2020 to Jun 2021', 'Junior Structural Engineer and Project Coordinator', 'WMCabardo Engineering & Consulting, Digos City, Philippines'].map((s) => s.replace('&', '&amp;')),
+  ]);
+  // Nothing still claims the Senterprisys job is current.
+  for (const page of ['index.html', 'resume.html', 'case-project-derisk.html']) {
+    assert.ok(!/2023 to present|since 2023|Oct 2023 to Present/i.test(read(page)), `${page} no longer says the Senterprisys role is current`);
+  }
+  assert.match(read('index.html'), /Senterprisys Limited, Queensland, from 2023 to 2026\./);
 });
 
 test('resume page opens on the tabs with a screen-reader-only heading', () => {
